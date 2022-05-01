@@ -8,6 +8,7 @@ export default function Chat(props) {
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
+  // const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
   const imgref = useRef(null);
 
@@ -34,7 +35,6 @@ export default function Chat(props) {
     console.log(props.socket.id);
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
-      // console.log(res);
       setMsg(res);
     });
     // for image
@@ -79,44 +79,50 @@ export default function Chat(props) {
         </div>
       ) : null}
       <div className="scroll-style w-[350px] h-[70vh] overflow-y-scroll m-auto">
-        <div className="">
-          {/* style={
-                  m.includes(id)
-                    ? { flex: "right", whiteSpace: "pre-wrap", color: "gray" }
-                    : { color: "" }
-                } */}
-          {msg.map((m, index) =>
-            m.id == id ? (
-              <div
-                ref={messagesEndRef}
-                className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
-                key={index}
-              >
-                <h1 className=" mt-1 mb-1 text-lg">{m.chat}</h1>
-                <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
-                  {format(new Date(m.createdAt), "p")}
-                </p>
-              </div>
-            ) : (
-              <div
-                className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg w-52 break-words"
-                key={index}
-                ref={messagesEndRef}
-              >
-                <h1 className=" mt-1 mb-1 text-lg">{m.chat}</h1>
-                <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
-                  {format(new Date(m.createdAt), "p")}
-                </p>
-              </div>
-            )
-          )}
-        </div>
+        {msg.length ? (
+          <div className="">
+            {/* style={
+                   m.includes(id)
+                     ? { flex: "right", whiteSpace: "pre-wrap", color: "gray" }
+                     : { color: "" }
+                 } */}
+            {msg.map((m, index) =>
+              m.id == id ? (
+                <div
+                  ref={messagesEndRef}
+                  className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
+                  key={index}
+                >
+                  <h1 className=" mt-1 mb-1 text-lg">{m.chat}</h1>
+                  <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
+                    {format(new Date(m.createdAt), "p")}
+                  </p>
+                </div>
+              ) : (
+                <div
+                  className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg w-52 break-words"
+                  key={index}
+                  ref={messagesEndRef}
+                >
+                  <h1 className=" mt-1 mb-1 text-lg">{m.chat}</h1>
+                  <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
+                    {format(new Date(m.createdAt), "p")}
+                  </p>
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          <div className=" text-white text-2xl flex h-full w-full  justify-center items-center">
+            Loading
+          </div>
+        )}
       </div>
       <form onSubmit={sendMsg} className=" mb-3 text-center w-80 m-auto mt-5">
         <div className=" relative">
-          <label for="chatField">
+          <label htmlFor="chatField">
             <div className="text-purple-500 p-2 bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-2">
-              <label for="file-input" className=" cursor-pointer ">
+              <label htmlFor="file-input" className=" cursor-pointer ">
                 <ion-icon name="image"></ion-icon>
               </label>
               <input
