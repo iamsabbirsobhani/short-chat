@@ -52,7 +52,7 @@ export default function Chat(props) {
       chat: chat,
       createdAt: new Date(),
     };
-    console.log(msg);
+    // console.log(msg);
     if (chat) {
       // props.socket.emit("chat message", `${chat} ${props.socket.id}`);
       props.socket.emit("chat message", msg);
@@ -62,7 +62,7 @@ export default function Chat(props) {
   };
 
   useEffect(() => {
-    console.log(props.socket.id);
+    // console.log(props.socket.id);
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
       setMsg(res);
@@ -73,25 +73,25 @@ export default function Chat(props) {
     });
     // for image
     let imgAr = [];
-    props.socket.on("img-chunk", function (chunk) {
-      imgAr.push(chunk);
-      setImgChunks(imgAr);
-      console.log(imgChunks);
-    });
+    // props.socket.on("img-chunk", function (chunk) {
+    //   imgAr.push(chunk);
+    //   setImgChunks(imgAr);
+    //   // console.log(imgChunks);
+    // });
 
-    props.socket.on("timer", function (sec) {
-      console.log(sec);
-      setTimer(sec);
-    });
+    // props.socket.on("timer", function (sec) {
+    //   // console.log(sec);
+    //   setTimer(sec);
+    // });
 
     props.socket.on("alert", function (msg) {
-      console.log(msg);
+      // console.log(msg);
       setAlert(msg);
     });
 
     const stopScrol = setInterval(() => {
       scrollToBottom();
-      console.log("sd");
+      // console.log("sd");
     }, 10);
 
     setTimeout(() => {
@@ -99,9 +99,9 @@ export default function Chat(props) {
     }, 700);
   });
 
-  msg.map((m) => {
-    console.log(m.chat);
-  });
+  // msg.map((m) => {
+  //   console.log(m.chat);
+  // });
 
   return (
     <>
