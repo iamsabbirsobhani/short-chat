@@ -1,20 +1,49 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { format } from "date-fns";
 import "../styles/chat.scss";
+import _debounce from "lodash/debounce";
+
 export default function Chat(props) {
+  const debounceFn = useCallback(_debounce(handleDebounce, 1000), []);
   const [msg, setMsg] = useState([]);
   const [id, setId] = useState([]);
   const [chat, setChat] = useState(null);
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
-  // const [loading, setLoading] = useState(true);
+  const [isTyping, setIsTyping] = useState();
   const messagesEndRef = useRef(null);
   const imgref = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
   };
+
+  function handleDebounce() {
+    let isTyping = {
+      isTyping: false,
+      id: props.socket.id,
+    };
+    props.socket.emit("typing", isTyping);
+  }
+
+  function handleChat(e) {
+    setChat(e.target.value);
+    debounceFn();
+  }
+
+  useEffect(() => {
+    console.log(chat, "- Has chnaged");
+
+    let isTyping = {
+      isTyping: true,
+      id: props.socket.id,
+    };
+    if (chat) {
+      props.socket.emit("typing", isTyping);
+    }
+  }, [chat]);
+
   const sendMsg = (e) => {
     e.preventDefault();
     let msg = {
@@ -36,6 +65,10 @@ export default function Chat(props) {
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
       setMsg(res);
+    });
+    props.socket.on("typing", function (isTyping) {
+      console.log(isTyping);
+      setIsTyping(isTyping);
     });
     // for image
     let imgAr = [];
@@ -62,7 +95,7 @@ export default function Chat(props) {
 
     setTimeout(() => {
       clearInterval(stopScrol);
-    }, 2000);
+    }, 700);
   });
 
   msg.map((m) => {
@@ -77,6 +110,9 @@ export default function Chat(props) {
             {alert}
           </p>
         </div>
+      ) : null}
+      {isTyping && isTyping.isTyping && isTyping.id != id ? (
+        <p className=" text-white">Typing...</p>
       ) : null}
       <div className="scroll-style w-[350px] h-[70vh] overflow-y-scroll m-auto">
         {msg.length ? (
@@ -137,7 +173,7 @@ export default function Chat(props) {
             className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
             type="text"
             name="chatField"
-            onChange={(e) => setChat(e.target.value)}
+            onChange={(e) => handleChat(e)}
             placeholder="Message..."
             autoComplete="off"
           />
