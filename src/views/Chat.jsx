@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { format } from "date-fns";
 import "../styles/chat.scss";
 import _debounce from "lodash/debounce";
+import TypingIndicator from "../components/TypingIndicator";
 
 export default function Chat(props) {
   const debounceFn = useCallback(_debounce(handleDebounce, 1000), []);
@@ -33,7 +34,7 @@ export default function Chat(props) {
   }
 
   useEffect(() => {
-    console.log(chat, "- Has chnaged");
+    // console.log(chat, "- Has chnaged");
 
     let isTyping = {
       isTyping: true,
@@ -67,7 +68,7 @@ export default function Chat(props) {
       setMsg(res);
     });
     props.socket.on("typing", function (isTyping) {
-      console.log(isTyping);
+      // console.log(isTyping);
       setIsTyping(isTyping);
     });
     // for image
@@ -111,9 +112,7 @@ export default function Chat(props) {
           </p>
         </div>
       ) : null}
-      {isTyping && isTyping.isTyping && isTyping.id != id ? (
-        <p className=" text-white">Typing...</p>
-      ) : null}
+
       <div className="scroll-style w-[350px] h-[70vh] overflow-y-scroll m-auto">
         {msg.length ? (
           <div className="">
@@ -154,7 +153,16 @@ export default function Chat(props) {
           </div>
         )}
       </div>
-      <form onSubmit={sendMsg} className=" mb-3 text-center w-80 m-auto mt-5">
+      <form
+        onSubmit={sendMsg}
+        className=" relative mb-3 text-center w-80 m-auto mt-5"
+      >
+        <div>
+          {isTyping && isTyping.isTyping && isTyping.id != id ? (
+            <TypingIndicator />
+          ) : null}
+          {/* <TypingIndicator /> */}
+        </div>
         <div className=" relative">
           <label htmlFor="chatField">
             <div className="text-purple-500 p-2 bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
