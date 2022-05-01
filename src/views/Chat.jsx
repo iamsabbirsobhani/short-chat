@@ -93,7 +93,7 @@ export default function Chat(props) {
                   className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
                   key={index}
                 >
-                  <h1 className=" mt-1 mb-1 text-lg">{m.chat}</h1>
+                  <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                   <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                     {format(new Date(m.createdAt), "p")}
                   </p>
@@ -104,7 +104,7 @@ export default function Chat(props) {
                   key={index}
                   ref={messagesEndRef}
                 >
-                  <h1 className=" mt-1 mb-1 text-lg">{m.chat}</h1>
+                  <h1 className=" mt-1 mb-1">{m.chat}</h1>
                   <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                     {format(new Date(m.createdAt), "p")}
                   </p>
@@ -121,7 +121,7 @@ export default function Chat(props) {
       <form onSubmit={sendMsg} className=" mb-3 text-center w-80 m-auto mt-5">
         <div className=" relative">
           <label htmlFor="chatField">
-            <div className="text-purple-500 p-2 bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-2">
+            <div className="text-purple-500 p-2 bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
               <label htmlFor="file-input" className=" cursor-pointer ">
                 <ion-icon name="image"></ion-icon>
               </label>
@@ -134,7 +134,7 @@ export default function Chat(props) {
             </div>
           </label>
           <input
-            className=" bg-gray-800 text-lg text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
+            className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
             type="text"
             name="chatField"
             onChange={(e) => setChat(e.target.value)}
@@ -143,7 +143,7 @@ export default function Chat(props) {
           />
           <button
             type="submit"
-            className=" bg-blue-500/40 h-9 w-9 rounded-full p-2 text-blue-500 absolute right-[30px] top-[8px]"
+            className=" bg-blue-500/40 h-9 w-9 rounded-full p-2 text-blue-500 absolute right-[30px] top-[6px]"
           >
             <ion-icon name="send"></ion-icon>
           </button>
