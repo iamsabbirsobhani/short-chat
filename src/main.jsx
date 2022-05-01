@@ -6,7 +6,7 @@ import "./index.css";
 import { io } from "socket.io-client";
 import Navbar from "./components/Navbar";
 
-const socket = io("http://192.168.0.100:8080");
+const socket = io("https://short-chat-backend.herokuapp.com");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
