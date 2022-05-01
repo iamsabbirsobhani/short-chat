@@ -12,7 +12,7 @@ export default function Chat(props) {
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [isTyping, setIsTyping] = useState();
+  const [isTypings, setIsTypings] = useState();
   const messagesEndRef = useRef(null);
   const imgref = useRef(null);
 
@@ -25,7 +25,9 @@ export default function Chat(props) {
       isTyping: false,
       id: props.socket.id,
     };
-    props.socket.emit("typing", isTyping);
+    if (!isTypings.isTyping) {
+      props.socket.emit("typing", isTyping);
+    }
   }
 
   function handleChat(e) {
@@ -40,7 +42,7 @@ export default function Chat(props) {
       isTyping: true,
       id: props.socket.id,
     };
-    if (chat) {
+    if (chat && !isTypings.isTyping) {
       props.socket.emit("typing", isTyping);
     }
   }, [chat]);
@@ -69,7 +71,7 @@ export default function Chat(props) {
     });
     props.socket.on("typing", function (isTyping) {
       // console.log(isTyping);
-      setIsTyping(isTyping);
+      setIsTypings(isTyping);
     });
     // for image
     let imgAr = [];
@@ -158,7 +160,7 @@ export default function Chat(props) {
         className=" relative mb-3 text-center w-80 m-auto mt-5"
       >
         <div>
-          {isTyping && isTyping.isTyping && isTyping.id != id ? (
+          {isTypings && isTypings.isTyping && isTypings.id != id ? (
             <TypingIndicator />
           ) : null}
           {/* <TypingIndicator /> */}
