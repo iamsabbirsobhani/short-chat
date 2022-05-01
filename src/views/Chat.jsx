@@ -5,7 +5,7 @@ import _debounce from "lodash/debounce";
 import TypingIndicator from "../components/TypingIndicator";
 
 export default function Chat(props) {
-  const debounceFn = useCallback(_debounce(handleDebounce, 1000), []);
+  const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
   const [msg, setMsg] = useState([]);
   const [id, setId] = useState([]);
   const [chat, setChat] = useState(null);
