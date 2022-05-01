@@ -12,7 +12,10 @@ export default function Chat(props) {
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [isTypings, setIsTypings] = useState();
+  const [isTypings, setIsTypings] = useState({
+    isTyping: false,
+    id: id,
+  });
   const messagesEndRef = useRef(null);
   const imgref = useRef(null);
 
