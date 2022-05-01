@@ -114,7 +114,7 @@ export default function Chat(props) {
           </div>
         ) : (
           <div className=" text-white text-2xl flex h-full w-full  justify-center items-center">
-            Loading
+            Loading...
           </div>
         )}
       </div>
