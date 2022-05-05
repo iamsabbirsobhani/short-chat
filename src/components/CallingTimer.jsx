@@ -114,8 +114,7 @@ export default function CallingTimer(props) {
       // bellow code fully turned off the mic
       // const enabled = myVideoStream.getAudioTracks();
       // enabled[0].stop();
-
-      // myVideoStream.getAudioTracks()[0].enabled = false;
+      myVideoStream.getAudioTracks()[0].enabled = false;
       console.log("stop all mic");
     });
 
