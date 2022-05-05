@@ -161,7 +161,7 @@ export default function Chat(props) {
 
     props.socket.on("get-peer-id", (id) => {
       console.log("Get peer id: (fired)", id);
-      setPeerId(id);
+      // setPeerId(id);
     });
   });
 
