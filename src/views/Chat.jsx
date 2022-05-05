@@ -13,6 +13,7 @@ import {
   receiverUIFnOn,
   receiverUIFnOff,
   callTimerOn,
+  setPeerId,
 } from "../features/state/globalState";
 import { io } from "socket.io-client";
 import CallingTimer from "../components/CallingTimer";
@@ -21,6 +22,7 @@ export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const callTimer = useSelector((state) => state.global.callTimer);
+  const pId = useSelector((state) => state.global.peerId);
   const dispatch = useDispatch();
 
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
@@ -30,7 +32,7 @@ export default function Chat(props) {
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [peerId, setPeerId] = useState(null);
+  // const [peerId, setPeerId] = useState(null);
   const [isTypings, setIsTypings] = useState({
     isTyping: false,
     id: id,
@@ -152,7 +154,7 @@ export default function Chat(props) {
       dispatch(receiverUIFnOff());
       dispatch(callTimerOn());
       console.log("PeerId props", props.peerId);
-      props.socket.emit("join", peerId);
+      props.socket.emit("join", pId);
 
       console.log("call-received inside logic");
       // }
@@ -161,7 +163,8 @@ export default function Chat(props) {
 
     props.socket.on("get-peer-id", (id) => {
       console.log("Get peer id: (fired)", id);
-      // setPeerId(id);
+      dispatch(setPeerId(id));
+      console.log(pId);
     });
   });
 
@@ -197,7 +200,7 @@ export default function Chat(props) {
     <>
       <Navbar callSend={callSend} />
       {callTimer && (
-        <CallingTimer peerId={peerId} peer={props.peer} socket={props.socket} />
+        <CallingTimer peerId={pId} peer={props.peer} socket={props.socket} />
       )}
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">

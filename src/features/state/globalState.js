@@ -29,7 +29,8 @@ export const globalState = createSlice({
       state.callTimer = false;
     },
     setPeerId: (state, payload) => {
-      state.peerId = payload;
+      console.log(payload.payload);
+      state.peerId = payload.payload;
     },
     increment: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It

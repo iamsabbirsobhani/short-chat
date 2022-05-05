@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function CallingTimer(props) {
+  const pId = useSelector((state) => state.global.peerId);
   const [sec, setSec] = useState(0);
   const [min, setmin] = useState(0);
   const [hour, sethour] = useState(0);
@@ -65,8 +67,8 @@ export default function CallingTimer(props) {
 
         props.socket.on("user-connected", (userId) => {
           console.log(userId);
-          console.log("Socket.on user-connected, userId", props.peerId);
-          connectToNewUser(props.peerId, stream);
+          console.log("Socket.on user-connected, userId", props.peerId, pId);
+          connectToNewUser(pId, stream);
         });
       });
     const connectToNewUser = (userId, stream) => {
