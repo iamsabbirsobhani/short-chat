@@ -94,6 +94,7 @@ export default function CallingTimer(props) {
           console.log(userId);
           console.log("Socket.on user-connected, userId", props.peerId, pId);
           connectToNewUser(pId, stream);
+          console.log("Stream:user-connected, ", stream);
         });
       });
     const connectToNewUser = (userId, stream) => {
