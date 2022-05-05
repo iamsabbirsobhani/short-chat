@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+// import App from "./App";
 import "./index.css";
 import store from "./app/store";
 import { Provider } from "react-redux";
 
 import { io } from "socket.io-client";
+import Chat from "./views/Chat";
 const socket = io("https://short-chat-backend.herokuapp.com");
 // const socket = io("http://192.168.0.100:8080");
 // import { setPeerId } from "./features/state/globalState";
@@ -34,7 +35,8 @@ peer.on("open", (id) => {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <React.StrictMode>
-      <App socket={socket} peerId={peerId} peer={peer} />
+      <Chat socket={socket} peer={peer} peerId={peerId} />
+      {/* <App socket={socket} peerId={peerId} peer={peer} /> */}
     </React.StrictMode>
   </Provider>
 );
