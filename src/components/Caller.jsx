@@ -54,6 +54,13 @@ export default function Caller({ closeCall }) {
             Calling<span className=" tracking-in-expand font-bold">...</span>
           </h1>
 
+          <div>
+            <h1 className=" antialiased text-gray-300 animate-pulse">
+              Make sure the person is
+              <span className=" text-green-500 font-semibold"> online</span>
+            </h1>
+          </div>
+
           <div className=" absolute right-0 left-0 bottom-3 flex justify-center">
             {/* reject button */}
             <div
