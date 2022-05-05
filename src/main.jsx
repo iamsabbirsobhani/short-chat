@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import App from "./App";
+import App from "./App";
 import "./index.css";
 import store from "./app/store";
 import { Provider } from "react-redux";
@@ -36,8 +36,8 @@ peer.on("open", (id) => {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <React.StrictMode>
-      <Chat socket={socket} peer={peer} peerId={peerId} />
-      {/* <App socket={socket} peerId={peerId} peer={peer} /> */}
+      {/* <Chat socket={socket} peer={peer} peerId={peerId} /> */}
+      <App socket={socket} peerId={peerId} peer={peer} />
     </React.StrictMode>
   </Provider>
 );

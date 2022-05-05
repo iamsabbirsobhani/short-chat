@@ -199,9 +199,9 @@ export default function Chat(props) {
   return (
     <>
       <Navbar callSend={callSend} />
-      {callTimer && (
+      {/* {callTimer && (
         <CallingTimer peerId={pId} peer={props.peer} socket={props.socket} />
-      )}
+      )} */}
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
           <p className=" text-white uppercase font-semibold text-center">
