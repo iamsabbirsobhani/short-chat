@@ -17,7 +17,7 @@ const socket = io("https://short-chat-backend.herokuapp.com");
 
 var peer = new Peer(undefined, {
   path: "/peerjs",
-  host: "short-chat-backend.herokuapp",
+  host: "short-chat-backend.herokuapp.com",
 });
 
 peer.on("open", (id) => {
