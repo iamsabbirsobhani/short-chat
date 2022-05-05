@@ -11,27 +11,27 @@ export default function CallingTimer(props) {
   let secL = 0;
   let minL = 0;
   let hourL = 0;
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSec(secL);
-      secL++;
-      if (secL > 60) {
-        secL = 1;
-        minL++;
-        setmin(minL);
-      }
-      if (minL > 60) {
-        minL = 0;
-        hourL++;
-        sethour(hourL);
-      }
-      //   console.log("Hour:", hourL, "Min: ", minL, "Sec: ", secL);
-    }, 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setSec(secL);
+  //     secL++;
+  //     if (secL > 60) {
+  //       secL = 1;
+  //       minL++;
+  //       setmin(minL);
+  //     }
+  //     if (minL > 60) {
+  //       minL = 0;
+  //       hourL++;
+  //       sethour(hourL);
+  //     }
+  //     //   console.log("Hour:", hourL, "Min: ", minL, "Sec: ", secL);
+  //   }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   const toggleMic = () => {
     setMicToggle(!micToggle);
