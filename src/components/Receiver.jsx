@@ -28,7 +28,7 @@ function useOutsideAlerter(ref) {
   }, [ref]);
   return state;
 }
-export default function Receiver({ callEnd }) {
+export default function Receiver({ callEnd, callReceive }) {
   const wrapperRef = useRef(null);
   //   useOutsideAlerter(wrapperRef);
   return (
@@ -48,7 +48,10 @@ export default function Receiver({ callEnd }) {
           </div>
           <div className=" absolute right-0 left-0 bottom-3 flex  justify-around">
             {/* receive call */}
-            <div className=" cursor-pointer text-white-600 bg-green-600 w-14 h-14 ml-5 rounded-full flex justify-center items-center">
+            <div
+              onClick={callReceive}
+              className=" cursor-pointer text-white-600 bg-green-600 w-14 h-14 ml-5 rounded-full flex justify-center items-center"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-7 w-7"

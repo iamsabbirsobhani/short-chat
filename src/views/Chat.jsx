@@ -12,6 +12,7 @@ import {
   openCallerScreenOff,
   receiverUIFnOn,
   receiverUIFnOff,
+  callTimerOn,
 } from "../features/state/globalState";
 import { io } from "socket.io-client";
 import CallingTimer from "../components/CallingTimer";
@@ -19,6 +20,7 @@ import CallingTimer from "../components/CallingTimer";
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
   const receiverUI = useSelector((state) => state.global.receiverUI);
+  const callTimer = useSelector((state) => state.global.callTimer);
   const dispatch = useDispatch();
 
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
@@ -124,6 +126,7 @@ export default function Chat(props) {
       console.log(caller.id);
       if (caller.id !== props.socket.id) {
         dispatch(receiverUIFnOn());
+        // navigator.vibrate([200]);
       }
     });
 
@@ -141,6 +144,15 @@ export default function Chat(props) {
         console.log("call ended inside logic");
       }
       console.log("call-end");
+    });
+    props.socket.on("call-received", (id) => {
+      // if (id !== props.socket.id) {
+      dispatch(openCallerScreenOff());
+      dispatch(receiverUIFnOff());
+      dispatch(callTimerOn());
+      console.log("call-received inside logic");
+      // }
+      console.log("call-received in event");
     });
   });
 
@@ -166,10 +178,16 @@ export default function Chat(props) {
     props.socket.emit("calling", caller);
   };
 
+  const callReceive = () => {
+    console.log("call received");
+    dispatch(callTimerOn());
+    props.socket.emit("call-received", props.socket.id);
+  };
+
   return (
     <>
       <Navbar callSend={callSend} />
-      <CallingTimer />
+      {callTimer && <CallingTimer peer={props.peer} socket={props.socket} />}
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
           <p className=" text-white uppercase font-semibold text-center">
@@ -181,7 +199,9 @@ export default function Chat(props) {
       <div className="scroll-style w-[350px] h-[68vh] overflow-y-scroll m-auto">
         <div>
           {openCalling && <Caller closeCall={closeCall} />}
-          {receiverUI && <Receiver callEnd={callEnd} />}
+          {receiverUI && (
+            <Receiver callReceive={callReceive} callEnd={callEnd} />
+          )}
         </div>
         {msg.length ? (
           <div className="">

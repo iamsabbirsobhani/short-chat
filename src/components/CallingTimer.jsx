@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 
-export default function CallingTimer() {
+export default function CallingTimer(props) {
   const [sec, setSec] = useState(0);
   const [min, setmin] = useState(0);
   const [hour, sethour] = useState(0);
+  const [micToggle, setMicToggle] = useState(true);
 
   let secL = 0;
   let minL = 0;
@@ -22,23 +23,93 @@ export default function CallingTimer() {
         hourL++;
         sethour(hourL);
       }
-      console.log("Hour:", hourL, "Min: ", minL, "Sec: ", secL);
+      //   console.log("Hour:", hourL, "Min: ", minL, "Sec: ", secL);
     }, 1000);
 
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+  const toggleMic = () => {
+    setMicToggle(!micToggle);
+  };
+
+  let myVideoStream;
+  useEffect(() => {
+    const myVideo = document.createElement("video");
+    myVideo.muted = true;
+    const videoGrid = document.getElementById("video-grid");
+    props.socket.on("abc", (userId) => {
+      console.log(userId);
+      setCount(userId);
+    });
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: true,
+      })
+      .then((stream) => {
+        myVideoStream = stream;
+        addVideoStream(myVideo, stream);
+        console.log("inside stream");
+
+        props.peer.on("call", (call) => {
+          call.answer(stream);
+          console.log("Peer.on call");
+          const video = document.createElement("video");
+          call.on("stream", (userVideoStream) => {
+            console.log("call.on stream");
+            addVideoStream(video, userVideoStream);
+          });
+        });
+
+        props.socket.on("user-connected", (userId) => {
+          console.log(userId);
+          console.log("Socket.on user-connected, userId", userId);
+          connectToNewUser(userId, stream);
+        });
+      });
+    const connectToNewUser = (userId, stream) => {
+      const call = props.peer.call(userId, stream);
+      const video = document.createElement("video");
+      console.log("Connect New User, userId", userId);
+      call.on("stream", (userVideoStream) => {
+        addVideoStream(video, userVideoStream);
+        console.log("Connect New User: call.on stream");
+      });
+    };
+
+    const addVideoStream = (video, stream) => {
+      video.srcObject = stream;
+      video.addEventListener("loadedmetadata", () => {
+        video.play();
+        videoGrid.append(video);
+      });
+    };
+  });
   return (
     <div className=" flex justify-between h-[60px] items-center shadow-lg absolute top-0 text-white bg-red-500 w-full p-3 ">
       <div>
-        <h1 className=" font-semibold">
-          Call<span className=" animate-pulse">...</span>
-        </h1>
+        {micToggle ? (
+          <div
+            onClick={() => toggleMic()}
+            className=" cursor-pointer shadow-md bg-white text-red-500 text-2xl flex justify-center items-center w-8 h-8 rounded-sm"
+          >
+            <ion-icon name="mic-outline"></ion-icon>
+          </div>
+        ) : (
+          <div
+            onClick={() => toggleMic()}
+            className=" cursor-pointer shadow-md bg-white text-red-500 text-2xl flex justify-center items-center w-8 h-8 rounded-sm"
+          >
+            <ion-icon name="mic-off-outline"></ion-icon>
+          </div>
+        )}
       </div>
       <div>
         <h1 className=" font-semibold tracking-wider">
           {hour}:{min}:{sec}
+          <div id="video-grid"></div>
         </h1>
       </div>
       <div className=" cursor-pointer bg-white text-red-500 rounded-sm">

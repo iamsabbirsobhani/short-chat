@@ -4,7 +4,7 @@ function App(props) {
   return (
     <div className="App">
       <header>
-        <Chat socket={props.socket} />
+        <Chat socket={props.socket} peer={props.peer} />
       </header>
     </div>
   );
