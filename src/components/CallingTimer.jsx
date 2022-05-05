@@ -111,8 +111,11 @@ export default function CallingTimer(props) {
     };
 
     props.socket.on("all-mic", (action) => {
-      const enabled = myVideoStream.getAudioTracks();
-      enabled[0].stop();
+      // bellow code fully turned off the mic
+      // const enabled = myVideoStream.getAudioTracks();
+      // enabled[0].stop();
+
+      myVideoStream.getAudioTracks()[0].enabled = false;
       console.log("stop all mic");
     });
   });
