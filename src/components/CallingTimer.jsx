@@ -35,7 +35,7 @@ export default function CallingTimer(props) {
   let myVideoStream;
 
   const toggleMic = () => {
-    setMicToggle(!micToggle);
+    // setMicToggle(!micToggle);
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
     if (enabled) {
       myVideoStream.getAudioTracks()[0].enabled = false;
