@@ -72,6 +72,7 @@ export default function CallingTimer(props) {
       })
       .then((stream) => {
         myVideoStream = stream;
+        myVideoStream.getAudioTracks()[0].enabled = true;
 
         addVideoStream(myVideo, stream);
         console.log("inside stream");
