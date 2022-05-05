@@ -42,6 +42,7 @@ export default function CallingTimer(props) {
     } else {
       myVideoStream.getAudioTracks()[0].enabled = true;
     }
+    console.log(enabled);
   };
 
   useEffect(() => {
@@ -97,7 +98,7 @@ export default function CallingTimer(props) {
     };
   });
   return (
-    <div className=" flex justify-between h-[60px] items-center shadow-lg absolute top-0 text-white bg-red-500 w-full p-3 ">
+    <div className=" flex justify-between h-[60px] items-center shadow-lg fixed top-0 text-white bg-red-500 w-full p-3 ">
       <div>
         {micToggle ? (
           <div
