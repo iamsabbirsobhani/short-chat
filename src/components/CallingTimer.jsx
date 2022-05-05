@@ -41,10 +41,10 @@ export default function CallingTimer(props) {
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
     if (enabled) {
       myVideoStream.getAudioTracks()[0].enabled = false;
-      dispatch(setMicOff());
+      // dispatch(setMicOff());
     } else {
       myVideoStream.getAudioTracks()[0].enabled = true;
-      dispatch(setMicOn());
+      // dispatch(setMicOn());
     }
     console.log(enabled);
   };
@@ -100,7 +100,7 @@ export default function CallingTimer(props) {
         videoGrid.append(video);
       });
     };
-  });
+  }, []);
   return (
     <div className=" flex justify-between h-[60px] items-center shadow-lg fixed top-0 text-white bg-red-500 w-full p-3 ">
       <div>
