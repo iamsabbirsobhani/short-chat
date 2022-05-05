@@ -59,7 +59,8 @@ export default function CallingTimer(props) {
 
   useEffect(() => {
     props.socket.emit("join", pId);
-  }, []);
+    console.log("Join ", pId);
+  });
   useEffect(() => {
     const myVideo = document.createElement("video");
     myVideo.muted = true;
