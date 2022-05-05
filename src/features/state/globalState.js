@@ -9,8 +9,12 @@ export const globalState = createSlice({
     callTimer: false,
     peerId: null,
     isMicOn: true,
+    myVideoStream: null,
   },
   reducers: {
+    setMyvideoStream: (state, payload) => {
+      state.myVideoStream = payload.payload;
+    },
     openCallerScreenOn: (state) => {
       state.openCalling = true;
     },
@@ -69,6 +73,7 @@ export const {
   setPeerId,
   setMicOff,
   setMicOn,
+  setMyvideoStream,
 } = globalState.actions;
 
 export default globalState.reducer;

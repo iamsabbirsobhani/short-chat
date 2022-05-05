@@ -24,6 +24,7 @@ export default function Chat(props) {
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
+  const myVideoStream = useSelector((state) => state.global.myVideoStream);
   const dispatch = useDispatch();
 
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);

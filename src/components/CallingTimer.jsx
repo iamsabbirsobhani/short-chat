@@ -4,6 +4,7 @@ import {
   setMicOn,
   setMicOff,
   callTimerOff,
+  setMyvideoStream,
 } from "../features/state/globalState";
 export default function CallingTimer(props) {
   const pId = useSelector((state) => state.global.peerId);
@@ -14,6 +15,9 @@ export default function CallingTimer(props) {
   const [hour, sethour] = useState(0);
   const [micToggle, setMicToggle] = useState(true);
   const closeCall = () => {
+    const enabled = myVideoStream.getAudioTracks();
+    enabled[0].stop();
+    props.socket.emit("all-mic", false);
     props.socket.emit("call-close", true);
     dispatch(callTimerOff());
   };
@@ -42,18 +46,15 @@ export default function CallingTimer(props) {
   //   };
   // }, []);
   let myVideoStream;
-
+  const off = function () {
+    //toggle state
+    myVideoStream.getAudioTracks()[0].enabled =
+      !myVideoStream.getAudioTracks()[0].enabled;
+  };
   const toggleMic = () => {
     // setMicToggle(!micToggle);
-    const enabled = myVideoStream.getAudioTracks()[0].enabled;
-    if (enabled) {
-      myVideoStream.getAudioTracks()[0].enabled = false;
-      // dispatch(setMicOff());
-    } else {
-      myVideoStream.getAudioTracks()[0].enabled = true;
-      // dispatch(setMicOn());
-    }
-    console.log(enabled);
+    off();
+    console.log("Mic Toggled");
   };
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function CallingTimer(props) {
       })
       .then((stream) => {
         myVideoStream = stream;
+
         addVideoStream(myVideo, stream);
         console.log("inside stream");
 
@@ -107,6 +109,12 @@ export default function CallingTimer(props) {
         videoGrid.append(video);
       });
     };
+
+    props.socket.on("all-mic", (action) => {
+      const enabled = myVideoStream.getAudioTracks();
+      enabled[0].stop();
+      console.log("stop all mic");
+    });
   });
   return (
     <div className=" flex justify-between h-[60px] items-center shadow-lg fixed top-0 text-white bg-red-500 w-full p-3 ">
