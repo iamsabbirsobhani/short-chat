@@ -115,7 +115,7 @@ export default function CallingTimer(props) {
       // const enabled = myVideoStream.getAudioTracks();
       // enabled[0].stop();
 
-      myVideoStream.getAudioTracks()[0].enabled = false;
+      // myVideoStream.getAudioTracks()[0].enabled = false;
       console.log("stop all mic");
     });
 
@@ -124,7 +124,7 @@ export default function CallingTimer(props) {
       // const enabled = myVideoStream.getAudioTracks();
       // enabled[0].stop();
 
-      myVideoStream.getAudioTracks()[0].enabled = true;
+      // myVideoStream.getAudioTracks()[0].enabled = true;
       console.log("start all mic");
     });
   });
