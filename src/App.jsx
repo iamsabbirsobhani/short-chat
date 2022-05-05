@@ -1,18 +1,18 @@
 import Chat from "./views/Chat";
 import CallingTimer from "./components/CallingTimer";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
-  useEffect(() => {
-    props.socket.emit("connect");
+  // useEffect(() => {
+  //   props.socket.emit("connects");
 
-    props.socket.on("total-user", (user) => {
-      console.log("Total user: ", user);
-    });
-  }, []);
+  //   props.socket.on("total-user", (user) => {
+  //     console.log("Total user: ", user);
+  //   });
+  // }, []);
   return (
     <div className="App">
       <header>
