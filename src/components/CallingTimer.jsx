@@ -41,10 +41,10 @@ export default function CallingTimer(props) {
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
     if (enabled) {
       myVideoStream.getAudioTracks()[0].enabled = false;
-      dispatch(setMicOff);
+      dispatch(setMicOff());
     } else {
       myVideoStream.getAudioTracks()[0].enabled = true;
-      dispatch(setMicOn);
+      dispatch(setMicOn());
     }
     console.log(enabled);
   };
