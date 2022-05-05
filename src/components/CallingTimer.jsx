@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setMicOn, setMicOff } from "../features/state/globalState";
+import {
+  setMicOn,
+  setMicOff,
+  callTimerOff,
+} from "../features/state/globalState";
 export default function CallingTimer(props) {
   const pId = useSelector((state) => state.global.peerId);
   const isMicOn = useSelector((state) => state.global.isMicOn);
@@ -9,7 +13,10 @@ export default function CallingTimer(props) {
   const [min, setmin] = useState(0);
   const [hour, sethour] = useState(0);
   const [micToggle, setMicToggle] = useState(true);
-
+  const closeCall = () => {
+    props.socket.emit("call-close", true);
+    dispatch(callTimerOff());
+  };
   let secL = 0;
   let minL = 0;
   let hourL = 0;
@@ -126,7 +133,10 @@ export default function CallingTimer(props) {
           <div id="video-grid"></div>
         </h1>
       </div>
-      <div className=" cursor-pointer bg-white text-red-500 rounded-sm">
+      <div
+        onClick={() => closeCall()}
+        className=" cursor-pointer bg-white text-red-500 rounded-sm"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"

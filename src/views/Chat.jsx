@@ -14,6 +14,7 @@ import {
   receiverUIFnOff,
   callTimerOn,
   setPeerId,
+  callTimerOff,
 } from "../features/state/globalState";
 import { io } from "socket.io-client";
 import CallingTimer from "../components/CallingTimer";
@@ -164,6 +165,9 @@ export default function Chat(props) {
       console.log("Get peer id: (fired)", id);
       dispatch(setPeerId(id));
       console.log(pId);
+    });
+    props.socket.on("call-close", (id) => {
+      dispatch(callTimerOff());
     });
   });
 
