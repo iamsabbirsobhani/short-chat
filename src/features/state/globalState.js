@@ -7,6 +7,7 @@ export const globalState = createSlice({
     openCalling: false,
     receiverUI: false,
     callTimer: false,
+    peerId: null,
   },
   reducers: {
     openCallerScreenOn: (state) => {
@@ -26,6 +27,9 @@ export const globalState = createSlice({
     },
     callTimerOff: (state) => {
       state.callTimer = false;
+    },
+    setPeerId: (state, payload) => {
+      state.peerId = payload;
     },
     increment: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -54,6 +58,7 @@ export const {
   receiverUIFnOff,
   callTimerOn,
   callTimerOff,
+  setPeerId,
 } = globalState.actions;
 
 export default globalState.reducer;
