@@ -100,7 +100,7 @@ export default function CallingTimer(props) {
         videoGrid.append(video);
       });
     };
-  }, []);
+  });
   return (
     <div className=" flex justify-between h-[60px] items-center shadow-lg fixed top-0 text-white bg-red-500 w-full p-3 ">
       <div>
