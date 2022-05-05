@@ -10,8 +10,12 @@ function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
   const [state, setstate] = useState(true);
+  const [isWrong, setIsWrong] = useState(false);
+  const [isLodaing, setIsLoading] = useState(false);
 
   async function handleLogin(code) {
+    setIsWrong(false);
+    setIsLoading(true);
     code.preventDefault();
     try {
       const response = await axios.get(
@@ -19,7 +23,10 @@ function App(props) {
       );
       const res = await response.data;
       setstate(res);
+      setIsWrong(res);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
     }
   }
@@ -38,7 +45,14 @@ function App(props) {
         {callTimer && (
           <CallingTimer peerId={pId} peer={props.peer} socket={props.socket} />
         )}
-        {state && <Login handleLogin={handleLogin} />}
+        {state && (
+          <Login
+            isLodaing={isLodaing}
+            isWrong={isWrong}
+            state={state}
+            handleLogin={handleLogin}
+          />
+        )}
         <Chat socket={props.socket} peer={props.peer} peerId={props.peerId} />
       </header>
     </div>

@@ -1,4 +1,4 @@
-export default function Login({ handleLogin }) {
+export default function Login({ handleLogin, state, isWrong, isLodaing }) {
   return (
     <>
       <div className=" fixed w-full h-full left-0 right-0 bottom-0 top-0  backdrop-blur-sm z-50"></div>
@@ -14,10 +14,22 @@ export default function Login({ handleLogin }) {
             required
             placeholder="type code..."
           />
+          {/* sdf{state == false && <div>sdf</div>} */}
+          {isWrong && (
+            <div className=" mt-2 text-red-500 font-semibold tracking-wide">
+              <h1>Wrong Code</h1>
+            </div>
+          )}
           <div className=" text-center">
-            <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">
-              Submit
-            </button>
+            {isLodaing ? (
+              <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">
+                <div className="border-4 flex justify-center items-center border-white  border-t-4 border-t-gray-600 border-gray-900/60 animate-spin  relative m-auto w-5 h-5 bg-sky-200 rounded-full"></div>
+              </button>
+            ) : (
+              <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">
+                Submit
+              </button>
+            )}
           </div>
         </form>
       </div>
