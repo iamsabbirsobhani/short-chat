@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setMicOn, setMicOff } from "../features/state/globalState";
 export default function CallingTimer(props) {
   const pId = useSelector((state) => state.global.peerId);
+  const isMicOn = useSelector((state) => state.global.isMicOn);
+  const dispatch = useDispatch();
   const [sec, setSec] = useState(0);
   const [min, setmin] = useState(0);
   const [hour, sethour] = useState(0);
@@ -39,8 +41,10 @@ export default function CallingTimer(props) {
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
     if (enabled) {
       myVideoStream.getAudioTracks()[0].enabled = false;
+      dispatch(setMicOff);
     } else {
       myVideoStream.getAudioTracks()[0].enabled = true;
+      dispatch(setMicOn);
     }
     console.log(enabled);
   };
@@ -100,7 +104,7 @@ export default function CallingTimer(props) {
   return (
     <div className=" flex justify-between h-[60px] items-center shadow-lg fixed top-0 text-white bg-red-500 w-full p-3 ">
       <div>
-        {micToggle ? (
+        {isMicOn ? (
           <div
             onClick={() => toggleMic()}
             className=" cursor-pointer shadow-md bg-white text-red-500 text-2xl flex justify-center items-center w-8 h-8 rounded-sm"
