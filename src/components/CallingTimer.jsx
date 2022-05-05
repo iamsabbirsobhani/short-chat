@@ -118,6 +118,15 @@ export default function CallingTimer(props) {
       myVideoStream.getAudioTracks()[0].enabled = false;
       console.log("stop all mic");
     });
+
+    props.socket.on("all-mic-on", (action) => {
+      // bellow code fully turned off the mic
+      // const enabled = myVideoStream.getAudioTracks();
+      // enabled[0].stop();
+
+      myVideoStream.getAudioTracks()[0].enabled = true;
+      console.log("start all mic");
+    });
   });
   return (
     <div className=" flex justify-between h-[60px] items-center shadow-lg fixed top-0 text-white bg-red-500 w-full p-3 ">

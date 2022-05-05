@@ -198,6 +198,7 @@ export default function Chat(props) {
     console.log("call received");
     dispatch(callTimerOn());
     props.socket.emit("call-received", props.socket.id);
+    props.socket.emit("all-mic-on", false);
   };
 
   return (
