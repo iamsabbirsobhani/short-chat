@@ -30,6 +30,7 @@ export default function Chat(props) {
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
+  const [peerId, setPeerId] = useState(null);
   const [isTypings, setIsTypings] = useState({
     isTyping: false,
     id: id,
@@ -150,9 +151,17 @@ export default function Chat(props) {
       dispatch(openCallerScreenOff());
       dispatch(receiverUIFnOff());
       dispatch(callTimerOn());
+
+      props.socket.emit("join", peerId);
+
       console.log("call-received inside logic");
       // }
       console.log("call-received in event");
+    });
+
+    props.socket.on("get-peer-id", function (id) {
+      console.log("sdf", id);
+      setPeerId(id);
     });
   });
 
@@ -187,7 +196,9 @@ export default function Chat(props) {
   return (
     <>
       <Navbar callSend={callSend} />
-      {callTimer && <CallingTimer peer={props.peer} socket={props.socket} />}
+      {callTimer && (
+        <CallingTimer peerId={peerId} peer={props.peer} socket={props.socket} />
+      )}
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
           <p className=" text-white uppercase font-semibold text-center">

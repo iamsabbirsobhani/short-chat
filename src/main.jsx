@@ -22,8 +22,10 @@ var peer = new Peer(undefined, {
 
 peer.on("open", (id) => {
   console.log("peer open", id);
-  socket.emit("join", id);
+  socket.emit("get-peer-id", id);
+  // socket.emit("join", id);
 });
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <React.StrictMode>
