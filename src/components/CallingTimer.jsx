@@ -32,12 +32,18 @@ export default function CallingTimer(props) {
   //     clearInterval(interval);
   //   };
   // }, []);
+  let myVideoStream;
 
   const toggleMic = () => {
     setMicToggle(!micToggle);
+    const enabled = myVideoStream.getAudioTracks()[0].enabled;
+    if (enabled) {
+      myVideoStream.getAudioTracks()[0].enabled = false;
+    } else {
+      myVideoStream.getAudioTracks()[0].enabled = true;
+    }
   };
 
-  let myVideoStream;
   useEffect(() => {
     props.socket.emit("join", pId);
     const myVideo = document.createElement("video");
