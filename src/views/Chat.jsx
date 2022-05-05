@@ -154,7 +154,6 @@ export default function Chat(props) {
       dispatch(receiverUIFnOff());
       dispatch(callTimerOn());
       console.log("PeerId props", props.peerId);
-      props.socket.emit("join", pId);
 
       console.log("call-received inside logic");
       // }
