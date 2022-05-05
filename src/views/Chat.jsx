@@ -129,7 +129,7 @@ export default function Chat(props) {
       console.log(caller.id);
       if (caller.id !== props.socket.id) {
         dispatch(receiverUIFnOn());
-        // navigator.vibrate([200]);
+        navigator.vibrate([200]);
       }
     });
 
