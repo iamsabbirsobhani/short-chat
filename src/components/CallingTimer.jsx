@@ -15,8 +15,8 @@ export default function CallingTimer(props) {
   const [hour, sethour] = useState(0);
   const [micToggle, setMicToggle] = useState(true);
   const closeCall = () => {
-    const enabled = myVideoStream.getAudioTracks();
-    enabled[0].stop();
+    // const enabled = myVideoStream.getAudioTracks();
+    // enabled[0].stop();
     props.socket.emit("all-mic", false);
     props.socket.emit("call-close", true);
     dispatch(callTimerOff());
