@@ -5,8 +5,15 @@ import {
   getDownloadURL,
 } from "../firebase/config";
 import { useState } from "react";
+import { format } from "date-fns";
 const fileUpload = async (file, setProgress, setUrl) => {
-  const storageRef = ref(storage, "images/" + file.name);
+  const storageRef = ref(
+    storage,
+    "images/" +
+      `${format(new Date(), "PP")}/` +
+      `${format(new Date(), "PPPp")} ` +
+      file.name
+  );
   const uploadTask = uploadBytesResumable(storageRef, file);
 
   uploadTask.on(
