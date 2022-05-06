@@ -18,6 +18,9 @@ import {
 } from "../features/state/globalState";
 import { io } from "socket.io-client";
 import CallingTimer from "../components/CallingTimer";
+import { fileUpload } from "../composable/fileUpload";
+import { async } from "@firebase/util";
+import Progress from "../components/Progress";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
@@ -34,6 +37,8 @@ export default function Chat(props) {
   const [imgChunks, setImgChunks] = useState([]);
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
+  const [uploading, setUploading] = useState(0);
+  const [url, setUrl] = useState(null);
   // const [peerId, setPeerId] = useState(null);
   const [isTypings, setIsTypings] = useState({
     isTyping: false,
@@ -44,6 +49,11 @@ export default function Chat(props) {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
+  };
+
+  const handleUpload = async (e) => {
+    console.log(e.target.files[0].name);
+    await fileUpload(e.target.files[0], setUploading, setUrl);
   };
 
   function handleDebounce() {
@@ -73,20 +83,43 @@ export default function Chat(props) {
     }
   }, [chat]);
 
-  const sendMsg = (e) => {
-    e.preventDefault();
-    let msg = {
-      id: props.socket.id,
-      chat: chat,
-      createdAt: new Date(),
-    };
+  useEffect(() => {
+    if (url) {
+      sendMsg(undefined, url);
+      console.log("uploaded: ", url);
+      setUploading(null);
+    }
+  }, [url]);
+
+  const sendMsg = (e, url) => {
+    let msg;
+    if (e) {
+      e.preventDefault();
+    }
+    if (url) {
+      msg = {
+        id: props.socket.id,
+        url: url,
+        createdAt: new Date(),
+      };
+    } else if (chat) {
+      msg = {
+        id: props.socket.id,
+        chat: chat,
+        createdAt: new Date(),
+      };
+    }
     // console.log(msg);
     if (chat) {
       // props.socket.emit("chat message", `${chat} ${props.socket.id}`);
       props.socket.emit("chat message", msg);
+    } else if (url) {
+      props.socket.emit("chat message", msg);
     }
     setChat(null);
-    e.target.chatField.value = null;
+    if (e) {
+      e.target.chatField.value = null;
+    }
   };
 
   useEffect(() => {
@@ -94,6 +127,7 @@ export default function Chat(props) {
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
       setMsg(res);
+      // console.log("chat message executed");
     });
     props.socket.on("typing", function (isTyping) {
       // console.log(isTyping);
@@ -138,8 +172,8 @@ export default function Chat(props) {
     props.socket.on("close-call", (id) => {
       if (id !== props.socket.id) {
         dispatch(receiverUIFnOff());
+        console.log("closed call");
       }
-      console.log("closed call");
     });
 
     props.socket.on("call-end", (id) => {
@@ -204,6 +238,7 @@ export default function Chat(props) {
   return (
     <>
       <Navbar callSend={callSend} />
+      <Progress uploading={uploading} />
       {/* {callTimer && (
         <CallingTimer peerId={pId} peer={props.peer} socket={props.socket} />
       )} */}
@@ -236,7 +271,13 @@ export default function Chat(props) {
                   className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
                   key={index}
                 >
-                  <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
+                  {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
+                  {m.url && (
+                    <div className=" rounded-md mt-1 mb-1 ">
+                      <img src={m.url} alt="" />
+                    </div>
+                  )}
+
                   <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                     {format(new Date(m.createdAt), "p")}
                   </p>
@@ -248,7 +289,12 @@ export default function Chat(props) {
                     key={index}
                     ref={messagesEndRef}
                   >
-                    <h1 className=" mt-1 mb-1">{m.chat}</h1>
+                    {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
+                    {m.url && (
+                      <div className=" rounded-md mt-1 mb-1 ">
+                        <img src={m.url} alt="" />
+                      </div>
+                    )}
                     <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                       {format(new Date(m.createdAt), "p")}
                     </p>
@@ -284,6 +330,7 @@ export default function Chat(props) {
                 type="file"
                 name=""
                 id="file-input"
+                onChange={(e) => handleUpload(e)}
               />
             </div>
           </label>

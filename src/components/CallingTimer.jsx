@@ -10,41 +10,13 @@ export default function CallingTimer(props) {
   const pId = useSelector((state) => state.global.peerId);
   const isMicOn = useSelector((state) => state.global.isMicOn);
   const dispatch = useDispatch();
-  const [sec, setSec] = useState(0);
-  const [min, setmin] = useState(0);
-  const [hour, sethour] = useState(0);
-  const [micToggle, setMicToggle] = useState(true);
+
   const closeCall = () => {
-    // const enabled = myVideoStream.getAudioTracks();
-    // enabled[0].stop();
     props.socket.emit("all-mic", false);
     props.socket.emit("call-close", true);
     dispatch(callTimerOff());
   };
-  let secL = 0;
-  let minL = 0;
-  let hourL = 0;
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setSec(secL);
-  //     secL++;
-  //     if (secL > 60) {
-  //       secL = 1;
-  //       minL++;
-  //       setmin(minL);
-  //     }
-  //     if (minL > 60) {
-  //       minL = 0;
-  //       hourL++;
-  //       sethour(hourL);
-  //     }
-  //     //   console.log("Hour:", hourL, "Min: ", minL, "Sec: ", secL);
-  //   }, 1000);
 
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
   let myVideoStream;
   const off = function () {
     //toggle state
