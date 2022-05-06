@@ -125,7 +125,7 @@ export default function CallingTimer(props) {
       </div>
       <div>
         <h1 className=" font-semibold tracking-wider">
-          {hour}:{min}:{sec}
+          <h1 className=" animate-pulse">Call in progress</h1>
           <div id="video-grid"></div>
         </h1>
       </div>

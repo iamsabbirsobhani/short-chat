@@ -14,16 +14,17 @@ export default function Login({ handleLogin, state, isWrong, isLodaing }) {
             required
             placeholder="type code..."
           />
-          {/* sdf{state == false && <div>sdf</div>} */}
+
           {isWrong && (
             <div className=" mt-2 text-red-500 font-semibold tracking-wide">
               <h1>Wrong Code</h1>
             </div>
           )}
+
           <div className=" text-center">
             {isLodaing ? (
               <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">
-                <div className="border-4 flex justify-center items-center border-white  border-t-4 border-t-gray-600 border-gray-900/60 animate-spin  relative m-auto w-5 h-5 bg-sky-200 rounded-full"></div>
+                <div className="border-4 flex justify-center items-center   border-t-4 border-t-gray-500 border-white animate-spin  relative m-auto h-6 w-6 bg-sky-500 rounded-full"></div>
               </button>
             ) : (
               <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">

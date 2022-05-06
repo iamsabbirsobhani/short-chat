@@ -27,9 +27,7 @@ export default function Chat(props) {
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
-  const myVideoStream = useSelector((state) => state.global.myVideoStream);
   const dispatch = useDispatch();
-
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
   const [msg, setMsg] = useState([]);
   const [id, setId] = useState([]);
@@ -39,13 +37,11 @@ export default function Chat(props) {
   const [alert, setAlert] = useState(null);
   const [uploading, setUploading] = useState(0);
   const [url, setUrl] = useState(null);
-  // const [peerId, setPeerId] = useState(null);
   const [isTypings, setIsTypings] = useState({
     isTyping: false,
     id: id,
   });
   const messagesEndRef = useRef(null);
-  const imgref = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
@@ -72,8 +68,6 @@ export default function Chat(props) {
   }
 
   useEffect(() => {
-    // console.log(chat, "- Has chnaged");
-
     let isTyping = {
       isTyping: true,
       id: props.socket.id,
@@ -86,7 +80,7 @@ export default function Chat(props) {
   useEffect(() => {
     if (url) {
       sendMsg(undefined, url);
-      console.log("uploaded: ", url);
+      console.log("uploaded");
       setUploading(null);
     }
   }, [url]);
@@ -109,51 +103,36 @@ export default function Chat(props) {
         createdAt: new Date(),
       };
     }
-    // console.log(msg);
+
     if (chat) {
-      // props.socket.emit("chat message", `${chat} ${props.socket.id}`);
       props.socket.emit("chat message", msg);
     } else if (url) {
       props.socket.emit("chat message", msg);
     }
+
     setChat(null);
+
     if (e) {
       e.target.chatField.value = null;
     }
   };
 
   useEffect(() => {
-    // console.log(props.socket.id);
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
       setMsg(res);
-      // console.log("chat message executed");
     });
+
     props.socket.on("typing", function (isTyping) {
-      // console.log(isTyping);
       setIsTypings(isTyping);
     });
-    // for image
-    let imgAr = [];
-    // props.socket.on("img-chunk", function (chunk) {
-    //   imgAr.push(chunk);
-    //   setImgChunks(imgAr);
-    //   // console.log(imgChunks);
-    // });
-
-    // props.socket.on("timer", function (sec) {
-    //   // console.log(sec);
-    //   setTimer(sec);
-    // });
 
     props.socket.on("alert", function (msg) {
-      // console.log(msg);
       setAlert(msg);
     });
 
     const stopScrol = setInterval(() => {
       scrollToBottom();
-      // console.log("sd");
     }, 10);
 
     setTimeout(() => {
@@ -165,14 +144,13 @@ export default function Chat(props) {
       console.log(caller.id);
       if (caller.id !== props.socket.id) {
         dispatch(receiverUIFnOn());
-        // navigator.vibrate([200]); //if problem on supporting remove this
       }
     });
 
     props.socket.on("close-call", (id) => {
       if (id !== props.socket.id) {
         dispatch(receiverUIFnOff());
-        console.log("closed call");
+        // console.log("closed call");
       }
     });
 
@@ -180,26 +158,25 @@ export default function Chat(props) {
       if (id !== props.socket.id) {
         dispatch(openCallerScreenOff());
         dispatch(receiverUIFnOff());
-        console.log("call ended inside logic");
+        // console.log("call ended inside logic");
       }
-      console.log("call-end");
+      // console.log("call-end");
     });
     props.socket.on("call-received", (id) => {
       // if (id !== props.socket.id) {
       dispatch(openCallerScreenOff());
       dispatch(receiverUIFnOff());
       dispatch(callTimerOn());
-      console.log("PeerId props", props.peerId);
-
-      console.log("call-received inside logic");
+      // console.log("PeerId props", props.peerId);
+      // console.log("call-received inside logic");
       // }
-      console.log("call-received in event");
+      // console.log("call-received in event");
     });
 
     props.socket.on("get-peer-id", (id) => {
-      console.log("Get peer id: (fired)", id);
+      // console.log("Get peer id: (fired)", id);
       dispatch(setPeerId(id));
-      console.log(pId);
+      // console.log(pId);
     });
     props.socket.on("call-close", (id) => {
       dispatch(callTimerOff());
@@ -207,18 +184,19 @@ export default function Chat(props) {
   });
 
   const closeCall = () => {
-    console.log("Close Call");
+    // console.log("Close Call");
     props.socket.emit("close-call", props.socket.id);
     dispatch(openCallerScreenOff());
   };
 
   const callEnd = () => {
-    console.log("call ended");
+    // console.log("call ended");
     props.socket.emit("call-end", props.socket.id);
     dispatch(receiverUIFnOff());
   };
+
   const callSend = () => {
-    console.log("call send");
+    // console.log("call send");
     dispatch(openCallerScreenOn());
     let caller = {
       id: props.socket.id,
@@ -229,7 +207,7 @@ export default function Chat(props) {
   };
 
   const callReceive = () => {
-    console.log("call received");
+    // console.log("call received");
     dispatch(callTimerOn());
     props.socket.emit("call-received", props.socket.id);
     props.socket.emit("all-mic-on", false);
@@ -239,9 +217,6 @@ export default function Chat(props) {
     <>
       <Navbar callSend={callSend} />
       <Progress uploading={uploading} />
-      {/* {callTimer && (
-        <CallingTimer peerId={pId} peer={props.peer} socket={props.socket} />
-      )} */}
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
           <p className=" text-white uppercase font-semibold text-center">
@@ -257,13 +232,9 @@ export default function Chat(props) {
             <Receiver callReceive={callReceive} callEnd={callEnd} />
           )}
         </div>
+
         {msg.length ? (
           <div className="">
-            {/* style={
-                   m.includes(id)
-                     ? { flex: "right", whiteSpace: "pre-wrap", color: "gray" }
-                     : { color: "" }
-                 } */}
             {msg.map((m, index) =>
               m.id == id ? (
                 <div
@@ -309,6 +280,7 @@ export default function Chat(props) {
           </div>
         )}
       </div>
+
       <form
         onSubmit={sendMsg}
         className=" relative mb-3 text-center w-80 m-auto mt-5"
@@ -350,7 +322,6 @@ export default function Chat(props) {
           </button>
         </div>
       </form>
-      {/* <img src={`data:image/jpeg;base64,` + window.btoa(imgChunks)} alt="" /> */}
     </>
   );
 }
