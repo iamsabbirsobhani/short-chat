@@ -119,9 +119,9 @@ export default function Chat(props) {
 
   // everytime mounted this page will be
   // emit event chat message for showing messages
-  useEffect(() => {
-    props.socket.emit("chat message");
-  });
+  // useEffect(() => {
+  //   props.socket.emit("chat message");
+  // });
 
   useEffect(() => {
     props.socket.on("chat message", (res) => {
