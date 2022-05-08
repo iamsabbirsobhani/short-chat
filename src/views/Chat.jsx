@@ -117,6 +117,12 @@ export default function Chat(props) {
     }
   };
 
+  // everytime mounted this page will be
+  // emit event chat message for showing messages
+  useEffect(() => {
+    props.socket.emit("chat message");
+  });
+
   useEffect(() => {
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
@@ -245,7 +251,7 @@ export default function Chat(props) {
                   {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
                   {m.url && (
                     <div className=" rounded-md mt-1 mb-1 ">
-                      <img src={m.url} alt="" />
+                      <img loading="lazy" src={m.url} alt="" />
                     </div>
                   )}
 
@@ -263,7 +269,7 @@ export default function Chat(props) {
                     {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
                     {m.url && (
                       <div className=" rounded-md mt-1 mb-1 ">
-                        <img src={m.url} alt="" />
+                        <img loading="lazy" src={m.url} alt="" />
                       </div>
                     )}
                     <p className=" absolute bottom-1 text-xs text-gray-300 right-1">

@@ -22,7 +22,11 @@ export default function ImagePreviewer({ handleClosePreview, url }) {
             />
           </svg>
         </div>
-        <img className="scale-in-center shadow-md" src={url} alt="" />
+        <img
+          className="scale-in-center shadow-md w-full h-full object-contain"
+          src={url}
+          alt=""
+        />
       </div>
     </>
   );
