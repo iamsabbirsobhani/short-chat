@@ -1,13 +1,18 @@
 import avatar from "../assets/avatar.png";
 import { useDispatch } from "react-redux";
-
+import { Link } from "react-router-dom";
 export default function Navbar({ callSend }) {
   const dispatch = useDispatch();
   return (
     <div className=" text-white m-auto w-full mb-2 p-3 bg-gray-800/40">
       <div className=" flex items-center justify-between">
         <img className=" w-9 mr-3" src={avatar} alt="" />
-        <h1 className=" font-semibold text-xl">Albion Johnson</h1>
+        <Link
+          to="/images"
+          className=" font-semibold bg-white/10 p-1 px-3 rounded-md"
+        >
+          Image Gallery
+        </Link>
         <div
           onClick={callSend}
           className=" cursor-pointer bg-green-500 w-8 h-8 flex justify-center items-center rounded-md"

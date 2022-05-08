@@ -1,10 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import store from "./app/store";
 import { Provider } from "react-redux";
 import { io } from "socket.io-client";
+import ImageGallery from "./views/ImageGallery";
 
 const socket = io("https://short-chat-backend.herokuapp.com");
 // const socket = io("http://192.168.0.100:8080");
@@ -28,10 +30,18 @@ peer.on("open", (id) => {
   socket.emit("get-peer-id", id);
 });
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <App socket={socket} peerId={peerId} peer={peer} />
-    </React.StrictMode>
-  </Provider>
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <BrowserRouter>
+    <Provider store={store}>
+      <Routes>
+        <Route
+          path="/"
+          element={<App socket={socket} peerId={peerId} peer={peer} />}
+        />
+        <Route path="/images" element={<ImageGallery />} />
+      </Routes>
+    </Provider>
+  </BrowserRouter>
 );

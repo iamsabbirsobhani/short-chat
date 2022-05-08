@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const globalState = createSlice({
   name: "global",
   initialState: {
-    value: 10,
+    value: 100,
     openCalling: false,
     receiverUI: false,
     callTimer: false,
