@@ -125,7 +125,7 @@ export default function Chat(props) {
     return () => {
       console.log("Dismounted");
     };
-  }, []);
+  });
 
   useEffect(() => {
     props.socket.on("chat message", (res) => {
