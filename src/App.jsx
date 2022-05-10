@@ -1,10 +1,12 @@
 import Chat from "./views/Chat";
 import CallingTimer from "./components/CallingTimer";
+import { setName } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
 import Login from "./components/Login";
 // import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
@@ -13,12 +15,14 @@ function App(props) {
   const [isWrong, setIsWrong] = useState(false);
   const [isError, setisError] = useState(null);
   const [isLodaing, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   async function handleLogin(code) {
     setIsWrong(false);
     setIsLoading(true);
     setisError(null);
     code.preventDefault();
+    dispatch(setName(code.target[1].value));
     try {
       const response = await axios.get(
         `https://short-chat-backend.herokuapp.com/${code.target[0].value}`
@@ -26,12 +30,9 @@ function App(props) {
       const res = await response.data;
       setstate(res);
       setIsWrong(res);
-      console.log(res);
       setIsLoading(false);
       if ("error" in res) {
-        console.log("sldjfsjdf");
         setisError(res);
-        console.log("sldjfsjdf");
       }
     } catch (error) {
       setIsLoading(false);

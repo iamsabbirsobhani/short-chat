@@ -4,6 +4,7 @@ export const globalState = createSlice({
   name: "global",
   initialState: {
     value: 100,
+    name: null,
     openCalling: false,
     receiverUI: false,
     callTimer: false,
@@ -12,6 +13,9 @@ export const globalState = createSlice({
     myVideoStream: null,
   },
   reducers: {
+    setName: (state, payload) => {
+      state.name = payload.payload;
+    },
     setMyvideoStream: (state, payload) => {
       state.myVideoStream = payload.payload;
     },
@@ -74,6 +78,7 @@ export const {
   setMicOff,
   setMicOn,
   setMyvideoStream,
+  setName,
 } = globalState.actions;
 
 export default globalState.reducer;

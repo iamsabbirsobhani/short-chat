@@ -24,6 +24,7 @@ import Progress from "../components/Progress";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
+  const name = useSelector((state) => state.global.name);
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
@@ -93,12 +94,14 @@ export default function Chat(props) {
     if (url) {
       msg = {
         id: props.socket.id,
+        name: name,
         url: url,
         createdAt: new Date(),
       };
     } else if (chat) {
       msg = {
         id: props.socket.id,
+        name: name,
         chat: chat,
         createdAt: new Date(),
       };
