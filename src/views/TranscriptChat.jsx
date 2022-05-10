@@ -24,7 +24,7 @@ export default function TranscriptChat() {
   }, []);
   return (
     <>
-      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-1/2  backdrop-blur-md overflow-y-scroll">
+      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-60  backdrop-blur-md overflow-y-scroll">
         {data &&
           data.rows.map((chat) => (
             <div className="  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800">
@@ -37,12 +37,12 @@ export default function TranscriptChat() {
                 </p>
               </div>
               <div>
-                <p className=" text-xs text-gray-600">
+                <p className=" text-xs text-gray-400">
                   {format(new Date(chat.createdAt), "PPp")}
                 </p>
-                <p className=" text-xs text-gray-600">ID: {chat.id}</p>
-                <p className=" text-xs text-gray-600">IP: {chat.ip}</p>
-                <p className=" text-xs text-gray-600">
+                <p className=" text-xs text-gray-400">ID: {chat.id}</p>
+                <p className=" text-xs text-gray-400">IP: {chat.ip}</p>
+                <p className=" text-xs text-gray-400">
                   location: {chat.location}
                 </p>
               </div>
