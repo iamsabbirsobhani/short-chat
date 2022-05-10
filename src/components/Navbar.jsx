@@ -2,12 +2,14 @@ import avatar from "../assets/avatar.png";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { setPage } from "../features/state/globalState";
 export default function Navbar({ callSend }) {
   const name = useSelector((state) => state.global.name);
+  const dispatch = useDispatch();
   return (
     <div className=" z-30 text-white shadow-2xl m-auto w-full mb-2 p-3 bg-gray-900">
       <div className=" flex items-center justify-between">
-        <Link to="/">
+        <Link to="/" onClick={() => dispatch(setPage(8))}>
           <img className=" w-9 mr-3" src={avatar} alt="" />
         </Link>
         <Link

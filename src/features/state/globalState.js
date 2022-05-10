@@ -11,8 +11,15 @@ export const globalState = createSlice({
     peerId: null,
     isMicOn: true,
     myVideoStream: null,
+    page: 8,
   },
   reducers: {
+    pageIncrement: (state) => {
+      state.page += 8;
+    },
+    setPage: (state, payload) => {
+      state.page = payload.payload;
+    },
     setName: (state, payload) => {
       state.name = payload.payload;
     },
@@ -79,6 +86,8 @@ export const {
   setMicOn,
   setMyvideoStream,
   setName,
+  pageIncrement,
+  setPage,
 } = globalState.actions;
 
 export default globalState.reducer;
