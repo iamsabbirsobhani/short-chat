@@ -24,6 +24,7 @@ function App(props) {
       const res = await response.data;
       setstate(res);
       setIsWrong(res);
+      console.log(res);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
