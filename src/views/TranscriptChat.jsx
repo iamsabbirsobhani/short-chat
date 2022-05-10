@@ -23,7 +23,7 @@ export default function TranscriptChat() {
   }, []);
   return (
     <>
-      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-1/4 bg-gray-600 backdrop-blur-md overflow-y-scroll">
+      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-1/2 bg-gray-600 backdrop-blur-md overflow-y-scroll">
         {data &&
           data.rows.map((chat) => (
             <div className=" bg-gray-500 mb-3 p-2 rounded-sm">
