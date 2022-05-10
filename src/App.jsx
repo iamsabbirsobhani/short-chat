@@ -29,7 +29,9 @@ function App(props) {
       console.log(res);
       setIsLoading(false);
       if ("error" in res) {
+        console.log("sldjfsjdf");
         setisError(res);
+        console.log("sldjfsjdf");
       }
     } catch (error) {
       setIsLoading(false);

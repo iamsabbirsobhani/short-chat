@@ -21,16 +21,15 @@ export default function Login({
             placeholder="type code..."
           />
 
-          {(isError && (
+          {isError ? (
             <div className=" mt-2 text-red-500 font-semibold tracking-wide">
-              <h1>{isError}</h1>
+              <h1>{isError.error}</h1>
             </div>
-          )) ||
-            (isWrong && (
-              <div className=" mt-2 text-red-500 font-semibold tracking-wide">
-                <h1>Wrong Code</h1>
-              </div>
-            ))}
+          ) : isWrong ? (
+            <div className=" mt-2 text-red-500 font-semibold tracking-wide">
+              <h1>Wrong Code</h1>
+            </div>
+          ) : null}
 
           <div className=" text-center">
             {isLodaing ? (
