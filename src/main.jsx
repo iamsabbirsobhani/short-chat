@@ -8,20 +8,20 @@ import { Provider } from "react-redux";
 import { io } from "socket.io-client";
 import ImageGallery from "./views/ImageGallery";
 
-const socket = io("http://192.168.0.100:8080");
-
-var peer = new Peer(undefined, {
-  path: "/peerjs",
-  host: "/",
-  port: 8080,
-});
-
-// const socket = io("https://short-chat-backend.herokuapp.com");
+// const socket = io("http://192.168.0.100:8080");
 
 // var peer = new Peer(undefined, {
 //   path: "/peerjs",
-//   host: "short-chat-backend.herokuapp.com",
+//   host: "/",
+//   port: 8080,
 // });
+
+const socket = io("https://short-chat-backend.herokuapp.com");
+
+var peer = new Peer(undefined, {
+  path: "/peerjs",
+  host: "short-chat-backend.herokuapp.com",
+});
 
 let peerId;
 
