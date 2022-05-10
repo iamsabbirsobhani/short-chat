@@ -11,11 +11,13 @@ function App(props) {
   const pId = useSelector((state) => state.global.peerId);
   const [state, setstate] = useState(true);
   const [isWrong, setIsWrong] = useState(false);
+  const [isError, setisError] = useState(null);
   const [isLodaing, setIsLoading] = useState(false);
 
   async function handleLogin(code) {
     setIsWrong(false);
     setIsLoading(true);
+    setisError(null);
     code.preventDefault();
     try {
       const response = await axios.get(
@@ -26,6 +28,9 @@ function App(props) {
       setIsWrong(res);
       console.log(res);
       setIsLoading(false);
+      if ("error" in res) {
+        setisError(res);
+      }
     } catch (error) {
       setIsLoading(false);
       console.error(error);
@@ -48,6 +53,7 @@ function App(props) {
         )}
         {state && (
           <Login
+            isError={isError}
             isLodaing={isLodaing}
             isWrong={isWrong}
             state={state}

@@ -1,4 +1,10 @@
-export default function Login({ handleLogin, state, isWrong, isLodaing }) {
+export default function Login({
+  handleLogin,
+  isError,
+  state,
+  isWrong,
+  isLodaing,
+}) {
   return (
     <>
       <div className=" fixed w-full h-full left-0 right-0 bottom-0 top-0  backdrop-blur-sm z-50"></div>
@@ -15,11 +21,16 @@ export default function Login({ handleLogin, state, isWrong, isLodaing }) {
             placeholder="type code..."
           />
 
-          {isWrong && (
+          {(isError && (
             <div className=" mt-2 text-red-500 font-semibold tracking-wide">
-              <h1>Wrong Code</h1>
+              <h1>{isError}</h1>
             </div>
-          )}
+          )) ||
+            (isWrong && (
+              <div className=" mt-2 text-red-500 font-semibold tracking-wide">
+                <h1>Wrong Code</h1>
+              </div>
+            ))}
 
           <div className=" text-center">
             {isLodaing ? (
