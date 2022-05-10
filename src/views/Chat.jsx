@@ -21,6 +21,8 @@ import CallingTimer from "../components/CallingTimer";
 import { fileUpload } from "../composable/fileUpload";
 import { async } from "@firebase/util";
 import Progress from "../components/Progress";
+import { Route, Routes } from "react-router-dom";
+import TranscriptChat from "./TranscriptChat";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
@@ -335,6 +337,9 @@ export default function Chat(props) {
           </button>
         </div>
       </form>
+      <Routes>
+        <Route path="transcript" element={<TranscriptChat />} />
+      </Routes>
     </>
   );
 }

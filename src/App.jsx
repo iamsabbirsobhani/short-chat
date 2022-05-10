@@ -24,6 +24,7 @@ function App(props) {
     code.preventDefault();
     dispatch(setName(code.target[1].value));
     props.socket.emit("get-name", code.target[1].value);
+    console.log(code.target[1].value);
     try {
       const response = await axios.get(
         `https://short-chat-backend.herokuapp.com/${code.target[0].value}`

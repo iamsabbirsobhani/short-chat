@@ -1,18 +1,25 @@
 import avatar from "../assets/avatar.png";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 export default function Navbar({ callSend }) {
-  const dispatch = useDispatch();
+  const name = useSelector((state) => state.global.name);
   return (
-    <div className=" text-white m-auto w-full mb-2 p-3 bg-gray-800/40">
+    <div className=" z-30 text-white shadow-2xl m-auto w-full mb-2 p-3 bg-gray-900">
       <div className=" flex items-center justify-between">
-        <img className=" w-9 mr-3" src={avatar} alt="" />
+        <Link to="/">
+          <img className=" w-9 mr-3" src={avatar} alt="" />
+        </Link>
         <Link
           to="/images"
           className=" font-semibold bg-white/10 p-1 px-3 rounded-md"
         >
           Image Gallery
         </Link>
+        {name && name.toLowerCase() == "albion" && (
+          <Link to="/transcript">Transcript</Link>
+        )}
+
         <div
           onClick={callSend}
           className=" cursor-pointer bg-green-500 w-8 h-8 flex justify-center items-center rounded-md"
@@ -32,7 +39,6 @@ export default function Navbar({ callSend }) {
             />
           </svg>
         </div>
-        {/* <div className=" ml-3 border-none w-2  h-2 bg-green-500 rounded-full"></div> */}
       </div>
     </div>
   );

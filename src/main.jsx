@@ -7,6 +7,7 @@ import store from "./app/store";
 import { Provider } from "react-redux";
 import { io } from "socket.io-client";
 import ImageGallery from "./views/ImageGallery";
+import TranscriptChat from "./views/TranscriptChat";
 
 // const socket = io("http://192.168.0.100:8080");
 
@@ -38,9 +39,11 @@ root.render(
     <Provider store={store}>
       <Routes>
         <Route
-          path="/"
+          path="/*"
           element={<App socket={socket} peerId={peerId} peer={peer} />}
         />
+        {/* <Route path="transcript" element={<TranscriptChat />} />
+        </Route> */}
         <Route path="/images" element={<ImageGallery />} />
       </Routes>
     </Provider>
