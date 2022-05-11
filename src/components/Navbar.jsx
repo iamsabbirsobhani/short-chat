@@ -12,12 +12,14 @@ export default function Navbar({ callSend }) {
         <Link to="/" onClick={() => dispatch(setPage(8))}>
           <img className=" w-9 mr-3" src={avatar} alt="" />
         </Link>
-        <Link
-          to="/images"
-          className=" font-semibold bg-white/10 p-1 px-3 rounded-md"
-        >
-          Image Gallery
-        </Link>
+        {name && name.toLowerCase() == "albion" && (
+          <Link
+            to="/images"
+            className=" font-semibold bg-white/10 p-1 px-3 rounded-md"
+          >
+            Image Gallery
+          </Link>
+        )}
         {name && name.toLowerCase() == "albion" && (
           <Link to="/transcript">Transcript</Link>
         )}

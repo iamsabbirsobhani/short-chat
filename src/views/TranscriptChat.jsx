@@ -37,7 +37,7 @@ export default function TranscriptChat() {
 
   return (
     <>
-      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-60 lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll">
+      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll">
         {data &&
           data.rows.map((chat) => (
             <div
@@ -48,9 +48,18 @@ export default function TranscriptChat() {
                 {chat.name}
               </h1>
               <div className=" break-words bg-gray-800/20 p-2 rounded-sm">
-                <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
-                  {chat.msg}
-                </p>
+                {chat.msg.includes("firebase") ? (
+                  <img src={chat.msg} />
+                ) : chat.msg.includes("mp4") ? (
+                  <video width="320" height="240" muted controls>
+                    <source src={chat.msg} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
+                    {chat.msg}
+                  </p>
+                )}
               </div>
               <div>
                 <p className=" text-xs text-gray-400">
