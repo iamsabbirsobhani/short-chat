@@ -9,8 +9,8 @@ import {
   setSocialPagination,
 } from "../features/state/globalState";
 
-const postAPI = "http://localhost:8080/social/";
-const postsAPI = "http://localhost:8080/socials/";
+const postAPI = "https://short-chat-backend.herokuapp.com/social/";
+const postsAPI = "https://short-chat-backend.herokuapp.com/socials/";
 
 export default function Social(props) {
   const name = useSelector((state) => state.global.name);
