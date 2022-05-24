@@ -63,7 +63,9 @@ export default function Social(props) {
     };
     try {
       setfetchOnce(true);
-      props.socket.emit("social-post", data);
+      if (post !== null || url !== null) {
+        props.socket.emit("social-post", data);
+      }
     } catch (error) {
       console.log(error);
     }
