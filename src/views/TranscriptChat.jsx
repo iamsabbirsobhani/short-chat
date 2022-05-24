@@ -1,15 +1,18 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { pageIncrement } from "../features/state/globalState";
 import format from "date-fns/format";
 
 export default function TranscriptChat() {
+  const onBottom = useRef(null);
   const dispatch = useDispatch();
   const page = useSelector((state) => state.global.page);
   const [data, setdata] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
 
   async function getTranscript() {
+    setisLoading(true);
     const response = await axios.get(
       `https://short-chat-backend.herokuapp.com/chat/${page}`,
       {
@@ -18,6 +21,7 @@ export default function TranscriptChat() {
     );
     const finalRes = await response.data;
     setdata(finalRes);
+    setisLoading(false);
     // console.log(finalRes);
   }
 
@@ -35,9 +39,24 @@ export default function TranscriptChat() {
     };
   }, []);
 
+  const fnBottom = () => {
+    if (
+      onBottom.current.scrollTop + onBottom.current.clientHeight ===
+      onBottom.current.scrollHeight
+    ) {
+      console.log("You have reached bottom");
+      dispatch(pageIncrement());
+      getTranscript();
+    }
+  };
+
   return (
     <>
-      <div className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll">
+      <div
+        onScroll={() => fnBottom()}
+        ref={onBottom}
+        className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll"
+      >
         {data &&
           data.rows.map((chat) => (
             <div
@@ -74,14 +93,17 @@ export default function TranscriptChat() {
             </div>
           ))}
         <div className=" text-center">
-          {data && data.rows.length < data.count && (
+          {isLoading && data && data.rows.length < data.count && (
+            <div className=" m-auto animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
+          )}
+          {/* {data && data.rows.length < data.count && (
             <button
               onClick={() => showMore()}
               className=" text-white font-semibold uppercase rounded-sm bg-gray-700 px-8 py-2"
             >
               Show more...
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </>

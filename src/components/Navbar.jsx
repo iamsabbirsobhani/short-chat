@@ -23,6 +23,7 @@ export default function Navbar({ callSend }) {
         {name && name.toLowerCase() == "albion" && (
           <Link to="/transcript">Transcript</Link>
         )}
+        {/* <Link to="/social">Social</Link> */}
 
         <div
           onClick={callSend}

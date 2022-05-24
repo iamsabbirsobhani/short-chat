@@ -23,6 +23,7 @@ import { async } from "@firebase/util";
 import Progress from "../components/Progress";
 import { Route, Routes } from "react-router-dom";
 import TranscriptChat from "./TranscriptChat";
+import Social from "./Social";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
@@ -339,6 +340,7 @@ export default function Chat(props) {
       </form>
       <Routes>
         <Route path="transcript" element={<TranscriptChat />} />
+        <Route path="social" element={<Social />} />
       </Routes>
     </>
   );
