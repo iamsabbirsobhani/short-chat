@@ -12,6 +12,7 @@ export const globalState = createSlice({
     isMicOn: true,
     myVideoStream: null,
     page: 8,
+    socialPagination: 8,
   },
   reducers: {
     pageIncrement: (state) => {
@@ -19,6 +20,13 @@ export const globalState = createSlice({
     },
     setPage: (state, payload) => {
       state.page = payload.payload;
+    },
+    socialPaginationIncrement: (state) => {
+      state.socialPagination += 8;
+      console.log(state.socialPagination);
+    },
+    setSocialPagination: (state, payload) => {
+      state.socialPagination = payload.payload;
     },
     setName: (state, payload) => {
       state.name = payload.payload;
@@ -88,6 +96,8 @@ export const {
   setName,
   pageIncrement,
   setPage,
+  socialPaginationIncrement,
+  setSocialPagination,
 } = globalState.actions;
 
 export default globalState.reducer;

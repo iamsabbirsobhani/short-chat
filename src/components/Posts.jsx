@@ -1,36 +1,7 @@
 import { useState, useEffect } from "react";
-
-export default function Posts() {
-  const [posts, setposts] = useState([
-    {
-      id: 1,
-      post: "somethign sdfs sdfklj",
-      postedBy: "Albion",
-      posterId: 1,
-      createdAt: new Date().toString(),
-    },
-    {
-      id: 2,
-      post: "somethign sdfs sdfklj",
-      postedBy: "Albion",
-      posterId: 1,
-      createdAt: new Date().toString(),
-    },
-    {
-      id: 3,
-      post: "somethign sdfs sdfklj",
-      postedBy: "Albion",
-      posterId: 1,
-      createdAt: new Date().toString(),
-    },
-    {
-      id: 4,
-      post: "somethign sdfs sdfklj",
-      postedBy: "Albion",
-      posterId: 1,
-      createdAt: new Date().toString(),
-    },
-  ]);
+import { format } from "date-fns";
+export default function Posts({ posts, isLoading }) {
+  // const [posts, setposts] = useState(null);
 
   const getRef = () => {
     console.log(
@@ -38,29 +9,76 @@ export default function Posts() {
       postsRef.current.clientHeight
     );
   };
+
   return (
     <>
       <div className="">
-        {posts.map((post) => (
-          <div
-            className=" mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
-            key={post.id}
-          >
-            <div>
-              <h1 className="text-white antialiased tracking-wider">
-                {post.postedBy}
-              </h1>
-            </div>
-            <div>
-              <div className="break-words bg-gray-800/20 p-2 rounded-sm">
-                <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
-                  {post.post}
-                </p>
+        {posts &&
+          posts.rows.map((post) =>
+            post.imgUrl && post.post ? (
+              <div
+                className=" mb-7 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 relative shadow-md"
+                key={post.id}
+              >
+                <div className=" absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                  <h1 className=" uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                    {post.postedBy}
+                  </h1>
+                </div>
+                <div>
+                  <div className="break-words bg-gray-800/20 p-2 py-3  rounded-sm">
+                    <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
+                      {post.post}
+                    </p>
+                    <img src={post.imgUrl} alt="" />
+                  </div>
+                  <p className="text-xs text-right text-gray-400 mt-3">
+                    {format(new Date(post.createdAt), "PPPp")}
+                  </p>
+                </div>
               </div>
-              <p className="text-xs text-gray-400">{post.createdAt}</p>
-            </div>
-          </div>
-        ))}
+            ) : post.imgUrl ? (
+              <div
+                className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
+                key={post.id}
+              >
+                <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                  <h1 className=" uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                    {post.postedBy}
+                  </h1>
+                </div>
+                <div>
+                  <div className="break-words py-3 bg-gray-800/20 p-2 rounded-sm">
+                    <img src={post.imgUrl} alt="" />
+                  </div>
+                  <p className="text-xs text-right text-gray-400 mt-3">
+                    {format(new Date(post.createdAt), "PPPp")}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div
+                className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
+                key={post.id}
+              >
+                <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                  <h1 className="uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                    {post.postedBy}
+                  </h1>
+                </div>
+                <div>
+                  <div className="break-words bg-gray-800/20 p-2 rounded-sm py-3">
+                    <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
+                      {post.post}
+                    </p>
+                  </div>
+                  <p className="text-xs text-right text-gray-400 mt-3">
+                    {format(new Date(post.createdAt), "PPPp")}
+                  </p>
+                </div>
+              </div>
+            )
+          )}
       </div>
     </>
   );

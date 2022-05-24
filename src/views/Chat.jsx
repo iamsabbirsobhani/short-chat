@@ -340,7 +340,7 @@ export default function Chat(props) {
       </form>
       <Routes>
         <Route path="transcript" element={<TranscriptChat />} />
-        <Route path="social" element={<Social />} />
+        <Route path="social" element={<Social socket={props.socket} />} />
       </Routes>
     </>
   );
