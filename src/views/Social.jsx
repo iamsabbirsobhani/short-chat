@@ -122,6 +122,7 @@ export default function Social(props) {
             placeholder="Share random thought..."
             onChange={(e) => setpost(e.target.value)}
             ref={inputText}
+            required
           />
           <div className=" flex items-center mt-3">
             <div className="input-media-file  w-8 flex justify-center items-center h-8 rounded-md transition duration-300  backdrop-blur-md cursor-pointer border-gray-600 border-[1px]">
