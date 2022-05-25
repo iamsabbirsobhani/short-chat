@@ -30,7 +30,9 @@ export default function Posts({ posts, isLoading }) {
                     <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
                       {post.post}
                     </p>
-                    <img loading="lazy" src={post.imgUrl} alt="" />
+                    <div className=" h-min bg-img-placeholder">
+                      <img src={post.imgUrl} alt="" />
+                    </div>
                   </div>
                   <p className="text-xs text-right text-gray-400 mt-3">
                     {format(new Date(post.createdAt), "PPPp")}
