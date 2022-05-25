@@ -8,7 +8,9 @@ import { Provider } from "react-redux";
 import { io } from "socket.io-client";
 import ImageGallery from "./views/ImageGallery";
 import TranscriptChat from "./views/TranscriptChat";
-
+import Signin from "./views/Signin";
+import Signup from "./views/Signup";
+import { Navigate } from "react-router-dom";
 // const socket = io("http://192.168.0.100:8080");
 
 // var peer = new Peer(undefined, {
@@ -35,17 +37,7 @@ peer.on("open", (id) => {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <Routes>
-        <Route
-          path="/*"
-          element={<App socket={socket} peerId={peerId} peer={peer} />}
-        />
-        {/* <Route path="transcript" element={<TranscriptChat />} />
-        </Route> */}
-        <Route path="/images" element={<ImageGallery />} />
-      </Routes>
-    </Provider>
-  </BrowserRouter>
+  <Provider store={store}>
+    <App socket={socket} peerId={peerId} peer={peer} />
+  </Provider>
 );

@@ -15,6 +15,7 @@ const postsAPI = "https://short-chat-backend.herokuapp.com/socials/";
 export default function Social(props) {
   const name = useSelector((state) => state.global.name);
   const page = useSelector((state) => state.global.socialPagination);
+  const token = useSelector((state) => state.global.token);
   const dispatch = useDispatch();
   const socialRef = useRef(null);
   const inputText = useRef(null);
@@ -70,7 +71,7 @@ export default function Social(props) {
     }
     // console.log(page);
     const data = {
-      postedBy: name,
+      postedBy: token.name,
       post: post,
       imgUrl: url,
     };

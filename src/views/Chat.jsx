@@ -29,6 +29,7 @@ export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
   const name = useSelector((state) => state.global.name);
   const receiverUI = useSelector((state) => state.global.receiverUI);
+  const token = useSelector((state) => state.global.token);
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
   const dispatch = useDispatch();
@@ -96,19 +97,20 @@ export default function Chat(props) {
     }
     if (url) {
       msg = {
-        id: props.socket.id,
-        name: name,
+        id: token.id,
+        name: token.name,
         url: url,
         createdAt: new Date(),
       };
     } else if (chat) {
       msg = {
-        id: props.socket.id,
-        name: name,
+        id: token.id,
+        name: token.name,
         chat: chat,
         createdAt: new Date(),
       };
     }
+    console.log(msg);
 
     if (chat) {
       props.socket.emit("chat message", msg);
@@ -122,16 +124,6 @@ export default function Chat(props) {
       e.target.chatField.value = null;
     }
   };
-
-  // everytime mounted this page will be
-  // emit event chat message for showing messages
-  // useEffect(() => {
-  //   props.socket.emit("chat message");
-  //   console.log("Mounted");
-  //   return () => {
-  //     console.log("Dismounted");
-  //   };
-  // });
 
   useEffect(() => {
     props.socket.on("chat message", (res) => {
@@ -252,7 +244,7 @@ export default function Chat(props) {
         {msg.length ? (
           <div className="">
             {msg.map((m, index) =>
-              m.id == id ? (
+              m.id == token.id ? (
                 <div
                   ref={messagesEndRef}
                   className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"

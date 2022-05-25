@@ -20,12 +20,6 @@ export default function Login({
             required
             placeholder="type code..."
           />
-          <input
-            className=" shadow-md mt-3 rounded-sm p-2 pl-3 text-gray-900 outline-none"
-            type="text"
-            required
-            placeholder="type name..."
-          />
 
           {isError ? (
             <div className=" mt-2 text-red-500 font-semibold tracking-wide">

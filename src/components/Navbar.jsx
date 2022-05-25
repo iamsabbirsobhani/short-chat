@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { setPage } from "../features/state/globalState";
 export default function Navbar({ callSend }) {
   const name = useSelector((state) => state.global.name);
+  const token = useSelector((state) => state.global.token);
   const dispatch = useDispatch();
   return (
     <div className=" z-30 text-white shadow-2xl m-auto w-full mb-2 p-3 bg-gray-900">
@@ -12,7 +13,7 @@ export default function Navbar({ callSend }) {
         <Link to="/" onClick={() => dispatch(setPage(8))}>
           <img className=" w-9 mr-3" src={avatar} alt="" />
         </Link>
-        {name && name.toLowerCase() == "albion" && (
+        {token && token.name.toLowerCase() === "albion" && (
           <Link
             to="/images"
             className=" font-semibold bg-white/10 p-1 px-3 rounded-md"
@@ -20,12 +21,12 @@ export default function Navbar({ callSend }) {
             Image Gallery
           </Link>
         )}
-        {name && name.toLowerCase() == "albion" && (
+        {token && token.name.toLowerCase() === "albion" && (
           <Link to="/transcript">Transcript</Link>
         )}
-        {/* <div className=" font-semibold bg-blue-500 p-1 rounded-sm shadow-md">
+        <div className=" font-semibold bg-blue-500 p-1 rounded-sm shadow-md">
           <Link to="/social">Social</Link>
-        </div> */}
+        </div>
 
         <div
           onClick={callSend}

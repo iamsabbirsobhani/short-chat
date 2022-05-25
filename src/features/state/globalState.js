@@ -13,8 +13,13 @@ export const globalState = createSlice({
     myVideoStream: null,
     page: 8,
     socialPagination: 8,
+    token: null,
   },
   reducers: {
+    setToken: (state, payload) => {
+      state.token = payload.payload;
+      console.log("TOken", state.token);
+    },
     pageIncrement: (state) => {
       state.page += 8;
     },
@@ -98,6 +103,7 @@ export const {
   setPage,
   socialPaginationIncrement,
   setSocialPagination,
+  setToken,
 } = globalState.actions;
 
 export default globalState.reducer;
