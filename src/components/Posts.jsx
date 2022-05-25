@@ -30,7 +30,7 @@ export default function Posts({ posts, isLoading }) {
                     <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
                       {post.post}
                     </p>
-                    <img src={post.imgUrl} alt="" />
+                    <img loading="lazy" src={post.imgUrl} alt="" />
                   </div>
                   <p className="text-xs text-right text-gray-400 mt-3">
                     {format(new Date(post.createdAt), "PPPp")}
@@ -49,7 +49,7 @@ export default function Posts({ posts, isLoading }) {
                 </div>
                 <div>
                   <div className="break-words py-3 bg-gray-800/20 p-2 rounded-sm">
-                    <img src={post.imgUrl} alt="" />
+                    <img loading="lazy" src={post.imgUrl} alt="" />
                   </div>
                   <p className="text-xs text-right text-gray-400 mt-3">
                     {format(new Date(post.createdAt), "PPPp")}

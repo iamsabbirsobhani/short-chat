@@ -174,7 +174,7 @@ export default function Social(props) {
                 >
                   <ion-icon name="close-circle-outline"></ion-icon>
                 </div>
-                <img className=" rounded-md" src={url} alt="" />
+                <img loading="lazy" className=" rounded-md" src={url} alt="" />
               </div>
             )}
             {uploading > 0 && uploading !== 100 && (
