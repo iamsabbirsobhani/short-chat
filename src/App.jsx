@@ -13,7 +13,7 @@ import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import ImageGallery from "./views/ImageGallery";
 
-const API = "http://localhost:8080/verifyToken/";
+const API = "https://short-chat-backend.herokuapp.com/verifyToken/";
 
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);

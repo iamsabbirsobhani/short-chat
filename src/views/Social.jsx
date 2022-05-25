@@ -74,6 +74,7 @@ export default function Social(props) {
       postedBy: token.name,
       post: post,
       imgUrl: url,
+      userId: token.id,
     };
     try {
       setfetchOnce(true);

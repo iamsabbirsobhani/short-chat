@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken } from "../features/state/globalState";
 
-const API = "http://localhost:8080/signin";
+const API = "https://short-chat-backend.herokuapp.com/signin";
 
 async function signIn(data) {
   try {
