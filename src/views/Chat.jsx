@@ -15,6 +15,7 @@ import {
   callTimerOn,
   setPeerId,
   callTimerOff,
+  setMsg,
 } from "../features/state/globalState";
 import { io } from "socket.io-client";
 import CallingTimer from "../components/CallingTimer";
@@ -27,6 +28,7 @@ import Social from "./Social";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
+  const msg = useSelector((state) => state.global.msg);
   const name = useSelector((state) => state.global.name);
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const token = useSelector((state) => state.global.token);
@@ -34,7 +36,6 @@ export default function Chat(props) {
   const pId = useSelector((state) => state.global.peerId);
   const dispatch = useDispatch();
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
-  const [msg, setMsg] = useState([]);
   const [id, setId] = useState([]);
   const [chat, setChat] = useState(null);
   const [imgChunks, setImgChunks] = useState([]);
@@ -128,7 +129,8 @@ export default function Chat(props) {
   useEffect(() => {
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
-      setMsg(res);
+      console.log("Response ", res);
+      dispatch(setMsg(res));
     });
 
     props.socket.on("typing", function (isTyping) {
