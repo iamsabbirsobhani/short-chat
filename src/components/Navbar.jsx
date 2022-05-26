@@ -10,8 +10,8 @@ export default function Navbar({ callSend }) {
   return (
     <div className=" z-30 text-white shadow-2xl m-auto w-full mb-2 p-3 bg-gray-900">
       <div className=" flex items-center justify-between">
-        <Link to="/" onClick={() => dispatch(setPage(8))}>
-          <img className=" w-9 mr-3" src={avatar} alt="" />
+        <Link to="/" onClick={() => dispatch(setPage(8))} className="text-xl">
+          <ion-icon className=" w-9 mr-3" name="home"></ion-icon>
         </Link>
         {token && token.name.toLowerCase() === "albion" && (
           <Link
