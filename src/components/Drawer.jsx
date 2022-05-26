@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setToken } from "../features/state/globalState";
+import { setToken, setPage } from "../features/state/globalState";
 
 export default function Drawer({ drawerToggle }) {
   const token = useSelector((state) => state.global.token);
@@ -28,6 +28,7 @@ export default function Drawer({ drawerToggle }) {
           <div className=" mt-2 ">
             <button
               onClick={() => {
+                dispatch(setPage(8));
                 navigate("/");
                 drawerToggle();
               }}
@@ -77,6 +78,7 @@ export default function Drawer({ drawerToggle }) {
           <div className="logout ">
             <button
               onClick={() => {
+                dispatch(setPage(8));
                 drawerToggle();
                 dispatch(setToken(null));
                 localStorage.setItem("user", JSON.stringify(null));
