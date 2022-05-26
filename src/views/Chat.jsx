@@ -235,7 +235,7 @@ export default function Chat(props) {
         </div>
       ) : null}
 
-      <div className="scroll-style w-[350px] h-[68vh] overflow-y-scroll m-auto">
+      <div className="scroll-style w-[350px] h-[70vh] overflow-y-scroll m-auto">
         <div>
           {openCalling && <Caller closeCall={closeCall} />}
           {receiverUI && (
