@@ -20,19 +20,19 @@ export const globalState = createSlice({
   reducers: {
     setMsg: (state, payload) => {
       state.msg = payload.payload;
-      console.log("Msg is ", state.msg ? state.msg : "Empty");
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
     },
     toggleDrawer: (state) => {
       state.drawer = !state.drawer;
-      console.log("Drawer is ", state.drawer ? "open" : "close");
+      // console.log("Drawer is ", state.drawer ? "open" : "close");
     },
     setDrawer: (state, payload) => {
       state.drawer = payload.payload;
-      console.log("Drawer is ", state.drawer ? "open" : "close");
+      // console.log("Drawer is ", state.drawer ? "open" : "close");
     },
     setToken: (state, payload) => {
       state.token = payload.payload;
-      console.log("TOken", state.token);
+      // console.log("TOken", state.token);
     },
     pageIncrement: (state) => {
       state.page += 8;

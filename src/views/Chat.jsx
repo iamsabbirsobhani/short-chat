@@ -54,7 +54,7 @@ export default function Chat(props) {
   };
 
   const handleUpload = async (e) => {
-    console.log(e.target.files[0].name);
+    // console.log(e.target.files[0].name);
     await fileUpload(e.target.files[0], setUploading, setUrl);
   };
 
@@ -111,7 +111,7 @@ export default function Chat(props) {
         createdAt: new Date(),
       };
     }
-    console.log(msg);
+    // console.log(msg);
 
     if (chat) {
       props.socket.emit("chat message", msg);
@@ -129,7 +129,7 @@ export default function Chat(props) {
   useEffect(() => {
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
-      console.log("Response ", res);
+      // console.log("Response ", res);
       dispatch(setMsg(res));
     });
 
@@ -150,8 +150,8 @@ export default function Chat(props) {
     }, 700);
 
     props.socket.on("incoming-call", (caller) => {
-      console.log(caller);
-      console.log(caller.id);
+      // console.log(caller);
+      // console.log(caller.id);
       if (caller.id !== props.socket.id) {
         dispatch(receiverUIFnOn());
       }

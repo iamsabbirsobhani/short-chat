@@ -125,7 +125,7 @@ export default function Social(props) {
     console.log("Image upload canceled");
     inputFile.current.value = "";
     seturl(null);
-    console.log(url);
+    // console.log(url);
   }
 
   return (

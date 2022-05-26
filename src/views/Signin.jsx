@@ -11,16 +11,16 @@ const API = "https://short-chat-backend.herokuapp.com/signin";
 
 async function signIn(data) {
   try {
-    console.log(data);
+    // console.log(data);
     const signin = await axios.post(API, qs.stringify(data), {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
-    console.log(signin);
+    // console.log(signin);
     return signin.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -41,9 +41,9 @@ export default function Signin() {
       email: email,
       password: password,
     };
-    console.log(data);
+    // console.log(data);
     const response = await signIn(data);
-    console.log(response);
+    // console.log(response);
     if ("error" in response) {
       seterror(response.error);
       setisLoading(false);
@@ -56,7 +56,7 @@ export default function Signin() {
 
       localStorage.setItem("user", JSON.stringify(response));
       dispatch(setToken(response));
-      console.log(JSON.parse(localStorage.getItem("user")));
+      // console.log(JSON.parse(localStorage.getItem("user")));
       navigate("/");
     }
     setisLoading(false);
