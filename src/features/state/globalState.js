@@ -14,8 +14,17 @@ export const globalState = createSlice({
     page: 8,
     socialPagination: 8,
     token: null,
+    drawer: false,
   },
   reducers: {
+    toggleDrawer: (state) => {
+      state.drawer = !state.drawer;
+      console.log("Drawer is ", state.drawer ? "open" : "close");
+    },
+    setDrawer: (state, payload) => {
+      state.drawer = payload.payload;
+      console.log("Drawer is ", state.drawer ? "open" : "close");
+    },
     setToken: (state, payload) => {
       state.token = payload.payload;
       console.log("TOken", state.token);
@@ -104,6 +113,8 @@ export const {
   socialPaginationIncrement,
   setSocialPagination,
   setToken,
+  toggleDrawer,
+  setDrawer,
 } = globalState.actions;
 
 export default globalState.reducer;

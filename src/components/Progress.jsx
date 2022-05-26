@@ -1,7 +1,7 @@
 export default function Progress(props) {
   return (
     <>
-      {props.uploading && (
+      {props.uploading ? (
         <div className=" flex justify-center items-center absolute top-0 left-0 right-0 bottom-0 w-72 m-auto z-30 h-56 backdrop-blur-md rounded-md shadow-md p-3">
           <div class="w-full flex bg-gray-200 rounded-full dark:bg-gray-700">
             <div
@@ -12,7 +12,7 @@ export default function Progress(props) {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 }
