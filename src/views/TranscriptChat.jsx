@@ -41,21 +41,21 @@ export default function TranscriptChat() {
     };
   }, []);
 
-  // const fnBottom = () => {
-  //   if (
-  //     onBottom.current.scrollTop + onBottom.current.clientHeight ===
-  //     onBottom.current.scrollHeight
-  //   ) {
-  //     console.log("You have reached bottom");
-  //     dispatch(pageIncrement());
-  //     getTranscript();
-  //   }
-  // };
+  const fnBottom = () => {
+    if (
+      onBottom.current.scrollTop + onBottom.current.clientHeight ===
+      onBottom.current.scrollHeight
+    ) {
+      console.log("You have reached bottom");
+      dispatch(pageIncrement());
+      getTranscript();
+    }
+  };
 
   return (
     <>
       <div
-        // onScroll={() => fnBottom()}
+        onScroll={() => fnBottom()}
         ref={onBottom}
         className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll"
       >
@@ -69,7 +69,7 @@ export default function TranscriptChat() {
                 <h1 className=" text-white antialiased tracking-wider">
                   {chat.name}
                 </h1>
-                {chat.uId ? <div className="text-white">{chat.uId}</div> : null}
+
                 <div className=" break-words bg-gray-800/20 p-2 rounded-sm">
                   {chat.msg.includes("firebase") ? (
                     <img src={chat.msg} />
@@ -122,17 +122,17 @@ export default function TranscriptChat() {
             )
           )}
         <div className=" text-center">
-          {/* {isLoading && data && data.rows.length < data.count && (
+          {isLoading && data && data.rows.length < data.count && (
             <div className=" m-auto animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
-          )} */}
-          {data && data.rows.length < data.count && (
+          )}
+          {/* {data && data.rows.length < data.count && (
             <button
               onClick={() => showMore()}
               className=" text-white font-semibold uppercase rounded-sm bg-gray-700 px-8 py-2"
             >
               Show more...
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </>
