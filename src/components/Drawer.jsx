@@ -75,7 +75,7 @@ export default function Drawer({ drawerToggle }) {
               Image Gallery
             </button>
           </div>
-          <div className="logout ">
+          <div className="logout mt-4 text-center">
             <button
               onClick={() => {
                 dispatch(setPage(8));
@@ -84,7 +84,7 @@ export default function Drawer({ drawerToggle }) {
                 localStorage.setItem("user", JSON.stringify(null));
                 navigate("signin");
               }}
-              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              className=" text-white font-semibold bg-red-500 p-2 rounded-sm shadow-md"
             >
               Logout
             </button>
