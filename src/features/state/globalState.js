@@ -16,8 +16,16 @@ export const globalState = createSlice({
     token: null,
     drawer: false,
     msg: [],
+    confirmDelete: false,
   },
   reducers: {
+    setConfirmDelete: (state, payload) => {
+      state.confirmDelete = payload.payload;
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
+    toggleConfirmDelete: (state) => {
+      state.confirmDelete = !state.confirmDelete;
+    },
     setMsg: (state, payload) => {
       state.msg = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -121,6 +129,8 @@ export const {
   toggleDrawer,
   setDrawer,
   setMsg,
+  setConfirmDelete,
+  toggleConfirmDelete,
 } = globalState.actions;
 
 export default globalState.reducer;

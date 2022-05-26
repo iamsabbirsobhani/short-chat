@@ -16,6 +16,7 @@ export default function Social(props) {
   const name = useSelector((state) => state.global.name);
   const page = useSelector((state) => state.global.socialPagination);
   const token = useSelector((state) => state.global.token);
+  const confirmDelete = useSelector((state) => state.global.confirmDelete);
   const dispatch = useDispatch();
   const socialRef = useRef(null);
   const inputText = useRef(null);
@@ -75,6 +76,7 @@ export default function Social(props) {
       post: post,
       imgUrl: url,
       userId: token.id,
+      uId: token.id,
     };
     try {
       setfetchOnce(true);
@@ -133,7 +135,9 @@ export default function Social(props) {
       <div
         onScroll={(e) => getRef(e)}
         ref={socialRef}
-        className=" fixed top-14 bottom-0 break-words p-3 py-3 right-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll"
+        className={`fixed top-14 bottom-0 break-words p-3 py-3 right-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2   overflow-y-scroll ${
+          confirmDelete ? "" : "backdrop-blur-md"
+        }`}
       >
         <form
           onSubmit={sumbitPost}
@@ -211,7 +215,7 @@ export default function Social(props) {
               <h1>Loading...</h1>
             </div>
           )}
-          <Posts posts={posts} isLoading={isLoading} />
+          <Posts socket={props.socket} posts={posts} isLoading={isLoading} />
           {isLoading && posts && posts.rows.length < posts.count && (
             <div className=" m-auto text-center font-semibold bg-gray-900/50 w-40 p-3 rounded-md uppercase shadow-md">
               <h1 className=" animate-pulse text-white">Loading more...</h1>

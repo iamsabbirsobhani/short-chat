@@ -100,6 +100,7 @@ export default function Chat(props) {
       msg = {
         id: token.id,
         name: token.name,
+        uId: token.id,
         url: url,
         createdAt: new Date(),
       };
@@ -107,6 +108,7 @@ export default function Chat(props) {
       msg = {
         id: token.id,
         name: token.name,
+        uId: token.id,
         chat: chat,
         createdAt: new Date(),
       };

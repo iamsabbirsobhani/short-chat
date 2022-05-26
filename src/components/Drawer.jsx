@@ -24,6 +24,10 @@ export default function Drawer({ drawerToggle }) {
             <ion-icon name="close" className=""></ion-icon>
           </div>
         </div>
+
+        <div className=" text-white text-center mt-2 mb-2 font-bold text-xl">
+          <h1>{token.name.toUpperCase()}</h1>
+        </div>
         <div className="menu mt-3 ml-3  ">
           <div className=" mt-2 ">
             <button
@@ -51,7 +55,7 @@ export default function Drawer({ drawerToggle }) {
               Share
             </button>
           </div>
-          {token && token.name.toLowerCase() === "albion" ? (
+          {token && token.admin === true ? (
             <div className=" mt-2">
               <button
                 onClick={() => {
