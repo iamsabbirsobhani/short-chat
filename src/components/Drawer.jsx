@@ -52,7 +52,7 @@ export default function Drawer({ drawerToggle }) {
               }}
               className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
             >
-              Share
+              Partager
             </button>
           </div>
           {token && token.admin === true ? (
