@@ -15,7 +15,7 @@ export default function Drawer({ drawerToggle, socket }) {
       >
         <h1>Drawer</h1>
       </div>
-      <div className="drawer p-2 w-[220px] h-full bg-gray-900 z-50 fixed top-0 left-0 ">
+      <div className="drawer p-2 w-[220px] h-full bg-gray-900 z-[60] fixed top-0 left-0 ">
         <div className=" flex items-center justify-end mt-2 mb-2 mr-2">
           <div
             onClick={drawerToggle}
