@@ -64,7 +64,7 @@ export default function TranscriptChat() {
             chat.name.toLowerCase() == token.name.toLowerCase() ? (
               <div
                 key={chat.id}
-                className="  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 w-1/2 flex flex-col ml-auto mr-0"
+                className="  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 w-2/3 flex flex-col ml-auto mr-0"
               >
                 <h1 className=" text-white antialiased tracking-wider">
                   {chat.name}
@@ -84,16 +84,17 @@ export default function TranscriptChat() {
                     </p>
                   )}
                 </div>
-                <div>
+                <div className=" flex items-center justify-between mt-1">
                   <p className=" text-xs text-right text-gray-400">
                     {format(new Date(chat.createdAt), "PPp")}
                   </p>
+                  <p className=" text-xs text-gray-400">ID: {chat.id}</p>
                 </div>
               </div>
             ) : (
               <div
                 key={chat.id}
-                className=" mr-auto ml-0 w-1/2  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
+                className=" mr-auto ml-0 w-2/3  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
               >
                 <h1 className=" text-white antialiased tracking-wider">
                   {chat.name}
@@ -113,10 +114,11 @@ export default function TranscriptChat() {
                     </p>
                   )}
                 </div>
-                <div>
+                <div className=" flex items-center justify-between mt-1">
                   <p className=" text-left text-xs text-gray-400">
                     {format(new Date(chat.createdAt), "PPp")}
                   </p>
+                  <p className=" text-xs text-gray-400">ID: {chat.id}</p>
                 </div>
               </div>
             )
