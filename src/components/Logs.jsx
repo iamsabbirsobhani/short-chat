@@ -12,7 +12,6 @@ export default function Logs(props) {
 
   useEffect(() => {
     props.socket.on("get-all-users", (users) => {
-      console.log(users);
       dispatch(setAllUsers(users));
     });
   });
