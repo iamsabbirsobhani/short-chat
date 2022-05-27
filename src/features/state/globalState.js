@@ -18,8 +18,13 @@ export const globalState = createSlice({
     msg: [],
     confirmDelete: false,
     connectedUsers: [],
+    allUsers: null,
   },
   reducers: {
+    setAllUsers: (state, payload) => {
+      state.allUsers = payload.payload;
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
     setConnectedUsers: (state, payload) => {
       state.connectedUsers = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -137,6 +142,7 @@ export const {
   setConfirmDelete,
   toggleConfirmDelete,
   setConnectedUsers,
+  setAllUsers,
 } = globalState.actions;
 
 export default globalState.reducer;

@@ -25,6 +25,7 @@ import Progress from "../components/Progress";
 import { Route, Routes } from "react-router-dom";
 import TranscriptChat from "./TranscriptChat";
 import Social from "./Social";
+import Logs from "../components/Logs";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
@@ -227,7 +228,7 @@ export default function Chat(props) {
 
   return (
     <>
-      <Navbar callSend={callSend} />
+      <Navbar callSend={callSend} socket={props.socket} />
       <Progress uploading={uploading} />
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
@@ -337,6 +338,7 @@ export default function Chat(props) {
       <Routes>
         <Route path="transcript" element={<TranscriptChat />} />
         <Route path="social" element={<Social socket={props.socket} />} />
+        <Route path="logs" element={<Logs socket={props.socket} />} />
       </Routes>
     </>
   );

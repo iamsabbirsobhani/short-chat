@@ -6,7 +6,7 @@ import {
   toggleDrawer,
 } from "../features/state/globalState";
 
-export default function MobileNavbar({ callSend }) {
+export default function MobileNavbar({ callSend, socket }) {
   const drawer = useSelector((state) => state.global.drawer);
   const connectedUsers = useSelector((state) => state.global.connectedUsers);
   const token = useSelector((state) => state.global.token);
@@ -19,7 +19,7 @@ export default function MobileNavbar({ callSend }) {
 
   return (
     <>
-      <div className=" w-full flex justify-between items-center p-3 bg-gray-900 shadow-2xl mb-2 text-white">
+      <div className=" w-full flex justify-between items-center p-3 bg-gray-900 shadow-2xl mb-2 text-white ">
         <div
           onClick={() => drawerToggle()}
           className=" text-2xl ml-2 cursor-pointer  flex  justify-center items-center"
@@ -72,7 +72,9 @@ export default function MobileNavbar({ callSend }) {
       {/* <div>
         <Drawer />
       </div> */}
-      <div>{drawer ? <Drawer drawerToggle={drawerToggle} /> : null}</div>
+      <div>
+        {drawer ? <Drawer socket={socket} drawerToggle={drawerToggle} /> : null}
+      </div>
     </>
   );
 }

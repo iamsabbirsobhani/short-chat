@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setPage } from "../features/state/globalState";
 
-export default function Drawer({ drawerToggle }) {
+export default function Drawer({ drawerToggle, socket }) {
   const token = useSelector((state) => state.global.token);
   let navigate = useNavigate();
   const dispatch = useDispatch();
@@ -65,6 +65,19 @@ export default function Drawer({ drawerToggle }) {
                 className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
               >
                 Transcript
+              </button>
+            </div>
+          ) : null}
+          {token && token.admin === true ? (
+            <div className=" mt-2">
+              <button
+                onClick={() => {
+                  navigate("logs");
+                  drawerToggle();
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              >
+                User Logs
               </button>
             </div>
           ) : null}
