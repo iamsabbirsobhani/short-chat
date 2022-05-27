@@ -1,9 +1,16 @@
 import Drawer from "./Drawer";
 import { useSelector, useDispatch } from "react-redux";
-import { setDrawer, toggleDrawer } from "../features/state/globalState";
+import {
+  setDrawer,
+  setToken,
+  toggleDrawer,
+} from "../features/state/globalState";
 
 export default function MobileNavbar({ callSend }) {
   const drawer = useSelector((state) => state.global.drawer);
+  const connectedUsers = useSelector((state) => state.global.connectedUsers);
+  const token = useSelector((state) => state.global.token);
+
   const dispatch = useDispatch();
 
   function drawerToggle() {
@@ -19,6 +26,28 @@ export default function MobileNavbar({ callSend }) {
         >
           <ion-icon name="grid"></ion-icon>
         </div>
+
+        {connectedUsers ? (
+          <div className=" flex">
+            {connectedUsers.map((item, index) =>
+              item.id !== token.id && item.online ? (
+                <div
+                  key={index}
+                  className="flex items-center ml-2 border-2  p-1"
+                >
+                  {item.online ? (
+                    <>
+                      <div className="name mr-2 ">
+                        <p>{item.name}</p>
+                      </div>
+                      <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
+                    </>
+                  ) : null}
+                </div>
+              ) : null
+            )}
+          </div>
+        ) : null}
 
         <div
           onClick={callSend}

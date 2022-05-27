@@ -1,6 +1,10 @@
 import Chat from "./views/Chat";
 import CallingTimer from "./components/CallingTimer";
-import { setName, setToken } from "./features/state/globalState";
+import {
+  setName,
+  setToken,
+  setConnectedUsers,
+} from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
@@ -18,7 +22,7 @@ const API = "https://short-chat-backend.herokuapp.com/verifyToken/";
 
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
-  const istoken = useSelector((state) => state.global.token);
+  const token = useSelector((state) => state.global.token);
   const pId = useSelector((state) => state.global.peerId);
   const [state, setstate] = useState(true);
   const [isWrong, setIsWrong] = useState(false);
@@ -69,6 +73,28 @@ function App(props) {
 
     verifyToken();
   }, []);
+
+  // online-offline status code
+  useEffect(() => {
+    props.socket.on("online", () => {
+      const data = {
+        online: true,
+        socketId: props.socket.id,
+        id: JSON.parse(localStorage.getItem("user")).id,
+      };
+      props.socket.emit("update-to-online", data);
+    });
+  });
+  useEffect(() => {
+    props.socket.on("online-status", (connectedUsers) => {
+      dispatch(setConnectedUsers(connectedUsers));
+    });
+
+    props.socket.on("offline", (connectedUsers) => {
+      dispatch(setConnectedUsers(connectedUsers));
+    });
+  });
+  // online-offline status code
 
   return (
     <div className="App">

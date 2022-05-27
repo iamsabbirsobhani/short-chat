@@ -7,6 +7,8 @@ import MobileNavbar from "./MobileNavbar";
 export default function Navbar({ callSend }) {
   const name = useSelector((state) => state.global.name);
   const token = useSelector((state) => state.global.token);
+  const connectedUsers = useSelector((state) => state.global.connectedUsers);
+
   const dispatch = useDispatch();
   return (
     <>

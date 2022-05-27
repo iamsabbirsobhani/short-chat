@@ -11,7 +11,11 @@ import TranscriptChat from "./views/TranscriptChat";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import { Navigate } from "react-router-dom";
-// const socket = io("http://192.168.0.100:8080");
+
+// const socket = io(
+//   "http://192.168.0.100:8080",
+//   JSON.parse(localStorage.getItem("user"))
+// );
 
 // var peer = new Peer(undefined, {
 //   path: "/peerjs",

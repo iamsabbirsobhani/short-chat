@@ -20,7 +20,7 @@ export default function TranscriptChat() {
         headers: { code: 1379 },
       }
     );
-    console.log(response);
+    // console.log(response);
     const finalRes = await response.data;
     setdata(finalRes);
     setisLoading(false);
