@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getMessaging, getToken } from "firebase/messaging";
 import {
   getStorage,
   ref,
@@ -26,5 +27,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const storage = getStorage(app);
+const messaging = getMessaging(app);
 
-export { storage, ref, uploadBytesResumable, getDownloadURL };
+export {
+  storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  messaging,
+  getToken,
+};

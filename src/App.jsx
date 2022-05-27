@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import ImageGallery from "./views/ImageGallery";
+import { messaging, getToken } from "./firebase/config";
 
 const API = "https://short-chat-backend.herokuapp.com/verifyToken/";
 
@@ -95,6 +96,32 @@ function App(props) {
     });
   });
   // online-offline status code
+
+  // fcm
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("user"));
+    // data.token = "sdf";
+    console.log(data);
+    getToken(messaging, {
+      vapidKey:
+        "BK5U3OatUDnGtiYBeLQ3IoB4wNE1mbsCfS30x8SJlwgXZOg4BJGvFGfjio8AdQNKg9u8xC5o_61dsw2pUyY2SCo",
+    })
+      .then((currentToken) => {
+        if (currentToken) {
+          data.token = currentToken;
+          console.log(data);
+          props.socket.emit("save-fcm-token", data);
+        } else {
+          console.log(
+            "No registration token available. Request permission to generate one."
+          );
+        }
+      })
+      .catch((err) => {
+        console.log("An error occurred while retrieving token. ", err);
+      });
+  }, []);
+  // fcm
 
   return (
     <div className="App">
