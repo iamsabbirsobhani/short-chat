@@ -51,7 +51,7 @@ export default function Chat(props) {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    // messagesEndRef.current?.scrollIntoView();
+    messagesEndRef.current?.scrollIntoView();
   };
 
   const handleUpload = async (e) => {
