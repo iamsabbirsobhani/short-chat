@@ -11,6 +11,11 @@ export default function TranscriptChat() {
   const token = useSelector((state) => state.global.token);
   const [data, setdata] = useState(null);
   const [isLoading, setisLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView();
+  };
 
   async function getTranscript() {
     setisLoading(true);
@@ -41,12 +46,21 @@ export default function TranscriptChat() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("active");
+    scrollToBottom();
+
+    // const stopScrol = setInterval(() => {
+    // }, 10);
+
+    // setTimeout(() => {
+    //   clearInterval(stopScrol);
+    // }, 700);
+  });
+
   const fnBottom = () => {
-    if (
-      onBottom.current.scrollTop + onBottom.current.clientHeight ===
-      onBottom.current.scrollHeight
-    ) {
-      console.log("You have reached bottom");
+    if (onBottom.current.scrollTop === 0) {
+      console.log("You have reached top");
       dispatch(pageIncrement());
       getTranscript();
     }
@@ -59,11 +73,25 @@ export default function TranscriptChat() {
         ref={onBottom}
         className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll"
       >
+        <div className=" text-center">
+          {isLoading && data && data.rows.length < data.count && (
+            <div className=" m-auto mt-14 animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
+          )}
+          {/* {data && data.rows.length < data.count && (
+            <button
+              onClick={() => showMore()}
+              className=" text-white font-semibold uppercase rounded-sm bg-gray-700 px-8 py-2"
+            >
+              Show more...
+            </button>
+          )} */}
+        </div>
         {data &&
           data.rows.map((chat) =>
             chat.name.toLowerCase() == token.name.toLowerCase() ? (
               <div
                 key={chat.id}
+                ref={messagesEndRef}
                 className="  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 w-2/3 flex flex-col ml-auto mr-0"
               >
                 <h1 className=" text-white antialiased tracking-wider">
@@ -123,19 +151,6 @@ export default function TranscriptChat() {
               </div>
             )
           )}
-        <div className=" text-center">
-          {isLoading && data && data.rows.length < data.count && (
-            <div className=" m-auto animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
-          )}
-          {/* {data && data.rows.length < data.count && (
-            <button
-              onClick={() => showMore()}
-              className=" text-white font-semibold uppercase rounded-sm bg-gray-700 px-8 py-2"
-            >
-              Show more...
-            </button>
-          )} */}
-        </div>
       </div>
     </>
   );

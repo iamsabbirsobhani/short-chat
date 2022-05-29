@@ -55,19 +55,19 @@ export default function Drawer({ drawerToggle, socket }) {
               Partager
             </button>
           </div>
-          {token && token.admin === true ? (
-            <div className=" mt-2">
-              <button
-                onClick={() => {
-                  navigate("transcript");
-                  drawerToggle();
-                }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
-              >
-                Transcript
-              </button>
-            </div>
-          ) : null}
+          {/* {token && token.admin === true ? ( */}
+          <div className=" mt-2">
+            <button
+              onClick={() => {
+                navigate("transcript");
+                drawerToggle();
+              }}
+              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+            >
+              Transcript
+            </button>
+          </div>
+          {/* ) : null} */}
           {token && token.admin === true ? (
             <div className=" mt-2">
               <button
