@@ -30,6 +30,7 @@ export default function Social(props) {
   const [uploading, setUploading] = useState(null);
   const [url, seturl] = useState(null);
   const [fetchOnce, setfetchOnce] = useState(false);
+  const [bottom, setbottom] = useState("Not in bottom");
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -56,13 +57,15 @@ export default function Social(props) {
   }
 
   //   on scroll bottom
+  let i = 0;
   const getRef = () => {
     setfetchOnce(false);
     if (
       socialRef.current.scrollTop + socialRef.current.clientHeight ===
       socialRef.current.scrollHeight
     ) {
-      console.log("Your have reached end");
+      console.log(`Your have reached end ${i + 1}`);
+      setbottom(`Your have reached end ${(i = i + 1)}`);
       dispatch(socialPaginationIncrement());
       // console.log(page);
       getPosts();
@@ -225,6 +228,9 @@ export default function Social(props) {
             posts={posts}
             isLoading={isLoading}
           />
+          <div>
+            <h1>{bottom}</h1>
+          </div>
           {isLoading && (
             <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
           )}
