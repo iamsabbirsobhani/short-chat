@@ -257,7 +257,7 @@ export default function Chat(props) {
               m.id == token.id ? (
                 <div
                   ref={messagesEndRef}
-                  className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-2/3  break-words"
+                  className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
                   key={index}
                 >
                   {m.url && m.url.includes("mp4") && m.url.includes("video") ? (
@@ -286,7 +286,7 @@ export default function Chat(props) {
                   </p>
                 </div>
               ) : (
-                <div className="w-2/3" key={index}>
+                <div className="w-52" key={index}>
                   <div
                     className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg  break-words"
                     ref={messagesEndRef}
