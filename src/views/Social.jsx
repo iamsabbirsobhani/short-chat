@@ -136,7 +136,7 @@ export default function Social(props) {
   return (
     <>
       <div
-        onScroll={(e) => getRef(e)}
+        onScroll={() => getRef()}
         ref={socialRef}
         className={`fixed top-14 bottom-0 break-words p-3 py-3 right-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2   overflow-y-scroll ${
           confirmDelete ? "" : "backdrop-blur-md"
