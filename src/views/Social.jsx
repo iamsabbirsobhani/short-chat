@@ -9,8 +9,7 @@ import {
   setSocialPagination,
   setPosts,
 } from "../features/state/globalState";
-import ConfirmDelete from "../components/ConfirmDelete";
-import format from "date-fns/format";
+
 const postAPI = "https://short-chat-backend.herokuapp.com/social/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/socials/";
 
@@ -114,7 +113,6 @@ export default function Social(props) {
       dispatch(setSocialPagination(8));
     };
   }, []);
-  const [postId, setpostId] = useState();
 
   useEffect(() => {
     // if (fetchOnce) {
@@ -216,324 +214,19 @@ export default function Social(props) {
           )}
         </form>
 
-        <div>
-          <h1>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quod
-            voluptatum atque officia incidunt reiciendis nihil, rerum sunt quae
-            eveniet illo earum vitae perspiciatis, ratione hic error ad dicta
-            placeat! Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Aliquid debitis voluptate temporibus, atque delectus fugiat labore
-            fugit illum quod, expedita quaerat? Velit ab suscipit corrupti
-            aliquid voluptatem enim amet ducimus saepe maxime? Culpa error enim
-            magni aliquam harum. Nostrum illum labore, repellendus nobis vel
-            culpa nesciunt cumque quis suscipit ad possimus doloremque aut
-            quaerat pariatur consequuntur in ab numquam quidem accusamus. Nemo
-            dolorum dolor velit ullam possimus, est expedita et eos sapiente cum
-            unde mollitia non nobis, blanditiis consectetur sit. Ad quis quas
-            tempore vero atque possimus commodi officia, inventore eum numquam
-            explicabo laudantium iure repudiandae et est nesciunt, voluptate
-            veniam in tempora asperiores at iusto laborum placeat! Fugit optio,
-            commodi id soluta error magni expedita officiis obcaecati natus ex
-            laborum repellat tenetur dolorum quas? Ratione facilis fuga
-            assumenda, ipsam nesciunt voluptates blanditiis repudiandae quis
-            nihil vero, quod, dolorem voluptatem nostrum veritatis vitae odit
-            molestias ducimus maiores repellendus doloremque error ipsa hic
-            iure. Temporibus cum doloribus, beatae modi eius qui magnam aut
-            dolore et autem in odit fugiat quibusdam impedit dolorum quas, ipsum
-            provident repellendus, laboriosam praesentium aperiam reiciendis
-            harum. Labore, eveniet a explicabo cupiditate, eligendi omnis,
-            maiores praesentium suscipit saepe consequuntur voluptas aliquid
-            voluptate maxime nihil! Totam, provident molestias facere minus
-            ipsum veritatis incidunt assumenda, explicabo nobis, cumque aperiam
-            eaque temporibus labore reiciendis accusamus architecto nisi neque
-            dolores obcaecati maiores delectus id. A molestias laudantium minus
-            in soluta eligendi autem animi velit odit dolorum numquam atque, nam
-            officiis qui deleniti. Rem, consequatur expedita. Deleniti adipisci
-            ullam nulla nesciunt nam distinctio, voluptatem quod, aliquid
-            doloribus amet ducimus beatae harum placeat aliquam? Hic deserunt ut
-            unde veritatis saepe cum voluptatibus cumque sunt eos sequi nulla
-            consequuntur consectetur aspernatur, velit error amet voluptates
-            omnis. Fugit, quia rem aut deserunt odit sapiente suscipit ad veniam
-            quod illum? Sunt obcaecati vitae molestias corrupti nam, rerum
-            adipisci, voluptatem quis quia quasi commodi voluptate autem
-            provident impedit quos omnis eveniet quas nisi, incidunt aspernatur
-            fuga. Ducimus laborum, non esse iusto accusamus sapiente dolore modi
-            dolor minus quidem labore pariatur quod! Consequatur accusantium
-            eius nemo eos, dolorum explicabo blanditiis animi omnis, excepturi
-            illo doloribus veniam, asperiores ratione neque maxime. Nam, ducimus
-            ipsam magni ratione aut quas accusamus ab delectus quam in et saepe
-            ea vitae perferendis id illo obcaecati, doloribus modi nobis numquam
-            dolores! Dignissimos illo totam doloribus ad iure perferendis
-            dolores, aut molestiae sunt dolor amet a unde, ipsa delectus
-            consectetur sed itaque odit quod reiciendis recusandae eaque
-            praesentium. Labore dignissimos culpa, quo possimus, ipsum sit
-            veniam mollitia, dolorem suscipit quam ab unde quos modi nobis
-            itaque necessitatibus pariatur distinctio nisi velit perferendis
-            dolor maxime odio? Asperiores minus eveniet facere, voluptas harum
-            ullam, praesentium ad saepe quisquam ipsam fugit rem consectetur
-            debitis, a soluta porro sit aspernatur accusamus similique possimus
-            excepturi. Earum non nam necessitatibus error unde nemo labore
-            assumenda, aut minus numquam fugit ipsam architecto amet ut sed
-            cumque quas blanditiis eius doloremque, sunt ipsa expedita
-            voluptate! Officia rerum quam quo harum quidem temporibus ut at qui
-            odio? Temporibus quam labore accusamus velit! Et, ipsum.
-          </h1>
-        </div>
-
         <div className="posts mt-10">
           {!posts && (
             <div className=" text-center text-white mt-5 mb-5">
               <h1>Loading...</h1>
             </div>
           )}
-          {/* <Posts
+          <Posts
             events="social-post-delete"
             setfetchOnce={setfetchOnce}
             socket={props.socket}
             posts={posts}
             isLoading={isLoading}
-          /> */}
-
-          <div className=" ">
-            {posts &&
-              posts.rows.map((post) =>
-                post.imgUrl && post.post ? (
-                  <div
-                    className=" mb-7 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 relative shadow-md"
-                    key={post.id}
-                  >
-                    <div className=" flex  justify-between absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
-                      <h1 className=" uppercase font-semibold shadow-md text-white antialiased tracking-wider">
-                        {post.postedBy}
-                      </h1>
-                    </div>
-                    {post.UserId === token.id ? (
-                      <div className="ml-auto mr-0 w-[30px] text-center">
-                        <button
-                          onClick={() => {
-                            dispatch(toggleConfirmDelete());
-                            setpostId(post.id);
-                          }}
-                          className=" text-white bg-red-500 rounded-sm w-6"
-                        >
-                          <ion-icon name="trash-outline"></ion-icon>
-                        </button>
-                      </div>
-                    ) : null}
-                    <div>
-                      <div className="break-words bg-gray-800/20 p-2 py-3  rounded-sm">
-                        <div>
-                          <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
-                            {post.post}
-                          </p>
-                          <div className=" h-min">
-                            <img src={post.imgUrl} alt="" />
-                          </div>
-                        </div>
-                        <div className=" mt-2 flex-row-reverse flex justify-between items-center">
-                          <div>
-                            <p className="text-xs text-gray-400">
-                              {format(new Date(post.createdAt), "PPPp")}
-                            </p>
-                          </div>
-                          <div className=" flex items-center text-white text-xl ">
-                            <div
-                              onClick={() => {
-                                setfetchOnce(true);
-                                props.socket.emit("heart", post.id);
-                              }}
-                              className=" text-red-500 flex items-center cursor-pointer"
-                            >
-                              <ion-icon name="heart"></ion-icon>
-                              <p className=" text-xs  ml-1 mr-1">
-                                {post.heart}
-                              </p>
-                            </div>
-                            <div
-                              onClick={() => {
-                                setfetchOnce(true);
-                                props.socket.emit("happy", post.id);
-                              }}
-                              className=" text-yellow-500  flex items-center cursor-pointer"
-                            >
-                              <ion-icon name="happy"></ion-icon>
-                              <p className=" text-xs  ml-1 mr-1">
-                                {post.happy}
-                              </p>
-                            </div>
-                            <div
-                              onClick={() => {
-                                setfetchOnce(true);
-                                props.socket.emit("sad", post.id);
-                              }}
-                              className=" text-blue-500 flex items-center cursor-pointer"
-                            >
-                              <ion-icon name="sad"></ion-icon>
-                              <p className=" text-xs ml-1 mr-1">{post.sad}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : post.imgUrl ? (
-                  <div
-                    className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
-                    key={post.id}
-                  >
-                    <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
-                      <h1 className=" uppercase font-semibold shadow-md text-white antialiased tracking-wider">
-                        {post.postedBy}
-                      </h1>
-                    </div>
-                    {post.uId === token.id ? (
-                      <div className="ml-auto mr-0 w-[30px] text-center">
-                        <button
-                          onClick={() => {
-                            dispatch(toggleConfirmDelete());
-                            setpostId(post.id);
-                          }}
-                          className=" text-white bg-red-500 rounded-sm w-6"
-                        >
-                          <ion-icon name="trash-outline"></ion-icon>
-                        </button>
-                      </div>
-                    ) : null}
-                    <div>
-                      <div className="break-words py-3 bg-gray-800/20 p-2 rounded-sm">
-                        <div>
-                          <img loading="lazy" src={post.imgUrl} alt="" />
-                        </div>
-                        <div className=" mt-2 flex-row-reverse flex justify-between items-center">
-                          <div>
-                            <p className="text-xs text-gray-400">
-                              {format(new Date(post.createdAt), "PPPp")}
-                            </p>
-                          </div>
-                          <div className=" flex items-center text-white text-xl ">
-                            <div
-                              onClick={() => {
-                                setfetchOnce(true);
-                                props.socket.emit("heart", post.id);
-                              }}
-                              className=" text-red-500 flex items-center cursor-pointer"
-                            >
-                              <ion-icon name="heart"></ion-icon>
-                              <p className=" text-xs  ml-1 mr-1">
-                                {post.heart}
-                              </p>
-                            </div>
-                            <div
-                              onClick={() => {
-                                setfetchOnce(true);
-                                props.socket.emit("happy", post.id);
-                              }}
-                              className=" text-yellow-500  flex items-center cursor-pointer"
-                            >
-                              <ion-icon name="happy"></ion-icon>
-                              <p className=" text-xs  ml-1 mr-1">
-                                {post.happy}
-                              </p>
-                            </div>
-                            <div
-                              onClick={() => {
-                                setfetchOnce(true);
-                                props.socket.emit("sad", post.id);
-                              }}
-                              className=" text-blue-500 flex items-center cursor-pointer"
-                            >
-                              <ion-icon name="sad"></ion-icon>
-                              <p className=" text-xs ml-1 mr-1">{post.sad}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
-                    key={post.id}
-                  >
-                    <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
-                      <h1 className="uppercase font-semibold shadow-md text-white antialiased tracking-wider">
-                        {post.postedBy}
-                      </h1>
-                    </div>
-                    {post.uId === token.id ? (
-                      <div className="ml-auto mr-0 w-[30px] text-center">
-                        <button
-                          onClick={() => {
-                            dispatch(toggleConfirmDelete());
-                            setpostId(post.id);
-                          }}
-                          className=" text-white bg-red-500 rounded-sm w-6"
-                        >
-                          <ion-icon name="trash-outline"></ion-icon>
-                        </button>
-                      </div>
-                    ) : null}
-                    <div>
-                      <div className="break-words bg-gray-800/20 p-2 rounded-sm py-3">
-                        <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
-                          {post.post}
-                        </p>
-                      </div>
-                      <div className=" flex-row-reverse flex justify-between items-center">
-                        <div>
-                          <p className="text-xs text-gray-400">
-                            {format(new Date(post.createdAt), "PPPp")}
-                          </p>
-                        </div>
-                        <div className=" flex items-center text-white text-xl ">
-                          <div
-                            onClick={() => {
-                              setfetchOnce(true);
-                              props.socket.emit("heart", post.id);
-                            }}
-                            className=" text-red-500 flex items-center cursor-pointer"
-                          >
-                            <ion-icon name="heart"></ion-icon>
-                            <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
-                          </div>
-                          <div
-                            onClick={() => {
-                              setfetchOnce(true);
-                              props.socket.emit("happy", post.id);
-                            }}
-                            className=" text-yellow-500  flex items-center cursor-pointer"
-                          >
-                            <ion-icon name="happy"></ion-icon>
-                            <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
-                          </div>
-                          <div
-                            onClick={() => {
-                              setfetchOnce(true);
-                              props.socket.emit("sad", post.id);
-                            }}
-                            className=" text-blue-500 flex items-center cursor-pointer"
-                          >
-                            <ion-icon name="sad"></ion-icon>
-                            <p className=" text-xs ml-1 mr-1">{post.sad}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              )}
-          </div>
-          <div className=" confirm-delete">
-            {confirmDelete ? (
-              <ConfirmDelete
-                events={events}
-                dispatch={dispatch}
-                toggleConfirmDelete={toggleConfirmDelete}
-                postId={postId}
-                socket={socket}
-              />
-            ) : null}
-          </div>
+          />
           <div>
             <h1>{bottom}</h1>
           </div>
