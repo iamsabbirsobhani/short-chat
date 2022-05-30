@@ -48,6 +48,7 @@ const fileUpload = async (file, setProgress, setUrl) => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log("File available at", downloadURL);
         setUrl(downloadURL);
+        storageRef = null;
       });
     }
   );

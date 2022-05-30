@@ -30,7 +30,7 @@ export default function TranscriptChat() {
     const finalRes = await response.data;
     setdata(finalRes);
     setisLoading(false);
-    onBottom.current.scrollTo({ top: 1100, behavior: "smooth" });
+    onBottom.current.scrollTop = 100;
   }
 
   const showMore = () => {

@@ -48,6 +48,7 @@ export default function Chat(props) {
     isTyping: false,
     id: id,
   });
+  const inputFile = useRef(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -57,6 +58,7 @@ export default function Chat(props) {
   const handleUpload = async (e) => {
     console.log(e.target.files[0].type);
     await fileUpload(e.target.files[0], setUploading, setUrl);
+    inputFile.current.value = "";
   };
 
   function handleDebounce() {
@@ -346,6 +348,7 @@ export default function Chat(props) {
                 accept="image/*,video/*"
                 name=""
                 id="file-input"
+                ref={inputFile}
                 onChange={(e) => handleUpload(e)}
               />
             </div>
