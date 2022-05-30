@@ -284,13 +284,13 @@ export default function Social(props) {
               <h1>Loading...</h1>
             </div>
           )}
-          <Posts
+          {/* <Posts
             events="social-post-delete"
             setfetchOnce={setfetchOnce}
             socket={props.socket}
             posts={posts}
             isLoading={isLoading}
-          />
+          /> */}
           <div>
             <h1>{bottom}</h1>
           </div>
