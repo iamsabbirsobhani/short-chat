@@ -55,7 +55,7 @@ export default function Chat(props) {
   };
 
   const handleUpload = async (e) => {
-    // console.log(e.target.files[0].name);
+    console.log(e.target.files[0].type);
     await fileUpload(e.target.files[0], setUploading, setUrl);
   };
 
@@ -253,7 +253,7 @@ export default function Chat(props) {
                 <div
                   ref={messagesEndRef}
                   className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-2/3  break-words"
-                  key={m.id}
+                  key={index}
                 >
                   {m.url && m.url.includes("mp4") && m.url.includes("video") ? (
                     <video width="320" height="240" muted controls>
@@ -276,12 +276,12 @@ export default function Chat(props) {
                     <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                   )}
 
-                  <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
+                  <p className=" absolute bottom-[0.5px] text-xs text-gray-300 right-2">
                     {format(new Date(m.createdAt), "p")}
                   </p>
                 </div>
               ) : (
-                <div className="w-2/3" key={m.id}>
+                <div className="w-2/3" key={index}>
                   <div
                     className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg  break-words"
                     ref={messagesEndRef}
@@ -309,7 +309,7 @@ export default function Chat(props) {
                     ) : (
                       <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                     )}
-                    <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
+                    <p className=" absolute bottom-[0.5px] text-xs text-gray-300 left-2">
                       {format(new Date(m.createdAt), "p")}
                     </p>
                   </div>
@@ -343,6 +343,7 @@ export default function Chat(props) {
               <input
                 className=" hidden w-9"
                 type="file"
+                accept="image/*,video/*"
                 name=""
                 id="file-input"
                 onChange={(e) => handleUpload(e)}

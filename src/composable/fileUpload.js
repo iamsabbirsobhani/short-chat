@@ -7,13 +7,24 @@ import {
 import { useState } from "react";
 import { format } from "date-fns";
 const fileUpload = async (file, setProgress, setUrl) => {
-  const storageRef = ref(
-    storage,
-    "images/" +
-      `${format(new Date(), "PP")}/` +
-      `${format(new Date(), "PPPp")} ` +
-      file.name
-  );
+  let storageRef;
+  if (file && file.type.includes("video")) {
+    storageRef = ref(
+      storage,
+      "videos/" +
+        `${format(new Date(), "PP")}/` +
+        `${format(new Date(), "PPPp")} ` +
+        file.name
+    );
+  } else {
+    storageRef = ref(
+      storage,
+      "images/" +
+        `${format(new Date(), "PP")}/` +
+        `${format(new Date(), "PPPp")} ` +
+        file.name
+    );
+  }
   const uploadTask = uploadBytesResumable(storageRef, file);
 
   uploadTask.on(
