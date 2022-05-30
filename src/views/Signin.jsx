@@ -43,8 +43,8 @@ export default function Signin() {
     };
     // console.log(data);
     const response = await signIn(data);
-    // console.log(response);
-    if ("error" in response) {
+    console.log(response);
+    if (response && "error" in response) {
       seterror(response.error);
       setisLoading(false);
     }

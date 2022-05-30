@@ -253,7 +253,7 @@ export default function Chat(props) {
                 <div
                   ref={messagesEndRef}
                   className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
-                  key={index}
+                  key={m.id}
                 >
                   {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
                   {m.url && (
@@ -267,10 +267,9 @@ export default function Chat(props) {
                   </p>
                 </div>
               ) : (
-                <div className="w-52">
+                <div className="w-52" key={m.id}>
                   <div
                     className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg w-52 break-words"
-                    key={index}
                     ref={messagesEndRef}
                   >
                     {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}

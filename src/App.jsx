@@ -45,7 +45,7 @@ function App(props) {
       setstate(res);
       setIsWrong(res);
       setIsLoading(false);
-      if ("error" in res) {
+      if (res && "error" in res) {
         setisError(res);
       }
     } catch (error) {

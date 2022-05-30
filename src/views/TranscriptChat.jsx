@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { pageIncrement } from "../features/state/globalState";
+import { pageIncrement, setPage } from "../features/state/globalState";
 import format from "date-fns/format";
 
 export default function TranscriptChat() {
@@ -11,6 +11,7 @@ export default function TranscriptChat() {
   const token = useSelector((state) => state.global.token);
   const [data, setdata] = useState(null);
   const [isLoading, setisLoading] = useState(false);
+  const [isAutoScroll, setisAutoScroll] = useState(true);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -29,7 +30,7 @@ export default function TranscriptChat() {
     const finalRes = await response.data;
     setdata(finalRes);
     setisLoading(false);
-    // console.log(finalRes);
+    onBottom.current.scrollTop = 100;
   }
 
   const showMore = () => {
@@ -43,22 +44,22 @@ export default function TranscriptChat() {
     getTranscript();
     return () => {
       console.log("transcript unmounted");
+      // after leaving the transcript default pagination
+      // will be 8
+      dispatch(setPage(8));
+      setisAutoScroll(true);
     };
   }, []);
 
   useEffect(() => {
     console.log("active");
-    scrollToBottom();
-
-    // const stopScrol = setInterval(() => {
-    // }, 10);
-
-    // setTimeout(() => {
-    //   clearInterval(stopScrol);
-    // }, 700);
+    if (isAutoScroll) {
+      scrollToBottom();
+    }
   });
 
   const fnBottom = () => {
+    setisAutoScroll(false);
     if (onBottom.current.scrollTop === 0) {
       console.log("You have reached top");
       dispatch(pageIncrement());
@@ -73,9 +74,9 @@ export default function TranscriptChat() {
         ref={onBottom}
         className=" fixed top-14 bottom-0 break-words p-3 py-3 left-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2  backdrop-blur-md overflow-y-scroll"
       >
-        <div className=" text-center">
-          {isLoading && data && data.rows.length < data.count && (
-            <div className=" m-auto mt-14 animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
+        <div className=" text-center mt-3 mb-3">
+          {isLoading && (
+            <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
           )}
           {/* {data && data.rows.length < data.count && (
             <button
