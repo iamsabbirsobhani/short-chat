@@ -71,6 +71,11 @@ export default function Social(props) {
     }
   };
 
+  const loadMore = () => {
+    dispatch(socialPaginationIncrement());
+    getPosts();
+  };
+
   const sumbitPost = async (e) => {
     if (e) {
       e.preventDefault();
@@ -115,13 +120,13 @@ export default function Social(props) {
   }, []);
 
   useEffect(() => {
-    // if (fetchOnce) {
-    props.socket.on("social-post", function () {
-      console.log("Execute once");
-      getPosts();
-      // setfetchOnce(false);
-    });
-    // }
+    if (fetchOnce) {
+      props.socket.on("social-post", function () {
+        console.log("Execute once");
+        getPosts();
+        setfetchOnce(false);
+      });
+    }
   });
 
   function handlePost(e) {
@@ -138,7 +143,6 @@ export default function Social(props) {
   return (
     <>
       <div
-        onScroll={() => getRef()}
         ref={socialRef}
         className={`fixed top-14 bottom-0 break-words p-3 py-3 right-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2   overflow-y-scroll ${
           confirmDelete ? "" : "backdrop-blur-md"
@@ -227,12 +231,19 @@ export default function Social(props) {
             posts={posts}
             isLoading={isLoading}
           />
-          <div>
-            <h1>{bottom}</h1>
-          </div>
+
           {isLoading ? (
             <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
-          ) : null}
+          ) : (
+            <div className=" text-center mb-2">
+              <button
+                className="text-white bg-gray-800 p-2 font-semibold rounded-sm shadow-md"
+                onClick={() => loadMore()}
+              >
+                Load More...
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
