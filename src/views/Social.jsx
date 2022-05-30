@@ -214,26 +214,28 @@ export default function Social(props) {
           )}
         </form>
 
-        <div className="posts mt-10">
-          {!posts && (
-            <div className=" text-center text-white mt-5 mb-5">
-              <h1>Loading...</h1>
+        {posts && (
+          <div className="posts mt-10">
+            {!posts && (
+              <div className=" text-center text-white mt-5 mb-5">
+                <h1>Loading...</h1>
+              </div>
+            )}
+            <Posts
+              events="social-post-delete"
+              setfetchOnce={setfetchOnce}
+              socket={props.socket}
+              posts={posts}
+              isLoading={isLoading}
+            />
+            <div>
+              <h1>{bottom}</h1>
             </div>
-          )}
-          <Posts
-            events="social-post-delete"
-            setfetchOnce={setfetchOnce}
-            socket={props.socket}
-            posts={posts}
-            isLoading={isLoading}
-          />
-          <div>
-            <h1>{bottom}</h1>
+            {isLoading && (
+              <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
+            )}
           </div>
-          {isLoading && (
-            <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
-          )}
-        </div>
+        )}
       </div>
     </>
   );
