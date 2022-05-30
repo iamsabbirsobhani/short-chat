@@ -89,7 +89,7 @@ export default function TranscriptChat() {
         </div>
         {data &&
           data.rows.map((chat) =>
-            chat.name.toLowerCase() == token.name.toLowerCase() ? (
+            chat.name.toLowerCase() !== token.name.toLowerCase() ? (
               <div
                 key={chat.id}
                 ref={messagesEndRef}
@@ -123,6 +123,7 @@ export default function TranscriptChat() {
             ) : (
               <div
                 key={chat.id}
+                ref={messagesEndRef}
                 className=" mr-auto ml-0 w-2/3  mb-3 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
               >
                 <h1 className=" text-white antialiased tracking-wider">
