@@ -7,6 +7,7 @@ import { fileUpload } from "../composable/fileUpload";
 import {
   socialPaginationIncrement,
   setSocialPagination,
+  setPosts,
 } from "../features/state/globalState";
 
 const postAPI = "https://short-chat-backend.herokuapp.com/social/";
@@ -15,6 +16,7 @@ const postsAPI = "https://short-chat-backend.herokuapp.com/socials/";
 export default function Social(props) {
   const name = useSelector((state) => state.global.name);
   const page = useSelector((state) => state.global.socialPagination);
+  const posts = useSelector((state) => state.global.posts);
   const token = useSelector((state) => state.global.token);
   const confirmDelete = useSelector((state) => state.global.confirmDelete);
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ export default function Social(props) {
   const inputText = useRef(null);
   const inputFile = useRef(null);
 
-  const [posts, setposts] = useState(null);
+  // const [posts, setposts] = useState(null);
   const [post, setpost] = useState("");
   const [postLoading, setpostLoading] = useState(false);
   const [uploading, setUploading] = useState(null);
@@ -37,7 +39,7 @@ export default function Social(props) {
       headers: { code: 1379 },
     });
     const finalRes = await response.data;
-    setposts(finalRes);
+    dispatch(setPosts(finalRes));
 
     // reset the fields
     if (post !== "" || url !== null) {

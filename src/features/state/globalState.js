@@ -20,8 +20,13 @@ export const globalState = createSlice({
     confirmDelete: false,
     connectedUsers: [],
     allUsers: null,
+    posts: null,
   },
   reducers: {
+    setPosts: (state, payload) => {
+      state.posts = payload.payload;
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
     setAllUsers: (state, payload) => {
       state.allUsers = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -153,6 +158,7 @@ export const {
   setAllUsers,
   adminPaginationIncrement,
   setAdminPagination,
+  setPosts,
 } = globalState.actions;
 
 export default globalState.reducer;
