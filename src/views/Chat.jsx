@@ -336,8 +336,8 @@ export default function Chat(props) {
         </div>
         <div className=" relative">
           <label htmlFor="chatField">
-            <div className="text-purple-500 p-2 bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
-              <label htmlFor="file-input" className=" cursor-pointer ">
+            <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
+              <label htmlFor="file-input" className=" ">
                 <ion-icon name="image"></ion-icon>
               </label>
               <input
