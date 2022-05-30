@@ -252,14 +252,12 @@ export default function Chat(props) {
               m.id == token.id ? (
                 <div
                   ref={messagesEndRef}
-                  className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
+                  className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-2/3  break-words"
                   key={m.id}
                 >
-                  {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
-
                   {m.url && m.url.includes("mp4") && m.url.includes("video") ? (
                     <video width="320" height="240" muted controls>
-                      <source src={chat.msg} type="video/mp4" />
+                      <source src={m.url} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                   ) : (
@@ -267,30 +265,49 @@ export default function Chat(props) {
                       <img loading="lazy" src={m.url} alt="" />
                     </div>
                   )}
+                  {m.chat &&
+                  m.chat.includes("mp4") &&
+                  m.chat.includes("video") ? (
+                    <video width="320" height="240" muted controls>
+                      <source src={m.chat} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
+                  )}
 
                   <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                     {format(new Date(m.createdAt), "p")}
                   </p>
                 </div>
               ) : (
-                <div className="w-52" key={m.id}>
+                <div className="w-2/3" key={m.id}>
                   <div
-                    className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg w-52 break-words"
+                    className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg  break-words"
                     ref={messagesEndRef}
                   >
-                    {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
-
                     {m.url &&
                     m.url.includes("mp4") &&
                     m.url.includes("video") ? (
                       <video width="320" height="240" muted controls>
-                        <source src={chat.msg} type="video/mp4" />
+                        <source src={m.url} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     ) : (
                       <div className=" rounded-md mt-1 mb-1 ">
                         <img loading="lazy" src={m.url} alt="" />
                       </div>
+                    )}
+
+                    {m.chat &&
+                    m.chat.includes("mp4") &&
+                    m.chat.includes("video") ? (
+                      <video width="320" height="240" muted controls>
+                        <source src={m.chat} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                     )}
                     <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                       {format(new Date(m.createdAt), "p")}
