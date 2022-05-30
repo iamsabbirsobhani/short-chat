@@ -222,10 +222,8 @@ export default function Social(props) {
             posts={posts}
             isLoading={isLoading}
           />
-          {isLoading && posts && posts.rows.length < posts.count && (
-            <div className=" m-auto text-center font-semibold bg-gray-900/50 w-40 p-3 rounded-md uppercase shadow-md">
-              <h1 className=" animate-pulse text-white">Loading more...</h1>
-            </div>
+          {isLoading && (
+            <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
           )}
         </div>
       </div>
