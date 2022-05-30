@@ -288,7 +288,7 @@ export default function Chat(props) {
               ) : (
                 <div className="w-52" key={index}>
                   <div
-                    className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg  break-words"
+                    className=" ml-1 relative float-left text-white mb-2 bg-gray-700 p-3 rounded-lg w-52  break-words"
                     ref={messagesEndRef}
                   >
                     {m.url &&
