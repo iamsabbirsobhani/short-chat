@@ -55,6 +55,7 @@ export default function Social(props) {
 
   //   on scroll bottom
   const getRef = () => {
+    setfetchOnce(false);
     if (
       socialRef.current.scrollTop + socialRef.current.clientHeight ===
       socialRef.current.scrollHeight
