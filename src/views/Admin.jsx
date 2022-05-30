@@ -5,20 +5,20 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { fileUpload } from "../composable/fileUpload";
 import {
-  socialPaginationIncrement,
-  setSocialPagination,
+  adminPaginationIncrement,
+  setAdminPagination,
 } from "../features/state/globalState";
 
-const postAPI = "https://short-chat-backend.herokuapp.com/social/";
-const postsAPI = "https://short-chat-backend.herokuapp.com/socials/";
+const postAPI = "https://short-chat-backend.herokuapp.com/admin/";
+const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
 
-export default function Social(props) {
+export default function Admin(props) {
   const name = useSelector((state) => state.global.name);
-  const page = useSelector((state) => state.global.socialPagination);
+  const page = useSelector((state) => state.global.adminPagination);
   const token = useSelector((state) => state.global.token);
   const confirmDelete = useSelector((state) => state.global.confirmDelete);
   const dispatch = useDispatch();
-  const socialRef = useRef(null);
+  const adminRef = useRef(null);
   const inputText = useRef(null);
   const inputFile = useRef(null);
 
@@ -56,11 +56,11 @@ export default function Social(props) {
   //   on scroll bottom
   const getRef = () => {
     if (
-      socialRef.current.scrollTop + socialRef.current.clientHeight ===
-      socialRef.current.scrollHeight
+      adminRef.current.scrollTop + adminRef.current.clientHeight ===
+      adminRef.current.scrollHeight
     ) {
       console.log("Your have reached end");
-      dispatch(socialPaginationIncrement());
+      dispatch(adminPaginationIncrement());
       // console.log(page);
       getPosts();
     }
@@ -82,7 +82,7 @@ export default function Social(props) {
       setfetchOnce(true);
       setpostLoading(true);
       if (post !== "" || url !== null) {
-        props.socket.emit("social-post", data);
+        props.socket.emit("admin-post", data);
       } else {
         console.log("Not Posted");
         setpostLoading(false);
@@ -99,19 +99,19 @@ export default function Social(props) {
   };
 
   useEffect(() => {
-    console.log("Social mounted");
-    dispatch(socialPaginationIncrement());
+    console.log("admin mounted");
+    dispatch(adminPaginationIncrement());
     getPosts();
     // console.log(page);
     return () => {
-      console.log("Social dismounted");
-      dispatch(setSocialPagination(8));
+      console.log("admin dismounted");
+      dispatch(setAdminPagination(8));
     };
   }, []);
 
   useEffect(() => {
     if (fetchOnce) {
-      props.socket.on("social-post", function () {
+      props.socket.on("admin-post", function () {
         console.log("Execute once");
         getPosts();
         setfetchOnce(false);
@@ -134,11 +134,16 @@ export default function Social(props) {
     <>
       <div
         onScroll={(e) => getRef(e)}
-        ref={socialRef}
+        ref={adminRef}
         className={`fixed top-14 bottom-0 break-words p-3 py-3 right-0 w-full lg:w-1/2 xl:w-1/2 2xl:w-1/2   overflow-y-scroll ${
           confirmDelete ? "" : "backdrop-blur-md"
         }`}
       >
+        <div className=" mt-2 mb-2">
+          <button className=" bg-blue-500 p-2 text-white font-semibold">
+            Menu
+          </button>
+        </div>
         <form
           onSubmit={sumbitPost}
           className="postbox flex flex-col  m-auto shadow-md  border-gray-600/50 p-2"
@@ -156,7 +161,7 @@ export default function Social(props) {
           <div className=" flex items-center mt-3">
             <div className="input-media-file  w-8 flex justify-center items-center h-8 rounded-md transition duration-300  backdrop-blur-md cursor-pointer border-gray-600 border-[1px]">
               <label
-                htmlFor="social-file"
+                htmlFor="admin-file"
                 className=" text-violet-500 cursor-pointer mt-1"
               >
                 <ion-icon name="image"></ion-icon>
@@ -167,7 +172,7 @@ export default function Social(props) {
                 accept="image/*"
                 src=""
                 alt=""
-                id="social-file"
+                id="admin-file"
                 ref={inputFile}
                 onChange={(e) => handleUpload(e)}
               />
@@ -216,7 +221,7 @@ export default function Social(props) {
             </div>
           )}
           <Posts
-            events="social-post-delete"
+            events="admin-post-delete"
             socket={props.socket}
             posts={posts}
             isLoading={isLoading}

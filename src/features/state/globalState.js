@@ -13,6 +13,7 @@ export const globalState = createSlice({
     myVideoStream: null,
     page: 8,
     socialPagination: 8,
+    adminPagination: 8,
     token: null,
     drawer: false,
     msg: [],
@@ -64,6 +65,13 @@ export const globalState = createSlice({
     },
     setSocialPagination: (state, payload) => {
       state.socialPagination = payload.payload;
+    },
+    adminPaginationIncrement: (state) => {
+      state.adminPagination += 8;
+      console.log(state.adminPagination);
+    },
+    setAdminPagination: (state, payload) => {
+      state.adminPagination = payload.payload;
     },
     setName: (state, payload) => {
       state.name = payload.payload;
@@ -143,6 +151,8 @@ export const {
   toggleConfirmDelete,
   setConnectedUsers,
   setAllUsers,
+  adminPaginationIncrement,
+  setAdminPagination,
 } = globalState.actions;
 
 export default globalState.reducer;

@@ -7,6 +7,8 @@ import Caller from "../components/Caller";
 import { useSelector, useDispatch } from "react-redux";
 import Receiver from "../components/Receiver";
 import Navbar from "../components/Navbar";
+import { Navigate } from "react-router-dom";
+
 import {
   openCallerScreenOn,
   openCallerScreenOff,
@@ -26,6 +28,7 @@ import { Route, Routes } from "react-router-dom";
 import TranscriptChat from "./TranscriptChat";
 import Social from "./Social";
 import Logs from "../components/Logs";
+import Admin from "./Admin";
 
 export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
@@ -373,6 +376,16 @@ export default function Chat(props) {
         <Route path="transcript" element={<TranscriptChat />} />
         <Route path="social" element={<Social socket={props.socket} />} />
         <Route path="logs" element={<Logs socket={props.socket} />} />
+        <Route
+          path="/admin"
+          element={
+            JSON.parse(localStorage.getItem("user")).admin ? (
+              <Admin socket={props.socket} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
       </Routes>
     </>
   );

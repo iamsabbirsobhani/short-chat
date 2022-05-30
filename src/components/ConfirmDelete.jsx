@@ -4,6 +4,7 @@ export default function ConfirmDelete({
   dispatch,
   postId,
   socket,
+  events,
 }) {
   //   useEffect(() => {
   //     console.log(postId);
@@ -11,7 +12,7 @@ export default function ConfirmDelete({
 
   function deletePost() {
     console.log(postId);
-    socket.emit("social-post-delete", postId);
+    socket.emit(events, postId);
     dispatch(toggleConfirmDelete());
   }
 

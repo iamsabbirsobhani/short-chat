@@ -72,6 +72,19 @@ export default function Drawer({ drawerToggle, socket }) {
             <div className=" mt-2">
               <button
                 onClick={() => {
+                  navigate("admin");
+                  drawerToggle();
+                }}
+                className=" text-white bg-orange-500 p-2 rounded-sm shadow-md"
+              >
+                Admin
+              </button>
+            </div>
+          ) : null}
+          {token && token.admin === true ? (
+            <div className=" mt-2">
+              <button
+                onClick={() => {
                   navigate("logs");
                   drawerToggle();
                 }}

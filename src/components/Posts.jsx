@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import ConfirmDelete from "./ConfirmDelete";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleConfirmDelete } from "../features/state/globalState";
-export default function Posts({ posts, isLoading, socket }) {
+export default function Posts({ posts, isLoading, socket, events }) {
   const [postId, setpostId] = useState();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.global.token);
@@ -130,6 +130,7 @@ export default function Posts({ posts, isLoading, socket }) {
       <div className=" confirm-delete">
         {confirmDelete ? (
           <ConfirmDelete
+            events={events}
             dispatch={dispatch}
             toggleConfirmDelete={toggleConfirmDelete}
             postId={postId}
