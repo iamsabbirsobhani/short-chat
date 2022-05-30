@@ -281,7 +281,7 @@ export default function Chat(props) {
                     <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                   )}
 
-                  <p className=" absolute bottom-[0.5px] text-xs text-gray-300 right-2">
+                  <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                     {format(new Date(m.createdAt), "p")}
                   </p>
                 </div>
@@ -314,7 +314,7 @@ export default function Chat(props) {
                     ) : (
                       <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                     )}
-                    <p className=" absolute bottom-[0.5px] text-xs text-gray-300 left-2">
+                    <p className=" absolute bottom-1 text-xs text-gray-300 right-1">
                       {format(new Date(m.createdAt), "p")}
                     </p>
                   </div>
