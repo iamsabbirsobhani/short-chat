@@ -9,6 +9,7 @@ export default function Posts({
   socket,
   events,
   setfetchOnce,
+  socialRef,
 }) {
   const [postId, setpostId] = useState();
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function Posts({
 
   return (
     <>
-      <div className="">
+      <div className=" ">
         {posts &&
           posts.rows.map((post) =>
             post.imgUrl && post.post ? (
