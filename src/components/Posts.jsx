@@ -15,13 +15,6 @@ export default function Posts({
   const token = useSelector((state) => state.global.token);
   const confirmDelete = useSelector((state) => state.global.confirmDelete);
 
-  const getRef = () => {
-    console.log(
-      postsRef.current.scrollHeight - postsRef.current.scrollTop,
-      postsRef.current.clientHeight
-    );
-  };
-
   return (
     <>
       <div className="">
