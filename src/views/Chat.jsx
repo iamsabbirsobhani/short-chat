@@ -256,7 +256,13 @@ export default function Chat(props) {
                   key={m.id}
                 >
                   {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
-                  {m.url && (
+
+                  {m.url && m.url.includes("mp4") && m.url.includes("video") ? (
+                    <video width="320" height="240" muted controls>
+                      <source src={chat.msg} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
                     <div className=" rounded-md mt-1 mb-1 ">
                       <img loading="lazy" src={m.url} alt="" />
                     </div>
@@ -273,7 +279,15 @@ export default function Chat(props) {
                     ref={messagesEndRef}
                   >
                     {m.chat && <h1 className=" mt-1 mb-1 ">{m.chat}</h1>}
-                    {m.url && (
+
+                    {m.url &&
+                    m.url.includes("mp4") &&
+                    m.url.includes("video") ? (
+                      <video width="320" height="240" muted controls>
+                        <source src={chat.msg} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
                       <div className=" rounded-md mt-1 mb-1 ">
                         <img loading="lazy" src={m.url} alt="" />
                       </div>

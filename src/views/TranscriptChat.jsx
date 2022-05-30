@@ -15,7 +15,7 @@ export default function TranscriptChat() {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   async function getTranscript() {
@@ -30,7 +30,7 @@ export default function TranscriptChat() {
     const finalRes = await response.data;
     setdata(finalRes);
     setisLoading(false);
-    onBottom.current.scrollTop = 100;
+    onBottom.current.scrollTo({ top: 1100, behavior: "smooth" });
   }
 
   const showMore = () => {
