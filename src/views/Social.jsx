@@ -217,6 +217,7 @@ export default function Social(props) {
           )}
           <Posts
             events="social-post-delete"
+            setfetchOnce={setfetchOnce}
             socket={props.socket}
             posts={posts}
             isLoading={isLoading}

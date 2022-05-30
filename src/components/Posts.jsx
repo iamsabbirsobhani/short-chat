@@ -3,7 +3,13 @@ import { format } from "date-fns";
 import ConfirmDelete from "./ConfirmDelete";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleConfirmDelete } from "../features/state/globalState";
-export default function Posts({ posts, isLoading, socket, events }) {
+export default function Posts({
+  posts,
+  isLoading,
+  socket,
+  events,
+  setfetchOnce,
+}) {
   const [postId, setpostId] = useState();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.global.token);
@@ -46,16 +52,54 @@ export default function Posts({ posts, isLoading, socket, events }) {
                 ) : null}
                 <div>
                   <div className="break-words bg-gray-800/20 p-2 py-3  rounded-sm">
-                    <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
-                      {post.post}
-                    </p>
-                    <div className=" h-min bg-img-placeholder">
-                      <img src={post.imgUrl} alt="" />
+                    <div>
+                      <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
+                        {post.post}
+                      </p>
+                      <div className=" h-min">
+                        <img src={post.imgUrl} alt="" />
+                      </div>
+                    </div>
+                    <div className=" mt-2 flex-row-reverse flex justify-between items-center">
+                      <div>
+                        <p className="text-xs text-gray-400">
+                          {format(new Date(post.createdAt), "PPPp")}
+                        </p>
+                      </div>
+                      <div className=" flex items-center text-white text-xl ">
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("heart", post.id);
+                          }}
+                          className=" text-red-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="heart"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("happy", post.id);
+                          }}
+                          className=" text-yellow-500  flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="happy"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("sad", post.id);
+                          }}
+                          className=" text-blue-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="sad"></ion-icon>
+                          <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <p className="text-xs text-right text-gray-400 mt-3">
-                    {format(new Date(post.createdAt), "PPPp")}
-                  </p>
                 </div>
               </div>
             ) : post.imgUrl ? (
@@ -83,11 +127,49 @@ export default function Posts({ posts, isLoading, socket, events }) {
                 ) : null}
                 <div>
                   <div className="break-words py-3 bg-gray-800/20 p-2 rounded-sm">
-                    <img loading="lazy" src={post.imgUrl} alt="" />
+                    <div>
+                      <img loading="lazy" src={post.imgUrl} alt="" />
+                    </div>
+                    <div className=" mt-2 flex-row-reverse flex justify-between items-center">
+                      <div>
+                        <p className="text-xs text-gray-400">
+                          {format(new Date(post.createdAt), "PPPp")}
+                        </p>
+                      </div>
+                      <div className=" flex items-center text-white text-xl ">
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("heart", post.id);
+                          }}
+                          className=" text-red-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="heart"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("happy", post.id);
+                          }}
+                          className=" text-yellow-500  flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="happy"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("sad", post.id);
+                          }}
+                          className=" text-blue-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="sad"></ion-icon>
+                          <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-xs text-right text-gray-400 mt-3">
-                    {format(new Date(post.createdAt), "PPPp")}
-                  </p>
                 </div>
               </div>
             ) : (
@@ -119,9 +201,45 @@ export default function Posts({ posts, isLoading, socket, events }) {
                       {post.post}
                     </p>
                   </div>
-                  <p className="text-xs text-right text-gray-400 mt-3">
-                    {format(new Date(post.createdAt), "PPPp")}
-                  </p>
+                  <div className=" flex-row-reverse flex justify-between items-center">
+                    <div>
+                      <p className="text-xs text-gray-400">
+                        {format(new Date(post.createdAt), "PPPp")}
+                      </p>
+                    </div>
+                    <div className=" flex items-center text-white text-xl ">
+                      <div
+                        onClick={() => {
+                          setfetchOnce(true);
+                          socket.emit("heart", post.id);
+                        }}
+                        className=" text-red-500 flex items-center cursor-pointer"
+                      >
+                        <ion-icon name="heart"></ion-icon>
+                        <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setfetchOnce(true);
+                          socket.emit("happy", post.id);
+                        }}
+                        className=" text-yellow-500  flex items-center cursor-pointer"
+                      >
+                        <ion-icon name="happy"></ion-icon>
+                        <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setfetchOnce(true);
+                          socket.emit("sad", post.id);
+                        }}
+                        className=" text-blue-500 flex items-center cursor-pointer"
+                      >
+                        <ion-icon name="sad"></ion-icon>
+                        <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )
