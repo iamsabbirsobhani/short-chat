@@ -9,7 +9,9 @@ import {
   setSocialPagination,
   setPosts,
 } from "../features/state/globalState";
-
+import Button from "@mui/material/Button";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 const postAPI = "https://short-chat-backend.herokuapp.com/social/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/socials/";
 
@@ -33,6 +35,15 @@ export default function Social(props) {
   const [bottom, setbottom] = useState("Not in bottom");
 
   const [isLoading, setisLoading] = useState(false);
+  const [alignment, setAlignment] = useState("normal");
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  useEffect(() => {
+    console.log(alignment);
+  }, [alignment]);
 
   async function getPosts() {
     setisLoading(true);
@@ -87,6 +98,7 @@ export default function Social(props) {
       imgUrl: url,
       userId: token.id,
       uId: token.id,
+      sensitive: alignment === "normal" || alignment === null ? false : true,
     };
     try {
       setfetchOnce(true);
@@ -162,7 +174,7 @@ export default function Social(props) {
             onChange={handlePost}
             ref={inputText}
           />
-          <div className=" flex items-center mt-3">
+          <div className=" flex items-center mt-3 mb-3">
             <div className="input-media-file  w-8 flex justify-center items-center h-8 rounded-md transition duration-300  backdrop-blur-md cursor-pointer border-gray-600 border-[1px]">
               <label
                 htmlFor="social-file"
@@ -199,6 +211,16 @@ export default function Social(props) {
                 <div className=" w-1 h-5 bg-white ml-1 animate-pulse delay-100"></div>
               </div>
             )}
+            <ToggleButtonGroup
+              className=" ml-3"
+              color="primary"
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+            >
+              <ToggleButton value="normal">Normal</ToggleButton>
+              <ToggleButton value="sensitive">Sensitive</ToggleButton>
+            </ToggleButtonGroup>
           </div>
           {postLoading ? (
             <button
@@ -209,12 +231,16 @@ export default function Social(props) {
               <div className="border-l-white m-auto animate-spin border-r-white border-b-white border-t-gray-800/50 h-7 w-7  rounded-full border-4"></div>
             </button>
           ) : (
-            <button
-              type="submit"
-              className="  uppercase font-semibold tracking-wider text-white bg-blue-400 py-1 px-4 rounded-sm mt-3"
-            >
+            // <button
+            //   type="submit"
+            //   className="  uppercase font-semibold tracking-wider text-white bg-blue-400 py-1 px-4 rounded-sm mt-3"
+            // >
+            //   Post
+            // </button>
+
+            <Button type="submit" variant="contained">
               Post
-            </button>
+            </Button>
           )}
         </form>
 

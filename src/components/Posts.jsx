@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import ConfirmDelete from "./ConfirmDelete";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleConfirmDelete } from "../features/state/globalState";
+import SensitiveButton from "./SensitiveButton";
 export default function Posts({
   posts,
   isLoading,
@@ -12,15 +13,361 @@ export default function Posts({
   socialRef,
 }) {
   const [postId, setpostId] = useState();
+  const [sensitiveId, setsensitiveId] = useState();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.global.token);
+  const sensitiveContent = useSelector(
+    (state) => state.global.sensitiveContent
+  );
   const confirmDelete = useSelector((state) => state.global.confirmDelete);
+
+  const sensitiveHandle = (id) => {
+    console.log("ID ", id);
+    setsensitiveId(id);
+  };
 
   return (
     <>
       <div className=" ">
         {posts &&
           posts.rows.map((post) =>
+            // sensitive sontent
+            post.sensitive ? (
+              post.post && post.post.includes("mp4") ? (
+                // <div>
+                //   <div>
+                //     <SensitiveButton
+                //       id={post.id}
+                //       sensitiveHandle={sensitiveHandle}
+                //     />
+                //   </div>
+                //   {!sensitiveContent && sensitiveId && (
+                //     <video width="280" height="240" muted controls>
+                //       <source src={post.post} type="video/mp4" />
+                //       Your browser does not support the video tag.
+                //     </video>
+                //   )}
+                // </div>
+                <div
+                  className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
+                  key={post.id}
+                >
+                  <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                    <h1 className="uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                      {post.postedBy}
+                    </h1>
+                  </div>
+                  {post.uId === token.id ? (
+                    <div className="ml-auto mr-0 w-[30px] text-center">
+                      <button
+                        onClick={() => {
+                          dispatch(toggleConfirmDelete());
+                          setpostId(post.id);
+                        }}
+                        className=" text-white bg-red-500 rounded-sm w-6"
+                      >
+                        <ion-icon name="trash-outline"></ion-icon>
+                      </button>
+                    </div>
+                  ) : null}
+                  <div>
+                    <div>
+                      <SensitiveButton
+                        id={post.id}
+                        sensitiveHandle={sensitiveHandle}
+                      />
+                    </div>
+                    {!sensitiveContent && sensitiveId && (
+                      <div className="break-words bg-gray-800/20 p-2 rounded-sm py-3">
+                        <video width="320" height="240" muted controls>
+                          <source src={post.post} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    )}
+                    <div className=" flex-row-reverse flex justify-between items-center">
+                      <div>
+                        <p className="text-xs text-gray-400">
+                          {format(new Date(post.createdAt), "PPPp")}
+                        </p>
+                      </div>
+                      <div className=" flex items-center text-white text-xl ">
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("heart", post.id);
+                          }}
+                          className=" text-red-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="heart"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("happy", post.id);
+                          }}
+                          className=" text-yellow-500  flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="happy"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("sad", post.id);
+                          }}
+                          className=" text-blue-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="sad"></ion-icon>
+                          <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : post.imgUrl && post.post ? (
+                <div
+                  className=" mb-7 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 relative shadow-md"
+                  key={post.id}
+                >
+                  <div className=" flex  justify-between absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                    <h1 className=" uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                      {post.postedBy}
+                    </h1>
+                  </div>
+                  {post.UserId === token.id ? (
+                    <div className="ml-auto mr-0 w-[30px] text-center">
+                      <button
+                        onClick={() => {
+                          dispatch(toggleConfirmDelete());
+                          setpostId(post.id);
+                        }}
+                        className=" text-white bg-red-500 rounded-sm w-6"
+                      >
+                        <ion-icon name="trash-outline"></ion-icon>
+                      </button>
+                    </div>
+                  ) : null}
+                  <div>
+                    <div className="break-words bg-gray-800/20 p-2 py-3  rounded-sm">
+                      <div>
+                        <SensitiveButton
+                          id={post.id}
+                          sensitiveHandle={sensitiveHandle}
+                        />
+                      </div>
+                      {!sensitiveContent && sensitiveId && (
+                        <div>
+                          <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
+                            {post.post}
+                          </p>
+                          <div className=" h-min">
+                            <img src={post.imgUrl} alt="" />
+                          </div>
+                        </div>
+                      )}
+                      <div className=" mt-2 flex-row-reverse flex justify-between items-center">
+                        <div>
+                          <p className="text-xs text-gray-400">
+                            {format(new Date(post.createdAt), "PPPp")}
+                          </p>
+                        </div>
+                        <div className=" flex items-center text-white text-xl ">
+                          <div
+                            onClick={() => {
+                              setfetchOnce(true);
+                              socket.emit("heart", post.id);
+                            }}
+                            className=" text-red-500 flex items-center cursor-pointer"
+                          >
+                            <ion-icon name="heart"></ion-icon>
+                            <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                          </div>
+                          <div
+                            onClick={() => {
+                              setfetchOnce(true);
+                              socket.emit("happy", post.id);
+                            }}
+                            className=" text-yellow-500  flex items-center cursor-pointer"
+                          >
+                            <ion-icon name="happy"></ion-icon>
+                            <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                          </div>
+                          <div
+                            onClick={() => {
+                              setfetchOnce(true);
+                              socket.emit("sad", post.id);
+                            }}
+                            className=" text-blue-500 flex items-center cursor-pointer"
+                          >
+                            <ion-icon name="sad"></ion-icon>
+                            <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : post.imgUrl ? (
+                <div
+                  className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
+                  key={post.id}
+                >
+                  <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                    <h1 className=" uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                      {post.postedBy}
+                    </h1>
+                  </div>
+                  {post.uId === token.id ? (
+                    <div className="ml-auto mr-0 w-[30px] text-center">
+                      <button
+                        onClick={() => {
+                          dispatch(toggleConfirmDelete());
+                          setpostId(post.id);
+                        }}
+                        className=" text-white bg-red-500 rounded-sm w-6"
+                      >
+                        <ion-icon name="trash-outline"></ion-icon>
+                      </button>
+                    </div>
+                  ) : null}
+                  <div>
+                    <div className="break-words py-3 bg-gray-800/20 p-2 rounded-sm">
+                      <div>
+                        <SensitiveButton
+                          id={post.id}
+                          sensitiveHandle={sensitiveHandle}
+                        />
+                      </div>
+                      {!sensitiveContent && sensitiveId && (
+                        <div>
+                          <img loading="lazy" src={post.imgUrl} alt="" />
+                        </div>
+                      )}
+                      <div className=" mt-2 flex-row-reverse flex justify-between items-center">
+                        <div>
+                          <p className="text-xs text-gray-400">
+                            {format(new Date(post.createdAt), "PPPp")}
+                          </p>
+                        </div>
+                        <div className=" flex items-center text-white text-xl ">
+                          <div
+                            onClick={() => {
+                              setfetchOnce(true);
+                              socket.emit("heart", post.id);
+                            }}
+                            className=" text-red-500 flex items-center cursor-pointer"
+                          >
+                            <ion-icon name="heart"></ion-icon>
+                            <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                          </div>
+                          <div
+                            onClick={() => {
+                              setfetchOnce(true);
+                              socket.emit("happy", post.id);
+                            }}
+                            className=" text-yellow-500  flex items-center cursor-pointer"
+                          >
+                            <ion-icon name="happy"></ion-icon>
+                            <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                          </div>
+                          <div
+                            onClick={() => {
+                              setfetchOnce(true);
+                              socket.emit("sad", post.id);
+                            }}
+                            className=" text-blue-500 flex items-center cursor-pointer"
+                          >
+                            <ion-icon name="sad"></ion-icon>
+                            <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
+                  key={post.id}
+                >
+                  <div className="absolute -top-4  bg-gray-800/80 rounded-sm px-3 py-1">
+                    <h1 className="uppercase font-semibold shadow-md text-white antialiased tracking-wider">
+                      {post.postedBy}
+                    </h1>
+                  </div>
+                  {post.uId === token.id ? (
+                    <div className="ml-auto mr-0 w-[30px] text-center">
+                      <button
+                        onClick={() => {
+                          dispatch(toggleConfirmDelete());
+                          setpostId(post.id);
+                        }}
+                        className=" text-white bg-red-500 rounded-sm w-6"
+                      >
+                        <ion-icon name="trash-outline"></ion-icon>
+                      </button>
+                    </div>
+                  ) : null}
+                  <div>
+                    <div>
+                      <SensitiveButton
+                        id={post.id}
+                        sensitiveHandle={sensitiveHandle}
+                      />
+                    </div>
+                    {!sensitiveContent && sensitiveId && (
+                      <div className="break-words bg-gray-800/20 p-2 rounded-sm py-3">
+                        <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
+                          {post.post}
+                        </p>
+                      </div>
+                    )}
+                    <div className=" flex-row-reverse flex justify-between items-center">
+                      <div>
+                        <p className="text-xs text-gray-400">
+                          {format(new Date(post.createdAt), "PPPp")}
+                        </p>
+                      </div>
+                      <div className=" flex items-center text-white text-xl ">
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("heart", post.id);
+                          }}
+                          className=" text-red-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="heart"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.heart}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("happy", post.id);
+                          }}
+                          className=" text-yellow-500  flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="happy"></ion-icon>
+                          <p className=" text-xs  ml-1 mr-1">{post.happy}</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            setfetchOnce(true);
+                            socket.emit("sad", post.id);
+                          }}
+                          className=" text-blue-500 flex items-center cursor-pointer"
+                        >
+                          <ion-icon name="sad"></ion-icon>
+                          <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            ) : // sensitive sontent
+
             post.imgUrl && post.post ? (
               <div
                 className=" mb-7 p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800 relative shadow-md"

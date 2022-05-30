@@ -21,10 +21,15 @@ export const globalState = createSlice({
     connectedUsers: [],
     allUsers: null,
     posts: null,
+    sensitiveContent: true,
   },
   reducers: {
     setPosts: (state, payload) => {
       state.posts = payload.payload;
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
+    setSensitiveContent: (state, payload) => {
+      state.sensitiveContent = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
     },
     setAllUsers: (state, payload) => {
@@ -159,6 +164,7 @@ export const {
   adminPaginationIncrement,
   setAdminPagination,
   setPosts,
+  setSensitiveContent,
 } = globalState.actions;
 
 export default globalState.reducer;
