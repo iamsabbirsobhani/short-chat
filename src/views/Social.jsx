@@ -230,9 +230,9 @@ export default function Social(props) {
           <div>
             <h1>{bottom}</h1>
           </div>
-          {isLoading && (
+          {isLoading ? (
             <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
-          )}
+          ) : null}
         </div>
       </div>
     </>
