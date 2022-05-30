@@ -111,13 +111,13 @@ export default function Social(props) {
   }, []);
 
   useEffect(() => {
-    if (fetchOnce) {
-      props.socket.on("social-post", function () {
-        console.log("Execute once");
-        getPosts();
-        setfetchOnce(false);
-      });
-    }
+    // if (fetchOnce) {
+    props.socket.on("social-post", function () {
+      console.log("Execute once");
+      getPosts();
+      // setfetchOnce(false);
+    });
+    // }
   });
 
   function handlePost(e) {
