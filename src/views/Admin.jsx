@@ -15,6 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Route, Routes } from "react-router-dom";
 import ChatDelete from "../components/ChatDelete";
 import Alert from "@mui/material/Alert";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const postAPI = "https://short-chat-backend.herokuapp.com/admin/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
@@ -49,6 +50,11 @@ export default function Admin(props) {
     setAnchorEl(null);
   };
 
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
   async function getPosts() {
     setisLoading(true);
     const response = await axios.get(postsAPI + page, {
@@ -170,56 +176,58 @@ export default function Admin(props) {
             ) : null}
           </div>
           <div>
-            <Button
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              Menu
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
+            <ThemeProvider theme={darkTheme}>
+              <Button
+                id="basic-button"
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+              >
+                Menu
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
                 }}
               >
-                Profile
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
-                  navigate("chat/delete");
-                }}
-              >
-                Chat Delete
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  props.socket.emit("blockd-site", false);
-                  setAnchorEl(null);
-                }}
-              >
-                Block Site
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  props.socket.emit("blockd-site", true);
-                  setAnchorEl(null);
-                }}
-              >
-                Unblock Site
-              </MenuItem>
-            </Menu>
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                  }}
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    navigate("chat/delete");
+                  }}
+                >
+                  Chat Delete
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blockd-site", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Site
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blockd-site", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Site
+                </MenuItem>
+              </Menu>
+            </ThemeProvider>
           </div>
         </div>
         <form
