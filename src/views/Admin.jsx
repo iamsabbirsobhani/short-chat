@@ -8,6 +8,12 @@ import {
   adminPaginationIncrement,
   setAdminPagination,
 } from "../features/state/globalState";
+import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Route, Routes } from "react-router-dom";
+import ChatDelete from "../components/ChatDelete";
 
 const postAPI = "https://short-chat-backend.herokuapp.com/admin/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
@@ -21,6 +27,7 @@ export default function Admin(props) {
   const adminRef = useRef(null);
   const inputText = useRef(null);
   const inputFile = useRef(null);
+  let navigate = useNavigate();
 
   const [posts, setposts] = useState(null);
   const [post, setpost] = useState("");
@@ -30,6 +37,16 @@ export default function Admin(props) {
   const [fetchOnce, setfetchOnce] = useState(false);
 
   const [isLoading, setisLoading] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (e) => {
+    console.log(e);
+    setAnchorEl(null);
+  };
 
   async function getPosts() {
     setisLoading(true);
@@ -117,6 +134,10 @@ export default function Admin(props) {
         setfetchOnce(false);
       });
     }
+
+    props.socket.on("site-blocked", () => {
+      console.log("Site blocked");
+    });
   });
 
   function handlePost(e) {
@@ -139,10 +160,59 @@ export default function Admin(props) {
           confirmDelete ? "" : "backdrop-blur-md"
         }`}
       >
-        <div className=" mt-2 mb-2">
-          <button className=" bg-blue-500 p-2 text-white font-semibold">
-            Menu
-          </button>
+        <div className=" mt-2 mb-2 menu">
+          <div>
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              Menu
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                }}
+              >
+                Profile
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                  navigate("chat/delete");
+                }}
+              >
+                Chat Delete
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  props.socket.emit("blockd-site", false);
+                  setAnchorEl(null);
+                }}
+              >
+                Block Site
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  props.socket.emit("blockd-site", true);
+                  setAnchorEl(null);
+                }}
+              >
+                Unblock Site
+              </MenuItem>
+            </Menu>
+          </div>
         </div>
         <form
           onSubmit={sumbitPost}
@@ -232,6 +302,15 @@ export default function Admin(props) {
             </div>
           )}
         </div>
+      </div>
+
+      <div>
+        <Routes>
+          <Route
+            path="chat/delete"
+            element={<ChatDelete socket={props.socket} />}
+          />
+        </Routes>
       </div>
     </>
   );

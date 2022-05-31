@@ -377,7 +377,7 @@ export default function Chat(props) {
         <Route path="social" element={<Social socket={props.socket} />} />
         <Route path="logs" element={<Logs socket={props.socket} />} />
         <Route
-          path="/admin"
+          path="/admin/*"
           element={
             JSON.parse(localStorage.getItem("user")).admin ? (
               <Admin socket={props.socket} />

@@ -18,6 +18,7 @@ import Signin from "./views/Signin";
 import Signup from "./views/Signup";
 import ImageGallery from "./views/ImageGallery";
 import { messaging, getToken } from "./firebase/config";
+import BlockNotice from "./components/BlockNotice";
 
 const API = "https://short-chat-backend.herokuapp.com/verifyToken/";
 
@@ -30,6 +31,7 @@ function App(props) {
   const [isError, setisError] = useState(null);
   const [isLodaing, setIsLoading] = useState(false);
   const [hasToken, sethasToken] = useState(false);
+  const [block, setblock] = useState(true);
   const dispatch = useDispatch();
 
   async function handleLogin(code) {
@@ -94,11 +96,17 @@ function App(props) {
     props.socket.on("offline", (connectedUsers) => {
       dispatch(setConnectedUsers(connectedUsers));
     });
+
+    props.socket.on("block-status", (auth) => {
+      setblock(auth.rows[0].block);
+    });
   });
   // online-offline status code
 
   // fcm
   useEffect(() => {
+    props.socket.emit("block-site-status");
+
     let data = JSON.parse(localStorage.getItem("user"));
     getToken(messaging, {
       vapidKey:
@@ -122,60 +130,70 @@ function App(props) {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/signin"
-            element={
-              JSON.parse(localStorage.getItem("user")) === null ? (
-                <Signin />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              JSON.parse(localStorage.getItem("user")) === null ? (
-                <Signup />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
+      {(token && token.admin) || block ? (
+        <>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/signin"
+                element={
+                  JSON.parse(localStorage.getItem("user")) === null ? (
+                    <Signin />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  JSON.parse(localStorage.getItem("user")) === null ? (
+                    <Signup />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
 
-          <Route
-            path="/*"
-            element={
-              JSON.parse(localStorage.getItem("user")) ? (
-                <Chat
-                  socket={props.socket}
-                  peer={props.peer}
-                  peerId={props.peerId}
-                />
-              ) : (
-                <Navigate to="signin" />
-              )
-            }
-          />
-          <Route path="/images" element={<ImageGallery />} />
-        </Routes>
-      </BrowserRouter>
-      <header>
-        {callTimer && (
-          <CallingTimer peerId={pId} peer={props.peer} socket={props.socket} />
-        )}
-        {state && (
-          <Login
-            isError={isError}
-            isLodaing={isLodaing}
-            isWrong={isWrong}
-            state={state}
-            handleLogin={handleLogin}
-          />
-        )}
-      </header>
+              <Route
+                path="/*"
+                element={
+                  JSON.parse(localStorage.getItem("user")) ? (
+                    <Chat
+                      socket={props.socket}
+                      peer={props.peer}
+                      peerId={props.peerId}
+                    />
+                  ) : (
+                    <Navigate to="signin" />
+                  )
+                }
+              />
+              <Route path="/images" element={<ImageGallery />} />
+            </Routes>
+          </BrowserRouter>
+          <header>
+            {callTimer && (
+              <CallingTimer
+                peerId={pId}
+                peer={props.peer}
+                socket={props.socket}
+              />
+            )}
+            {state && (
+              <Login
+                isError={isError}
+                isLodaing={isLodaing}
+                isWrong={isWrong}
+                state={state}
+                handleLogin={handleLogin}
+              />
+            )}
+          </header>
+        </>
+      ) : (
+        <BlockNotice />
+      )}
     </div>
   );
 }
