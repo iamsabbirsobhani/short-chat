@@ -14,6 +14,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Route, Routes } from "react-router-dom";
 import ChatDelete from "../components/ChatDelete";
+import Alert from "@mui/material/Alert";
 
 const postAPI = "https://short-chat-backend.herokuapp.com/admin/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
@@ -21,6 +22,7 @@ const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
 export default function Admin(props) {
   const name = useSelector((state) => state.global.name);
   const page = useSelector((state) => state.global.adminPagination);
+  const blcok = useSelector((state) => state.global.isSiteBlock);
   const token = useSelector((state) => state.global.token);
   const confirmDelete = useSelector((state) => state.global.confirmDelete);
   const dispatch = useDispatch();
@@ -44,7 +46,6 @@ export default function Admin(props) {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (e) => {
-    console.log(e);
     setAnchorEl(null);
   };
 
@@ -161,6 +162,13 @@ export default function Admin(props) {
         }`}
       >
         <div className=" mt-2 mb-2 menu">
+          <div className=" mb-2">
+            {!blcok ? (
+              <Alert severity="warning">
+                Site is beign blocked. — check it out!
+              </Alert>
+            ) : null}
+          </div>
           <div>
             <Button
               id="basic-button"

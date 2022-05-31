@@ -4,6 +4,7 @@ import {
   setName,
   setToken,
   setConnectedUsers,
+  setSiteBlock,
 } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -99,6 +100,7 @@ function App(props) {
 
     props.socket.on("block-status", (auth) => {
       setblock(auth.rows[0].block);
+      dispatch(setSiteBlock(auth.rows[0].block));
     });
   });
   // online-offline status code

@@ -22,8 +22,13 @@ export const globalState = createSlice({
     allUsers: null,
     posts: null,
     sensitiveContent: true,
+    isSiteBlock: true,
   },
   reducers: {
+    setSiteBlock: (state, payload) => {
+      state.isSiteBlock = payload.payload;
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
     setPosts: (state, payload) => {
       state.posts = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -165,6 +170,7 @@ export const {
   setAdminPagination,
   setPosts,
   setSensitiveContent,
+  setSiteBlock,
 } = globalState.actions;
 
 export default globalState.reducer;

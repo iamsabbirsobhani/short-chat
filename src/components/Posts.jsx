@@ -34,20 +34,6 @@ export default function Posts({
             // sensitive sontent
             post.sensitive ? (
               post.post && post.post.includes("mp4") ? (
-                // <div>
-                //   <div>
-                //     <SensitiveButton
-                //       id={post.id}
-                //       sensitiveHandle={sensitiveHandle}
-                //     />
-                //   </div>
-                //   {!sensitiveContent && sensitiveId && (
-                //     <video width="280" height="240" muted controls>
-                //       <source src={post.post} type="video/mp4" />
-                //       Your browser does not support the video tag.
-                //     </video>
-                //   )}
-                // </div>
                 <div
                   className=" mb-7  p-3 rounded-sm backdrop-blur-md border-[1px] border-gray-800"
                   key={post.id}
@@ -79,7 +65,16 @@ export default function Posts({
                     </div>
                     {!sensitiveContent && sensitiveId && (
                       <div className="break-words bg-gray-800/20 p-2 rounded-sm py-3">
-                        <video width="320" height="240" muted controls>
+                        <video
+                          onPlay={() => {
+                            setfetchOnce(true);
+                            socket.emit("view-incremented", post.id);
+                          }}
+                          width="320"
+                          height="240"
+                          muted
+                          controls
+                        >
                           <source src={post.post} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
@@ -121,6 +116,9 @@ export default function Posts({
                         >
                           <ion-icon name="sad"></ion-icon>
                           <p className=" text-xs ml-1 mr-1">{post.sad}</p>
+                        </div>
+                        <div className=" text-xs text-gray-700 ml-2">
+                          <p> View: {post.view}</p>
                         </div>
                       </div>
                     </div>
