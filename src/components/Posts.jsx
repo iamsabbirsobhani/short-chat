@@ -68,7 +68,10 @@ export default function Posts({
                         <video
                           onPlay={() => {
                             setfetchOnce(true);
-                            socket.emit("view-incremented", post.id);
+                            socket.emit("view-incremented", {
+                              id: post.id,
+                              admin: token.admin,
+                            });
                           }}
                           width="320"
                           height="240"

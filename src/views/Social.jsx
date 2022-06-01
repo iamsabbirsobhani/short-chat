@@ -26,24 +26,17 @@ export default function Social(props) {
   const inputText = useRef(null);
   const inputFile = useRef(null);
 
-  // const [posts, setposts] = useState(null);
   const [post, setpost] = useState("");
   const [postLoading, setpostLoading] = useState(false);
   const [uploading, setUploading] = useState(null);
   const [url, seturl] = useState(null);
   const [fetchOnce, setfetchOnce] = useState(false);
-  const [bottom, setbottom] = useState("Not in bottom");
-
   const [isLoading, setisLoading] = useState(false);
   const [alignment, setAlignment] = useState("normal");
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-
-  useEffect(() => {
-    console.log(alignment);
-  }, [alignment]);
 
   async function getPosts() {
     setisLoading(true);
@@ -58,32 +51,28 @@ export default function Social(props) {
       setpost("");
       seturl(null);
       if (url) {
-        // console.log("value ", url, url !== null);
         inputFile.current.value = "";
       }
-      // reset the fields
     }
     setpostLoading(false);
     setisLoading(false);
   }
 
   //   on scroll bottom
-  let i = 0;
   const getRef = () => {
     if (
       socialRef.current.scrollTop + socialRef.current.clientHeight ===
       socialRef.current.scrollHeight
     ) {
-      console.log(`Your have reached end ${i + 1}`);
-      setbottom(`Your have reached end ${(i = i + 1)}`);
       dispatch(socialPaginationIncrement());
-      // console.log(page);
       getPosts();
     }
   };
 
   const loadMore = () => {
+    console.log("Load more", page);
     dispatch(socialPaginationIncrement());
+    console.log("Load more 2", page);
     getPosts();
   };
 
@@ -91,7 +80,6 @@ export default function Social(props) {
     if (e) {
       e.preventDefault();
     }
-    // console.log(page);
     const data = {
       postedBy: token.name,
       post: post,
@@ -123,8 +111,9 @@ export default function Social(props) {
   useEffect(() => {
     console.log("Social mounted");
     dispatch(socialPaginationIncrement());
+    console.log("First page value ", page);
     getPosts();
-    // console.log(page);
+    console.log("Again page incremented");
     return () => {
       console.log("Social dismounted");
       dispatch(setSocialPagination(8));
@@ -149,7 +138,6 @@ export default function Social(props) {
     console.log("Image upload canceled");
     inputFile.current.value = "";
     seturl(null);
-    // console.log(url);
   }
 
   return (
