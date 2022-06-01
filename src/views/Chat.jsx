@@ -195,7 +195,7 @@ export default function Chat(props) {
       dispatch(receiverUIFnOff());
       // dispatch(callTimerOn());
       // navigate("https://audio-call.vercel.app/");
-      window.open("https://audio-call.vercel.app/");
+      window.location.replace("https://audio-call.vercel.app/");
       // console.log("PeerId props", props.peerId);
       // console.log("call-received inside logic");
       // }
@@ -239,7 +239,7 @@ export default function Chat(props) {
     // console.log("call received");
     // dispatch(callTimerOn());
     // navigate("https://audio-call.vercel.app/");
-    window.open("https://audio-call.vercel.app/");
+    window.location.replace("https://audio-call.vercel.app/");
 
     props.socket.emit("call-received", props.socket.id);
     props.socket.emit("all-mic-on", false);
