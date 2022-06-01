@@ -175,13 +175,13 @@ function App(props) {
             </Routes>
           </BrowserRouter>
           <header>
-            {callTimer && (
+            {/* {callTimer && (
               <CallingTimer
                 peerId={pId}
                 peer={props.peer}
                 socket={props.socket}
               />
-            )}
+            )} */}
             {state && (
               <Login
                 isError={isError}
