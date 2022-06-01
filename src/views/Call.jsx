@@ -28,6 +28,7 @@ export default function Call(props) {
       })
       .then((stream) => {
         myVideoStream = stream;
+        myVideoStream.getAudioTracks()[0].enabled = true;
         addVideoStream(myVideo, stream);
         console.log("inside stream");
 
@@ -64,7 +65,7 @@ export default function Call(props) {
         videoGrid.append(video);
       });
     };
-  });
+  }, []);
   return (
     <>
       <div className="fixed top-0  left-0 w-full h-14 shadow-md   flex justify-center items-center right-0 backdrop-blur-md  m-auto">
