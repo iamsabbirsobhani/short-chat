@@ -5,6 +5,7 @@ import {
   setToken,
   toggleDrawer,
 } from "../features/state/globalState";
+import MyDay from "./MyDay/MyDay";
 
 export default function MobileNavbar({ callSend, socket }) {
   const drawer = useSelector((state) => state.global.drawer);
@@ -25,6 +26,14 @@ export default function MobileNavbar({ callSend, socket }) {
           className=" text-2xl ml-2 cursor-pointer  flex  justify-center items-center"
         >
           <ion-icon name="grid"></ion-icon>
+        </div>
+
+        <div>
+          {token.admin ? (
+            <div>
+              <MyDay />
+            </div>
+          ) : null}
         </div>
 
         {connectedUsers ? (

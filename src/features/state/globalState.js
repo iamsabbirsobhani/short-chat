@@ -23,8 +23,17 @@ export const globalState = createSlice({
     posts: null,
     sensitiveContent: true,
     isSiteBlock: true,
+    dayUploadedImages: [],
   },
   reducers: {
+    setdayUploadedImages: (state, payload) => {
+      state.dayUploadedImages.push(payload.payload);
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
+    emptyDayUploadedImages: (state) => {
+      state.dayUploadedImages = [];
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
     setSiteBlock: (state, payload) => {
       state.isSiteBlock = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -171,6 +180,8 @@ export const {
   setPosts,
   setSensitiveContent,
   setSiteBlock,
+  setdayUploadedImages,
+  emptyDayUploadedImages,
 } = globalState.actions;
 
 export default globalState.reducer;
