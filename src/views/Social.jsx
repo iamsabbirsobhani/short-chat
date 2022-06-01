@@ -70,9 +70,9 @@ export default function Social(props) {
   };
 
   const loadMore = () => {
-    console.log("Load more", page);
+    // console.log("Load more", page);
     dispatch(socialPaginationIncrement());
-    console.log("Load more 2", page);
+    // console.log("Load more 2", page);
     getPosts();
   };
 
@@ -111,9 +111,8 @@ export default function Social(props) {
   useEffect(() => {
     console.log("Social mounted");
     dispatch(socialPaginationIncrement());
-    console.log("First page value ", page);
+    // console.log("First page value ", page);
     getPosts();
-    console.log("Again page incremented");
     return () => {
       console.log("Social dismounted");
       dispatch(setSocialPagination(8));
