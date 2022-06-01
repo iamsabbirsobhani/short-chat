@@ -5,6 +5,7 @@ import { openCallerScreenOff } from "../features/state/globalState";
 export default function Call(props) {
   const [count, setCount] = useState(0);
   const dispatch = useDispatch();
+  const pId = useSelector((state) => state.global.peerId);
 
   const closeCall = () => {
     console.log("Close Call");
@@ -13,6 +14,11 @@ export default function Call(props) {
   };
 
   let myVideoStream;
+
+  useEffect(() => {
+    props.socket.emit("join", pId);
+    console.log("Join ", pId);
+  }, []);
 
   useEffect(() => {
     const myVideo = document.createElement("video");
@@ -45,7 +51,7 @@ export default function Call(props) {
         props.socket.on("user-connected", (userId) => {
           console.log(userId);
           console.log("Socket.on user-connected, userId", userId);
-          connectToNewUser(userId, stream);
+          connectToNewUser(pId, stream);
         });
       });
     const connectToNewUser = (userId, stream) => {
@@ -97,7 +103,7 @@ export default function Call(props) {
         </div>
       </div>
 
-      <div id="video-grid"></div>
+      <div className=" hidden" id="video-grid"></div>
     </>
   );
 }
