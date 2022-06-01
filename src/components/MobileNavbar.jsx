@@ -29,7 +29,7 @@ export default function MobileNavbar({ callSend, socket }) {
         </div>
 
         <div>
-          {token.admin ? (
+          {token && token.admin ? (
             <div>
               <MyDay />
             </div>
