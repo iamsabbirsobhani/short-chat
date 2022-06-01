@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Receiver from "../components/Receiver";
 import Navbar from "../components/Navbar";
 import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   openCallerScreenOn,
@@ -29,8 +30,11 @@ import TranscriptChat from "./TranscriptChat";
 import Social from "./Social";
 import Logs from "../components/Logs";
 import Admin from "./Admin";
+import Call from "./Call";
 
 export default function Chat(props) {
+  let navigate = useNavigate();
+
   const openCalling = useSelector((state) => state.global.openCalling);
   const msg = useSelector((state) => state.global.msg);
   const name = useSelector((state) => state.global.name);
@@ -166,8 +170,12 @@ export default function Chat(props) {
     });
 
     props.socket.on("close-call", (id) => {
+      console.log("call fire", id === props.socket.id);
+      navigate("/");
+
       if (id !== props.socket.id) {
         dispatch(receiverUIFnOff());
+        navigate("/");
         // console.log("closed call");
       }
     });
@@ -176,6 +184,7 @@ export default function Chat(props) {
       if (id !== props.socket.id) {
         dispatch(openCallerScreenOff());
         dispatch(receiverUIFnOff());
+        navigate("/");
         // console.log("call ended inside logic");
       }
       // console.log("call-end");
@@ -184,7 +193,8 @@ export default function Chat(props) {
       // if (id !== props.socket.id) {
       dispatch(openCallerScreenOff());
       dispatch(receiverUIFnOff());
-      dispatch(callTimerOn());
+      // dispatch(callTimerOn());
+      navigate("callinprogress");
       // console.log("PeerId props", props.peerId);
       // console.log("call-received inside logic");
       // }
@@ -226,7 +236,8 @@ export default function Chat(props) {
 
   const callReceive = () => {
     // console.log("call received");
-    dispatch(callTimerOn());
+    // dispatch(callTimerOn());
+    navigate("callinprogress");
     props.socket.emit("call-received", props.socket.id);
     props.socket.emit("all-mic-on", false);
   };
@@ -376,6 +387,10 @@ export default function Chat(props) {
         <Route path="transcript" element={<TranscriptChat />} />
         <Route path="social" element={<Social socket={props.socket} />} />
         <Route path="logs" element={<Logs socket={props.socket} />} />
+        <Route
+          path="callinprogress"
+          element={<Call peer={props.peer} socket={props.socket} />}
+        />
         <Route
           path="/admin/*"
           element={
