@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setImageIndex } from "../../features/state/globalState";
+import {
+  setImageIndex,
+  setIndividualDay,
+} from "../../features/state/globalState";
 import "../../styles/dayview.scss";
+import { formatDistanceToNow } from "date-fns";
+
 export default function DayView(props) {
   const imageIndex = useSelector((state) => state.global.imageIndex);
   const dispatch = useDispatch();
+  const day = useSelector((state) => state.global.individualDay);
 
   const allDay = [
     {
@@ -46,8 +52,10 @@ export default function DayView(props) {
   ];
 
   const nextImage = () => {
-    if (imageIndex < allDay.length - 1) {
+    console.log("Day length: ", day.length);
+    if (imageIndex < day.length - 1) {
       dispatch(setImageIndex(imageIndex + 1));
+      console.log(imageIndex);
     }
   };
   const prevImage = () => {
@@ -59,17 +67,36 @@ export default function DayView(props) {
   useEffect(() => {
     return () => {
       dispatch(setImageIndex(0));
+      dispatch(setIndividualDay([]));
     };
   }, []);
+
+  useEffect(() => {
+    props.socket.on("individual-day", (day) => {
+      console.log("Individula day: ", day);
+      dispatch(setIndividualDay(day));
+    });
+    return () => {};
+  });
   return (
     <>
       <div className=" w-full fixed h-full backdrop-blur-md top-0 left-0 right-0 bottom-0 z-40"></div>
       <div className="day-viewer text-white z-50 fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center">
         <div className="flex justify-between items-center w-full  absolute right-0 top-4">
-          <div className="text-gray-400 opacity-60  left-2 relative z-[60]">
-            <h1>20h ago</h1>
+          <div className="text-gray-100  text-center rounded-full font-bold  left-2 relative z-[60]">
+            {day[imageIndex] ? (
+              <h1>
+                {formatDistanceToNow(new Date(day[imageIndex].createdAt))}
+              </h1>
+            ) : null}
           </div>
-          <div className="text-gray-400 opacity-60 relative z-[60]">
+          <div className="text-gray-50 bg-gray-900/50 w-11 text-center rounded-full font-bold  left-2 relative z-[60]">
+            <h1>
+              {day.length - 1 < imageIndex ? imageIndex - 1 : imageIndex + 1}/
+              {day.length}
+            </h1>
+          </div>
+          <div className="text-gray-100  text-center rounded-full font-bold  left-2 relative z-[60]">
             <h1>0 likes</h1>
           </div>
           <button
@@ -91,6 +118,9 @@ export default function DayView(props) {
             Prev
           </button>
           <button
+            onKeyDown={() => {
+              nextImage();
+            }}
             onClick={() => {
               nextImage();
             }}
@@ -101,11 +131,13 @@ export default function DayView(props) {
         </div>
         <div className=" relative">
           <div className=" fade-in flex justify-center items-center">
-            <img
-              className=" rounded-md w-full h-full object-contain"
-              src={allDay[imageIndex].imgUrl}
-              alt=""
-            />
+            {day[imageIndex] ? (
+              <img
+                className=" rounded-md w-full h-full object-contain"
+                src={day[imageIndex].imgUrl}
+                alt=""
+              />
+            ) : null}
           </div>
         </div>
         <form
@@ -117,10 +149,20 @@ export default function DayView(props) {
             type="text"
             placeholder="Say something"
           />
-          <button className=" p-2 bg-gradient-to-r from-red-500 to-red-500 rounded-md flex justify-center items-center">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            className=" p-2 bg-gradient-to-r from-red-500 to-red-500 rounded-md flex justify-center items-center"
+          >
             <ion-icon name="heart"></ion-icon>
           </button>
-          <button className=" p-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-md flex justify-center items-center">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+            className=" p-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-md flex justify-center items-center"
+          >
             <ion-icon name="send"></ion-icon>
           </button>
         </form>

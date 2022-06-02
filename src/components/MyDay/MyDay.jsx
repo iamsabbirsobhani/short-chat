@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import MyDayPage from "./MyDayPage";
 import { useNavigate } from "react-router-dom";
 
-export default function MyDay(params) {
+export default function MyDay(props) {
   let navigate = useNavigate();
   return (
     <>
@@ -16,7 +16,10 @@ export default function MyDay(params) {
       </div>
 
       <Routes>
-        <Route path="myday" element={<MyDayPage navigate={navigate} />} />
+        <Route
+          path="myday"
+          element={<MyDayPage socket={props.socket} navigate={navigate} />}
+        />
       </Routes>
     </>
   );

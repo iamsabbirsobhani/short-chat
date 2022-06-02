@@ -29,8 +29,10 @@ export default function AddDay(props) {
     e.preventDefault();
     props.setisAddDay(false);
     console.log(allImages);
+    props.socket.emit("create-day", allImages);
     dispatch(emptyDayUploadedImages());
   };
+
   return (
     <>
       <div className="  backdrop-blur-md shadow-md shadow-gray-500/50 p-2 w-72 min-h-[150px]">

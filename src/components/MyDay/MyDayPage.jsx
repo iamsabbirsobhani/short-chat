@@ -1,12 +1,14 @@
 import AddDay from "./AddDay";
 import { useState } from "react";
 import DayView from "./DayView";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function MyDayPage(props) {
   const [isAddDay, setisAddDay] = useState(false);
   const [dayView, setdayView] = useState(false);
+  const day = useSelector((state) => state.global.day);
 
-  const day = [
+  const days = [
     {
       id: 1,
       userId: 17,
@@ -40,7 +42,9 @@ export default function MyDayPage(props) {
     <>
       <div className="w-full top-14 left-0 right-0 bottom-0 fixed backdrop-blur-md z-40"></div>
       <div className=" left-4 top-20 fixed z-50 text-white flex flex-wrap justify-center ">
-        {dayView ? <DayView setdayView={setdayView} /> : null}
+        {dayView ? (
+          <DayView socket={props.socket} setdayView={setdayView} />
+        ) : null}
         <div
           onClick={() => {
             setisAddDay(true);
@@ -51,7 +55,7 @@ export default function MyDayPage(props) {
         </div>
         {isAddDay ? (
           <div className=" absolute z-[60] top-0 bottom-0 left-0 right-0 flex justify-center items-center">
-            <AddDay setisAddDay={setisAddDay} />
+            <AddDay socket={props.socket} setisAddDay={setisAddDay} />
           </div>
         ) : null}
 
@@ -59,6 +63,8 @@ export default function MyDayPage(props) {
           ? day.map((data) => (
               <div
                 onClick={() => {
+                  props.socket.emit("get-day-individual", data.UserId);
+                  console.log(data.UserId);
                   setdayView(true);
                 }}
                 key={data.id}

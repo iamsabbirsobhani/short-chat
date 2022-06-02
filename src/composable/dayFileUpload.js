@@ -60,7 +60,7 @@ const dayFileUpload = async (
           userName: token.name,
           imgUrl: downloadURL,
           like: 0,
-          view: 0,
+          UserId: token.id,
         };
         setProgress(null);
         dispatch(setdayUploadedImages(day));

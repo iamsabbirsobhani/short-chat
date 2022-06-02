@@ -26,11 +26,23 @@ export const globalState = createSlice({
     dayUploadedImages: [],
     siteStatus: null,
     imageIndex: 0,
+    // MyDay
+    day: [],
+    individualDay: [],
+    // MyDay
   },
   reducers: {
+    // MyDay
+    setIndividualDay: (state, payload) => {
+      state.individualDay = payload.payload; //DayView Component
+    },
+    setDay: (state, payload) => {
+      state.day = payload.payload; //DayView Component
+    },
     setImageIndex: (state, payload) => {
       state.imageIndex = payload.payload; //DayView Component
     },
+    // MyDay
     setSiteStatus: (state, payload) => {
       state.siteStatus = payload.payload;
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -193,6 +205,8 @@ export const {
   emptyDayUploadedImages,
   setSiteStatus,
   setImageIndex,
+  setIndividualDay,
+  setDay,
 } = globalState.actions;
 
 export default globalState.reducer;

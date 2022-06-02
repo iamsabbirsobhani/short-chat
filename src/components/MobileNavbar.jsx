@@ -34,7 +34,7 @@ export default function MobileNavbar({ callSend, socket }) {
         {(siteStatus && siteStatus.day) || (token && token.admin) ? (
           <div>
             <div>
-              <MyDay />
+              <MyDay socket={socket} />
             </div>
           </div>
         ) : null}
