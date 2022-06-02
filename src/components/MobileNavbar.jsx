@@ -9,6 +9,7 @@ import MyDay from "./MyDay/MyDay";
 
 export default function MobileNavbar({ callSend, socket }) {
   const drawer = useSelector((state) => state.global.drawer);
+  const siteStatus = useSelector((state) => state.global.siteStatus);
   const connectedUsers = useSelector((state) => state.global.connectedUsers);
   const token = useSelector((state) => state.global.token);
 
@@ -36,7 +37,7 @@ export default function MobileNavbar({ callSend, socket }) {
           ) : null}
         </div>
 
-        {connectedUsers ? (
+        {(connectedUsers && siteStatus.online) || (token && token.admin) ? (
           <div className=" flex">
             {connectedUsers.map((item, index) =>
               item.id !== token.id && item.online ? (

@@ -24,8 +24,13 @@ export const globalState = createSlice({
     sensitiveContent: true,
     isSiteBlock: true,
     dayUploadedImages: [],
+    siteStatus: null,
   },
   reducers: {
+    setSiteStatus: (state, payload) => {
+      state.siteStatus = payload.payload;
+      // console.log("Msg is ", state.msg ? state.msg : "Empty");
+    },
     setdayUploadedImages: (state, payload) => {
       state.dayUploadedImages.push(payload.payload);
       // console.log("Msg is ", state.msg ? state.msg : "Empty");
@@ -182,6 +187,7 @@ export const {
   setSiteBlock,
   setdayUploadedImages,
   emptyDayUploadedImages,
+  setSiteStatus,
 } = globalState.actions;
 
 export default globalState.reducer;

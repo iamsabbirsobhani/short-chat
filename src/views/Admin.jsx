@@ -212,7 +212,7 @@ export default function Admin(props) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    props.socket.emit("blockd-site", false);
+                    props.socket.emit("blocked-site", false);
                     setAnchorEl(null);
                   }}
                 >
@@ -220,11 +220,123 @@ export default function Admin(props) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    props.socket.emit("blockd-site", true);
+                    props.socket.emit("blocked-site", true);
                     setAnchorEl(null);
                   }}
                 >
                   Unblock Site
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-online", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Online
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-online", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Online
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-chat", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block chat
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-chat", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock chat
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-chatinput", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Disable Chat(in)
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-chatinput", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Enable Chat(in)
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-call", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Call
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-call", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Call
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-menu", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Menu
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-menu", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Menu
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-transcript", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Transcript
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-transcript", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Transcript
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-partager", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Partager
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-partager", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Partager
                 </MenuItem>
               </Menu>
             </ThemeProvider>
