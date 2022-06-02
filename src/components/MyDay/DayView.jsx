@@ -103,7 +103,7 @@ export default function DayView(props) {
           </div>
           <div className="text-gray-100 flex items-center bg-green-500 p-2  text-center rounded-md font-bold  left-2 relative z-[60] opacity-70">
             <ion-icon name="eye-outline"></ion-icon>
-            {day[imageIndex] ? <h1>{day[imageIndex].view}</h1> : null}
+            <h1>{day[imageIndex]?.view}</h1>
           </div>
           <button
             onClick={() => {
@@ -119,7 +119,10 @@ export default function DayView(props) {
             <button
               onClick={() => {
                 prevImage();
-                props.socket.emit("view-increment", { id: day[imageIndex].id });
+                props.socket.emit("view-increment", {
+                  id: day[imageIndex].id,
+                  UserId: day[imageIndex]?.UserId,
+                });
               }}
               className="rounded-tr-sm rounded-bl-md rounded-br-sm rounded-tl-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
             >
@@ -130,7 +133,10 @@ export default function DayView(props) {
             <button
               onClick={() => {
                 nextImage();
-                props.socket.emit("view-increment", { id: day[imageIndex].id });
+                props.socket.emit("view-increment", {
+                  id: day[imageIndex].id,
+                  UserId: day[imageIndex]?.UserId,
+                });
               }}
               className=" rounded-tl-sm rounded-bl-sm rounded-tr-md rounded-br-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
             >
