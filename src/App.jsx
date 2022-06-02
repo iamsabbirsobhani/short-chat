@@ -103,7 +103,6 @@ function App(props) {
       setblock(auth.rows[0].block);
       dispatch(setSiteBlock(auth.rows[0].block));
       dispatch(setSiteStatus(auth.rows[0]));
-      console.log(auth.rows[0]);
     });
   });
   // online-offline status code

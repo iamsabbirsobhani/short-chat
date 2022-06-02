@@ -42,6 +42,8 @@ export default function Chat(props) {
   const token = useSelector((state) => state.global.token);
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
+  const siteStatus = useSelector((state) => state.global.siteStatus);
+
   const dispatch = useDispatch();
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
   const [id, setId] = useState([]);
@@ -342,49 +344,77 @@ export default function Chat(props) {
         )}
       </div>
 
-      <form
-        onSubmit={sendMsg}
-        className=" relative mb-3 text-center w-80 m-auto mt-5"
-      >
-        <div>
-          {isTypings && isTypings.isTyping && isTypings.id != id ? (
-            <TypingIndicator />
-          ) : null}
-          {/* <TypingIndicator /> */}
-        </div>
-        <div className=" relative">
-          <label htmlFor="chatField">
-            <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
-              <label htmlFor="file-input" className=" ">
-                <ion-icon name="image"></ion-icon>
-              </label>
+      {(siteStatus && siteStatus.chat) || (token && token.admin) ? (
+        <form
+          onSubmit={sendMsg}
+          className=" relative mb-3 text-center w-80 m-auto mt-5"
+        >
+          <div>
+            {isTypings && isTypings.isTyping && isTypings.id != id ? (
+              <TypingIndicator />
+            ) : null}
+            {/* <TypingIndicator /> */}
+          </div>
+          <div className=" relative">
+            <label htmlFor="chatField">
+              <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
+                <label htmlFor="file-input" className=" ">
+                  <ion-icon name="image"></ion-icon>
+                </label>
+                {(siteStatus && siteStatus.chatInput) ||
+                (token && token.admin) ? (
+                  <input
+                    className=" hidden w-9"
+                    type="file"
+                    accept="image/*,video/*"
+                    name=""
+                    id="file-input"
+                    ref={inputFile}
+                    onChange={(e) => handleUpload(e)}
+                  />
+                ) : (
+                  <input
+                    className=" hidden w-9"
+                    type="file"
+                    accept="image/*,video/*"
+                    name=""
+                    disabled
+                    id="file-input"
+                    ref={inputFile}
+                    onChange={(e) => handleUpload(e)}
+                  />
+                )}
+              </div>
+            </label>
+            {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input
-                className=" hidden w-9"
-                type="file"
-                accept="image/*,video/*"
-                name=""
-                id="file-input"
-                ref={inputFile}
-                onChange={(e) => handleUpload(e)}
+                className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
+                type="text"
+                name="chatField"
+                onChange={(e) => handleChat(e)}
+                placeholder="Message..."
+                autoComplete="off"
               />
-            </div>
-          </label>
-          <input
-            className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
-            type="text"
-            name="chatField"
-            onChange={(e) => handleChat(e)}
-            placeholder="Message..."
-            autoComplete="off"
-          />
-          <button
-            type="submit"
-            className=" bg-blue-500/40 h-9 w-9 rounded-full p-2 text-blue-500 absolute right-[30px] top-[6px]"
-          >
-            <ion-icon name="send"></ion-icon>
-          </button>
-        </div>
-      </form>
+            ) : (
+              <input
+                className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
+                type="text"
+                name="chatField"
+                disabled
+                onChange={(e) => handleChat(e)}
+                placeholder="Message..."
+                autoComplete="off"
+              />
+            )}
+            <button
+              type="submit"
+              className=" bg-blue-500/40 h-9 w-9 rounded-full p-2 text-blue-500 absolute right-[30px] top-[6px]"
+            >
+              <ion-icon name="send"></ion-icon>
+            </button>
+          </div>
+        </form>
+      ) : null}
       <Routes>
         <Route path="transcript" element={<TranscriptChat />} />
         <Route path="social" element={<Social socket={props.socket} />} />

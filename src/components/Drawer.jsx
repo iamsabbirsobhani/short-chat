@@ -4,6 +4,8 @@ import { setToken, setPage } from "../features/state/globalState";
 
 export default function Drawer({ drawerToggle, socket }) {
   const token = useSelector((state) => state.global.token);
+  const siteStatus = useSelector((state) => state.global.siteStatus);
+
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -45,27 +47,53 @@ export default function Drawer({ drawerToggle, socket }) {
             </button>
           </div>
           <div className=" mt-2">
-            <button
-              onClick={() => {
-                navigate("social");
-                drawerToggle();
-              }}
-              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
-            >
-              Partager
-            </button>
+            {(siteStatus && siteStatus.partager) || (token && token.admin) ? (
+              <button
+                onClick={() => {
+                  navigate("social");
+                  drawerToggle();
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              >
+                Partager
+              </button>
+            ) : (
+              <button
+                disabled
+                onClick={() => {
+                  navigate("social");
+                  drawerToggle();
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              >
+                Partager
+              </button>
+            )}
           </div>
           {/* {token && token.admin === true ? ( */}
           <div className=" mt-2">
-            <button
-              onClick={() => {
-                navigate("transcript");
-                drawerToggle();
-              }}
-              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
-            >
-              Transcript
-            </button>
+            {(siteStatus && siteStatus.transcript) || (token && token.admin) ? (
+              <button
+                onClick={() => {
+                  navigate("transcript");
+                  drawerToggle();
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              >
+                Transcript
+              </button>
+            ) : (
+              <button
+                disabled
+                onClick={() => {
+                  navigate("transcript");
+                  drawerToggle();
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              >
+                Transcript
+              </button>
+            )}
           </div>
           {/* ) : null} */}
           {token && token.admin === true ? (

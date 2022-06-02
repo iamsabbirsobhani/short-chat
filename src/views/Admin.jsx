@@ -25,6 +25,8 @@ export default function Admin(props) {
   const page = useSelector((state) => state.global.adminPagination);
   const blcok = useSelector((state) => state.global.isSiteBlock);
   const token = useSelector((state) => state.global.token);
+  const siteStatus = useSelector((state) => state.global.siteStatus);
+
   const confirmDelete = useSelector((state) => state.global.confirmDelete);
   const dispatch = useDispatch();
   const adminRef = useRef(null);
@@ -170,8 +172,48 @@ export default function Admin(props) {
         <div className=" mt-2 mb-2 menu">
           <div className=" mb-2">
             {!blcok ? (
-              <Alert severity="warning">
+              <Alert className="mt-2" severity="warning">
                 Site is beign blocked. — check it out!
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.online ? (
+              <Alert className="mt-2" severity="warning">
+                Online presence has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.call ? (
+              <Alert className="mt-2" severity="warning">
+                Call has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.chat ? (
+              <Alert className="mt-2" severity="warning">
+                Chat has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.chatInput ? (
+              <Alert className="mt-2" severity="warning">
+                Chat input has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.day ? (
+              <Alert className="mt-2" severity="warning">
+                Day has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.menu ? (
+              <Alert className="mt-2" severity="warning">
+                Menu has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.partager ? (
+              <Alert className="mt-2" severity="warning">
+                Partager has been blocked.
+              </Alert>
+            ) : null}
+            {siteStatus && !siteStatus.transcript ? (
+              <Alert className="mt-2" severity="warning">
+                Transcript has been blocked.
               </Alert>
             ) : null}
           </div>
@@ -337,6 +379,22 @@ export default function Admin(props) {
                   }}
                 >
                   Unblock Partager
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-day", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Day
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("blocked-day", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Unblock Day
                 </MenuItem>
               </Menu>
             </ThemeProvider>
