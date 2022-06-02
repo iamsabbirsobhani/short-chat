@@ -35,6 +35,7 @@ export default function AddDay(props) {
     <>
       <div className="  backdrop-blur-md shadow-md shadow-gray-500/50 p-2 w-72 min-h-[150px]">
         <h1>Add Day</h1>
+
         <form onSubmit={addDay} className="mt-3">
           <div className=" flex items-center mb-3">
             <div className=" mt-3">
@@ -49,7 +50,7 @@ export default function AddDay(props) {
                 id="day-file"
                 type="file"
                 name="day-file"
-                accept="images/*"
+                accept="image/*"
                 onChange={(e) => handleUpload(e)}
                 ref={dayRef}
               />

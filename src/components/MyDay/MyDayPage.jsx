@@ -1,5 +1,6 @@
 import AddDay from "./AddDay";
 import { useState } from "react";
+import DayView from "./DayView";
 
 export default function MyDayPage(props) {
   const [isAddDay, setisAddDay] = useState(false);
@@ -38,6 +39,7 @@ export default function MyDayPage(props) {
     <>
       <div className="w-full top-14 left-0 right-0 bottom-0 fixed backdrop-blur-md z-40"></div>
       <div className=" left-4 top-20 fixed z-50 text-white flex flex-wrap justify-center ">
+        <DayView />
         <div
           onClick={() => {
             setisAddDay(true);
