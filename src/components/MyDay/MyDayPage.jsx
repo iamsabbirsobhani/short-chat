@@ -71,8 +71,8 @@ export default function MyDayPage(props) {
                 className="day-card mt-2 w-32 h-40 relative mr-2 cursor-pointer shadow-md shadow-cyan-500/50"
               >
                 <div className="absolute w-full h-full backdrop-blur-[2px] flex justify-center items-center">
-                  <div className="text-center">
-                    <h1>{data.userName}'s' Day</h1>
+                  <div className="text-center font-semibold bg-gray-800/30 p-2 rounded-md">
+                    <h1>{data.userName.toUpperCase()}'s' Day</h1>
                     <h1>Tap to see</h1>
                   </div>
                 </div>

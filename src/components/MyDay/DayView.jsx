@@ -9,6 +9,7 @@ import { formatDistanceToNow } from "date-fns";
 
 export default function DayView(props) {
   const imageIndex = useSelector((state) => state.global.imageIndex);
+  const token = useSelector((state) => state.global.token);
   const dispatch = useDispatch();
   const day = useSelector((state) => state.global.individualDay);
 
@@ -96,8 +97,13 @@ export default function DayView(props) {
               {day.length}
             </h1>
           </div>
-          <div className="text-gray-100  text-center rounded-full font-bold  left-2 relative z-[60]">
-            <h1>0 likes</h1>
+          <div className="text-gray-100 flex items-center bg-red-500 p-2  text-center rounded-md font-bold  left-2 relative z-[60] opacity-70">
+            <ion-icon name="heart"></ion-icon>
+            {day[imageIndex] ? <h1>{day[imageIndex].like}</h1> : null}
+          </div>
+          <div className="text-gray-100 flex items-center bg-green-500 p-2  text-center rounded-md font-bold  left-2 relative z-[60] opacity-70">
+            <ion-icon name="eye-outline"></ion-icon>
+            {day[imageIndex] ? <h1>{day[imageIndex].view}</h1> : null}
           </div>
           <button
             onClick={() => {
@@ -109,25 +115,28 @@ export default function DayView(props) {
           </button>
         </div>
         <div className=" z-[70] flex w-full justify-between absolute top-[50%]">
-          <button
-            onClick={() => {
-              prevImage();
-            }}
-            className="rounded-tr-sm rounded-bl-md rounded-br-sm rounded-tl-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
-          >
-            Prev
-          </button>
-          <button
-            onKeyDown={() => {
-              nextImage();
-            }}
-            onClick={() => {
-              nextImage();
-            }}
-            className=" rounded-tl-sm rounded-bl-sm rounded-tr-md rounded-br-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
-          >
-            Next
-          </button>
+          {day[imageIndex] ? (
+            <button
+              onClick={() => {
+                prevImage();
+                props.socket.emit("view-increment", { id: day[imageIndex].id });
+              }}
+              className="rounded-tr-sm rounded-bl-md rounded-br-sm rounded-tl-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
+            >
+              Prev
+            </button>
+          ) : null}
+          {day[imageIndex] ? (
+            <button
+              onClick={() => {
+                nextImage();
+                props.socket.emit("view-increment", { id: day[imageIndex].id });
+              }}
+              className=" rounded-tl-sm rounded-bl-sm rounded-tr-md rounded-br-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
+            >
+              Next
+            </button>
+          ) : null}
         </div>
         <div className=" relative">
           <div className=" fade-in flex justify-center items-center">
@@ -149,14 +158,20 @@ export default function DayView(props) {
             type="text"
             placeholder="Say something"
           />
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-            className=" p-2 bg-gradient-to-r from-red-500 to-red-500 rounded-md flex justify-center items-center"
-          >
-            <ion-icon name="heart"></ion-icon>
-          </button>
+          {day[imageIndex] && token ? (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                props.socket.emit("increment-like", {
+                  id: day[imageIndex].id,
+                  UserId: day[imageIndex].UserId,
+                });
+              }}
+              className=" p-2 bg-gradient-to-r from-red-500 to-red-500 rounded-md flex justify-center items-center"
+            >
+              <ion-icon name="heart"></ion-icon>
+            </button>
+          ) : null}
           <button
             onClick={(e) => {
               e.preventDefault();
