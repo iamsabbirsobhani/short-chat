@@ -48,17 +48,12 @@ export default function DayView(props) {
   const nextImage = () => {
     if (imageIndex < allDay.length - 1) {
       dispatch(setImageIndex(imageIndex + 1));
-      console.log(imageIndex, allDay.length);
-      console.log(allDay[imageIndex].imgUrl);
     }
   };
   const prevImage = () => {
     if (imageIndex > 0) {
       dispatch(setImageIndex(imageIndex - 1));
-      console.log(imageIndex, allDay.length);
-      console.log(allDay[imageIndex].imgUrl);
     }
-    console.log();
   };
 
   useEffect(() => {
@@ -70,12 +65,18 @@ export default function DayView(props) {
     <>
       <div className=" w-full fixed h-full backdrop-blur-md top-0 left-0 right-0 bottom-0 z-40"></div>
       <div className="day-viewer text-white z-50 fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center">
-        <div className=" absolute right-4 top-4">
+        <div className="flex justify-between items-center w-full  absolute right-0 top-4">
+          <div className="text-gray-400 opacity-60  left-2 relative z-[60]">
+            <h1>20h ago</h1>
+          </div>
+          <div className="text-gray-400 opacity-60 relative z-[60]">
+            <h1>0 likes</h1>
+          </div>
           <button
             onClick={() => {
               props.setdayView(false);
             }}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-md opacity-70 hover:opacity-100 relative z-[60]"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-md opacity-70 mr-2 hover:opacity-100 relative z-[60]"
           >
             Close
           </button>
@@ -86,7 +87,7 @@ export default function DayView(props) {
               onClick={() => {
                 prevImage();
               }}
-              className="rounded-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
+              className="rounded-tr-sm rounded-bl-md rounded-br-sm rounded-tl-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
             >
               Prev
             </button>
@@ -94,7 +95,7 @@ export default function DayView(props) {
               onClick={() => {
                 nextImage();
               }}
-              className=" rounded-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
+              className=" rounded-tl-sm rounded-bl-sm rounded-tr-md rounded-br-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
             >
               Next
             </button>
@@ -108,7 +109,7 @@ export default function DayView(props) {
           </div>
         </div>
         <form
-          className=" absolute bottom-2 flex w-full justify-around items-center "
+          className=" absolute bottom-3 flex w-full justify-around items-center "
           action=""
         >
           <input
@@ -116,7 +117,10 @@ export default function DayView(props) {
             type="text"
             placeholder="Say something"
           />
-          <button>
+          <button className=" p-2 bg-gradient-to-r from-red-500 to-red-500 rounded-md flex justify-center items-center">
+            <ion-icon name="heart"></ion-icon>
+          </button>
+          <button className=" p-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-md flex justify-center items-center">
             <ion-icon name="send"></ion-icon>
           </button>
         </form>
