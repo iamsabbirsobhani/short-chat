@@ -37,7 +37,8 @@ export default function MobileNavbar({ callSend, socket }) {
           ) : null}
         </div>
 
-        {(connectedUsers && siteStatus.online) || (token && token.admin) ? (
+        {(connectedUsers && siteStatus && siteStatus.online) ||
+        (token && token.admin) ? (
           <div className=" flex">
             {connectedUsers.map((item, index) =>
               item.id !== token.id && item.online ? (
