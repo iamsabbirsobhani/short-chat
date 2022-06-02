@@ -81,25 +81,25 @@ export default function DayView(props) {
             Close
           </button>
         </div>
+        <div className=" z-[70] flex w-full justify-between absolute top-[50%]">
+          <button
+            onClick={() => {
+              prevImage();
+            }}
+            className="rounded-tr-sm rounded-bl-md rounded-br-sm rounded-tl-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
+          >
+            Prev
+          </button>
+          <button
+            onClick={() => {
+              nextImage();
+            }}
+            className=" rounded-tl-sm rounded-bl-sm rounded-tr-md rounded-br-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
+          >
+            Next
+          </button>
+        </div>
         <div className=" relative">
-          <div className=" z-[70] flex w-full justify-between absolute top-[50%]">
-            <button
-              onClick={() => {
-                prevImage();
-              }}
-              className="rounded-tr-sm rounded-bl-md rounded-br-sm rounded-tl-md ml-2 bg-gradient-to-r from-sky-500 opacity-50 hover:opacity-100 to-indigo-500 p-2"
-            >
-              Prev
-            </button>
-            <button
-              onClick={() => {
-                nextImage();
-              }}
-              className=" rounded-tl-sm rounded-bl-sm rounded-tr-md rounded-br-md mr-2 bg-gradient-to-r from-cyan-500 to-blue-500 p-2 opacity-50 hover:opacity-100"
-            >
-              Next
-            </button>
-          </div>
           <div className=" fade-in flex justify-center items-center">
             <img
               className=" rounded-md w-full h-full object-contain"
