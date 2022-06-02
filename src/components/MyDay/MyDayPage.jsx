@@ -4,6 +4,7 @@ import DayView from "./DayView";
 
 export default function MyDayPage(props) {
   const [isAddDay, setisAddDay] = useState(false);
+  const [dayView, setdayView] = useState(false);
 
   const day = [
     {
@@ -39,7 +40,7 @@ export default function MyDayPage(props) {
     <>
       <div className="w-full top-14 left-0 right-0 bottom-0 fixed backdrop-blur-md z-40"></div>
       <div className=" left-4 top-20 fixed z-50 text-white flex flex-wrap justify-center ">
-        <DayView />
+        {dayView ? <DayView setdayView={setdayView} /> : null}
         <div
           onClick={() => {
             setisAddDay(true);
@@ -57,6 +58,9 @@ export default function MyDayPage(props) {
         {day
           ? day.map((data) => (
               <div
+                onClick={() => {
+                  setdayView(true);
+                }}
                 key={data.id}
                 className="day-card mt-2 w-32 h-40 relative mr-2 cursor-pointer shadow-md shadow-cyan-500/50"
               >
