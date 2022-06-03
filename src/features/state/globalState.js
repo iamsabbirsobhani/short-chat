@@ -31,8 +31,19 @@ export const globalState = createSlice({
     individualDay: [],
     // MyDay
     user: [],
+    userLogs: [],
+    userOuts: [],
   },
   reducers: {
+    // LogHistory
+    setUserLogs: (state, payload) => {
+      state.userLogs = payload.payload;
+    },
+    setUserOuts: (state, payload) => {
+      state.userOuts = payload.payload;
+    },
+    // LogHistory
+
     setLoggedUser: (state, payload) => {
       state.user = payload.payload; //get the current logged user
     },
@@ -212,6 +223,8 @@ export const {
   setIndividualDay,
   setDay,
   setLoggedUser,
+  setUserLogs,
+  setUserOuts,
 } = globalState.actions;
 
 export default globalState.reducer;

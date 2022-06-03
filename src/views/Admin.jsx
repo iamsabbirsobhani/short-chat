@@ -16,6 +16,7 @@ import { Route, Routes } from "react-router-dom";
 import ChatDelete from "../components/ChatDelete";
 import Alert from "@mui/material/Alert";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import LogHistory from "../components/LogHistory";
 
 const postAPI = "https://short-chat-backend.herokuapp.com/admin/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
@@ -239,10 +240,11 @@ export default function Admin(props) {
               >
                 <MenuItem
                   onClick={() => {
+                    navigate("chat/loghistory");
                     setAnchorEl(null);
                   }}
                 >
-                  Profile
+                  Log History
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -495,6 +497,10 @@ export default function Admin(props) {
           <Route
             path="chat/delete"
             element={<ChatDelete socket={props.socket} />}
+          />
+          <Route
+            path="chat/loghistory"
+            element={<LogHistory socket={props.socket} />}
           />
         </Routes>
       </div>

@@ -8,6 +8,7 @@ import {
   setSiteStatus,
   setDay,
   setLoggedUser,
+  setAllUsers,
 } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -116,13 +117,33 @@ function App(props) {
         dispatch(setLoggedUser(user));
       }
     });
+    props.socket.on("get-all-users", (users) => {
+      dispatch(setAllUsers(users));
+      console.log(users);
+    });
   });
   // online-offline status code
+
+  useEffect(() => {
+    return () => {
+      props.socket.emit(
+        "userlog-out",
+        new Date(),
+        JSON.parse(localStorage.getItem("user"))?.id
+      );
+    };
+  }, []);
 
   // fcm
   useEffect(() => {
     props.socket.emit("send-day");
+    props.socket.emit("get-all-users");
     props.socket.emit("block-site-status");
+    props.socket.emit(
+      "userlog-log",
+      new Date(),
+      JSON.parse(localStorage.getItem("user"))?.id
+    );
     props.socket.emit(
       "get-logged-user",
       JSON.parse(localStorage.getItem("user"))?.id

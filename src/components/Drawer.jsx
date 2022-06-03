@@ -122,6 +122,7 @@ export default function Drawer({ drawerToggle, socket }) {
               </button>
             </div>
           ) : null}
+
           <div className=" mt-2">
             <button
               onClick={() => {
