@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 export default function MyDay(props) {
   let navigate = useNavigate();
   const user = props.useSelector((state) => state.global.user);
+  const token = props.useSelector((state) => state.global.token);
+  useEffect(() => {
+    props.socket.emit("is-new-day", token?.id);
+  }, []);
   return (
     <>
       <div
