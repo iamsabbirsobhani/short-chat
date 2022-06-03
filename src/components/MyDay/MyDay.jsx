@@ -8,7 +8,10 @@ export default function MyDay(props) {
   const token = props.useSelector((state) => state.global.token);
   useEffect(() => {
     console.log("MyDay User: ", user);
-    props.socket.emit("is-new-day", token?.id);
+    props.socket.emit(
+      "is-new-day",
+      JSON.parse(localStorage.getItem("user"))?.id
+    );
   }, []);
   return (
     <>

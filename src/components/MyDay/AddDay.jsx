@@ -29,7 +29,11 @@ export default function AddDay(props) {
     e.preventDefault();
     props.setisAddDay(false);
     console.log(allImages);
-    props.socket.emit("create-day", allImages, token?.id);
+    props.socket.emit(
+      "create-day",
+      allImages,
+      JSON.parse(localStorage.getItem("user"))?.id
+    );
     dispatch(emptyDayUploadedImages());
   };
 
