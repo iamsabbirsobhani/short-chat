@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import MyDayPage from "./MyDayPage";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
 export default function MyDay(props) {
   let navigate = useNavigate();
   const user = props.useSelector((state) => state.global.user);
