@@ -30,8 +30,12 @@ export const globalState = createSlice({
     day: [],
     individualDay: [],
     // MyDay
+    user: [],
   },
   reducers: {
+    setLoggedUser: (state, payload) => {
+      state.user = payload.payload; //get the current logged user
+    },
     // MyDay
     setIndividualDay: (state, payload) => {
       state.individualDay = payload.payload; //DayView Component
@@ -207,6 +211,7 @@ export const {
   setImageIndex,
   setIndividualDay,
   setDay,
+  setLoggedUser,
 } = globalState.actions;
 
 export default globalState.reducer;

@@ -7,6 +7,7 @@ import {
   setSiteBlock,
   setSiteStatus,
   setDay,
+  setLoggedUser,
 } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -109,6 +110,10 @@ function App(props) {
     props.socket.on("day", (day) => {
       dispatch(setDay(day));
     });
+
+    props.socket.on("get-current-user", (user) => {
+      dispatch(setLoggedUser(user));
+    });
   });
   // online-offline status code
 
@@ -116,6 +121,10 @@ function App(props) {
   useEffect(() => {
     props.socket.emit("send-day");
     props.socket.emit("block-site-status");
+    props.socket.emit(
+      "get-logged-user",
+      JSON.parse(localStorage.getItem("user"))?.id
+    );
 
     let data = JSON.parse(localStorage.getItem("user"));
     getToken(messaging, {
