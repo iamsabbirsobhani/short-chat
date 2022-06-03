@@ -112,6 +112,7 @@ function App(props) {
     });
 
     props.socket.on("get-current-user", (user) => {
+      console.log(user);
       dispatch(setLoggedUser(user));
     });
   });

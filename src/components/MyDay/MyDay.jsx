@@ -7,6 +7,7 @@ export default function MyDay(props) {
   const user = props.useSelector((state) => state.global.user);
   const token = props.useSelector((state) => state.global.token);
   useEffect(() => {
+    console.log("MyDay User: ", user);
     props.socket.emit("is-new-day", token?.id);
   }, []);
   return (
@@ -17,7 +18,7 @@ export default function MyDay(props) {
         }}
         className=" cursor-pointer w-9 h-9 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full flex justify-center items-center relative"
       >
-        {user.newDay ? (
+        {user?.newDay ? (
           <div className=" absolute text-[10px] p-[1px] -top-1  -right-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-sm">
             <h1>New</h1>
           </div>
