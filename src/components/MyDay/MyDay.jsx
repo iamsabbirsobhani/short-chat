@@ -7,7 +7,7 @@ export default function MyDay(props) {
   const user = props.useSelector((state) => state.global.user);
   const token = props.useSelector((state) => state.global.token);
   useEffect(() => {
-    console.log("MyDay User: ", user);
+    // console.log("MyDay User: ", user);
   }, []);
   return (
     <>
