@@ -112,8 +112,10 @@ function App(props) {
     });
 
     props.socket.on("get-current-user", (user) => {
-      console.log(user);
-      dispatch(setLoggedUser(user));
+      if (user?.id === JSON.parse(localStorage.getItem("user"))?.id) {
+        console.log(user);
+        dispatch(setLoggedUser(user));
+      }
     });
   });
   // online-offline status code
