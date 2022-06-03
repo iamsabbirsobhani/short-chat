@@ -8,16 +8,16 @@ export default function MyDay(props) {
   const token = props.useSelector((state) => state.global.token);
   useEffect(() => {
     console.log("MyDay User: ", user);
-    props.socket.emit(
-      "is-new-day",
-      JSON.parse(localStorage.getItem("user"))?.id
-    );
   }, []);
   return (
     <>
       <div
         onClick={() => {
           navigate("myday");
+          props.socket.emit(
+            "is-new-day",
+            JSON.parse(localStorage.getItem("user"))?.id
+          );
         }}
         className=" cursor-pointer w-9 h-9 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full flex justify-center items-center relative"
       >
