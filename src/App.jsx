@@ -113,7 +113,6 @@ function App(props) {
 
     props.socket.on("get-current-user", (user) => {
       if (user?.id === JSON.parse(localStorage.getItem("user"))?.id) {
-        console.log(user);
         dispatch(setLoggedUser(user));
       }
     });
