@@ -119,7 +119,6 @@ function App(props) {
     });
     props.socket.on("get-all-users", (users) => {
       dispatch(setAllUsers(users));
-      console.log(users);
     });
   });
   // online-offline status code

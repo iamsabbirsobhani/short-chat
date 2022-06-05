@@ -42,7 +42,6 @@ export default function LogHistory(props) {
                   onClick={() => {
                     props.socket.emit("userlog-get-single-user-log", item.id);
                     props.socket.emit("userlog-get-single-user-out", item.id);
-                    console.log("hello", item.id);
                   }}
                   variant="outlined"
                 >
