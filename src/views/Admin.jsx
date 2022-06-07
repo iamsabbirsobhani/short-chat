@@ -17,6 +17,7 @@ import ChatDelete from "../components/ChatDelete";
 import Alert from "@mui/material/Alert";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import LogHistory from "../components/LogHistory";
+import CreateAnnounce from "../components/CreateAnnounce";
 
 const postAPI = "https://short-chat-backend.herokuapp.com/admin/";
 const postsAPI = "https://short-chat-backend.herokuapp.com/admin/";
@@ -253,6 +254,14 @@ export default function Admin(props) {
                   }}
                 >
                   Chat Delete
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("chat/announce");
+                    setAnchorEl(null);
+                  }}
+                >
+                  Announce
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -501,6 +510,10 @@ export default function Admin(props) {
           <Route
             path="chat/loghistory"
             element={<LogHistory socket={props.socket} />}
+          />
+          <Route
+            path="chat/announce"
+            element={<CreateAnnounce socket={props.socket} />}
           />
         </Routes>
       </div>

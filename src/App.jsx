@@ -9,6 +9,9 @@ import {
   setDay,
   setLoggedUser,
   setAllUsers,
+  setAnnounce,
+  setHasAnnounce,
+  setAllAnnounce,
 } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -120,6 +123,21 @@ function App(props) {
     props.socket.on("get-all-users", (users) => {
       dispatch(setAllUsers(users));
     });
+
+    props.socket.on("has-announce", (announce) => {
+      console.log("has-announce ", announce);
+      dispatch(setHasAnnounce(announce));
+    });
+
+    props.socket.on("send-announce", (announce) => {
+      console.log("send-announce ", announce);
+      dispatch(setAnnounce(announce));
+    });
+
+    props.socket.on("get-all-announce", (announce) => {
+      console.log("get-all-announce ", announce);
+      dispatch(setAllAnnounce(announce));
+    });
   });
   // online-offline status code
 
@@ -147,6 +165,10 @@ function App(props) {
       "get-logged-user",
       JSON.parse(localStorage.getItem("user"))?.id
     );
+
+    props.socket.emit("has-announce");
+    props.socket.emit("get-announce");
+    props.socket.emit("get-all-announce");
 
     let data = JSON.parse(localStorage.getItem("user"));
     getToken(messaging, {

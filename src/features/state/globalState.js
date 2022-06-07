@@ -33,8 +33,21 @@ export const globalState = createSlice({
     user: [],
     userLogs: [],
     userOuts: [],
+    hasAnnounce: false,
+    announce: [],
+    allAnnounce: [],
   },
   reducers: {
+    // announce
+    setAllAnnounce: (state, payload) => {
+      state.allAnnounce = payload.payload;
+    },
+    setAnnounce: (state, payload) => {
+      state.announce = payload.payload;
+    },
+    setHasAnnounce: (state, payload) => {
+      state.hasAnnounce = payload.payload;
+    },
     // LogHistory
     setUserLogs: (state, payload) => {
       state.userLogs = payload.payload;
@@ -225,6 +238,9 @@ export const {
   setLoggedUser,
   setUserLogs,
   setUserOuts,
+  setHasAnnounce,
+  setAnnounce,
+  setAllAnnounce,
 } = globalState.actions;
 
 export default globalState.reducer;

@@ -9,7 +9,7 @@ import Receiver from "../components/Receiver";
 import Navbar from "../components/Navbar";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import Announce from "../components/Announce";
 import {
   openCallerScreenOn,
   openCallerScreenOff,
@@ -36,6 +36,8 @@ export default function Chat(props) {
   let navigate = useNavigate();
 
   const openCalling = useSelector((state) => state.global.openCalling);
+  const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
+  const announce = useSelector((state) => state.global.announce);
   const msg = useSelector((state) => state.global.msg);
   const name = useSelector((state) => state.global.name);
   const receiverUI = useSelector((state) => state.global.receiverUI);
@@ -250,6 +252,10 @@ export default function Chat(props) {
     <>
       <Navbar callSend={callSend} socket={props.socket} />
       <Progress uploading={uploading} />
+      {hasAnnounce && announce?.published ? (
+        <Announce socket={props.socket} />
+      ) : null}
+
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
           <p className=" text-white uppercase font-semibold text-center">
