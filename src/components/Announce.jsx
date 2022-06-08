@@ -55,9 +55,6 @@ export default function ResponsiveDialog(props) {
   return (
     <div>
       <ThemeProvider theme={darkTheme}>
-        <Button variant="outlined" onClick={handleClickOpen}>
-          Open responsive dialog
-        </Button>
         <Dialog
           fullScreen={fullScreen}
           open={hasAnnounce}

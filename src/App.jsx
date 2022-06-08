@@ -125,17 +125,17 @@ function App(props) {
     });
 
     props.socket.on("has-announce", (announce) => {
-      console.log("has-announce ", announce);
+      // console.log("has-announce ", announce);
       dispatch(setHasAnnounce(announce));
     });
 
     props.socket.on("send-announce", (announce) => {
-      console.log("send-announce ", announce);
+      // console.log("send-announce ", announce);
       dispatch(setAnnounce(announce));
     });
 
     props.socket.on("get-all-announce", (announce) => {
-      console.log("get-all-announce ", announce);
+      // console.log("get-all-announce ", announce);
       dispatch(setAllAnnounce(announce));
     });
   });
