@@ -16,7 +16,7 @@ export default function SensitiveButton({ sensitiveHandle, id }) {
               dispatch(setSensitiveContent(false));
               sensitiveHandle(id);
             }}
-            className=" cursor-pointer bg-gray-700 w-full flex justify-between p-3 items-center text-xl rounded-sm shadow-md text-gray-400"
+            className="aaa cursor-pointer bg-gray-700 w-full flex justify-between p-3 items-center text-xl rounded-sm shadow-md text-gray-400"
           >
             <p>Content Explicit</p>
             <ion-icon name="eye-off-outline"></ion-icon>
