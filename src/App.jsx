@@ -106,6 +106,7 @@ function App(props) {
     });
 
     props.socket.on("block-status", (auth) => {
+      console.log(auth.rows[0]);
       setblock(auth.rows[0].block);
       dispatch(setSiteBlock(auth.rows[0].block));
       dispatch(setSiteStatus(auth.rows[0]));

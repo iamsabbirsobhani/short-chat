@@ -367,7 +367,7 @@ export default function Chat(props) {
                 <label htmlFor="file-input" className=" ">
                   <ion-icon name="image"></ion-icon>
                 </label>
-                {(siteStatus && siteStatus.chatInput) ||
+                {(siteStatus && siteStatus.fileInput) ||
                 (token && token.admin) ? (
                   <input
                     className=" hidden w-9"

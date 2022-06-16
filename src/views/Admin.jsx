@@ -329,6 +329,22 @@ export default function Admin(props) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
+                    props.socket.emit("block-blockFile", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Enable File Input(Chat)
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("block-blockFile", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Disable File Input(Chat)
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
                     props.socket.emit("blocked-call", false);
                     setAnchorEl(null);
                   }}
