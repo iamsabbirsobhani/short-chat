@@ -178,6 +178,11 @@ export default function Admin(props) {
                 Site is beign blocked. — check it out!
               </Alert>
             ) : null}
+            {!siteStatus?.fileInput ? (
+              <Alert className="mt-2" severity="warning">
+                File Input has been blocked! - Chat
+              </Alert>
+            ) : null}
             {siteStatus && !siteStatus.online ? (
               <Alert className="mt-2" severity="warning">
                 Online presence has been blocked.

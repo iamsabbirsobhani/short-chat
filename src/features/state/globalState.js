@@ -36,8 +36,32 @@ export const globalState = createSlice({
     hasAnnounce: false,
     announce: [],
     allAnnounce: [],
+    // search
+    searchResult: false,
+    findBetweenChat: false,
+    findData: [],
+    searchData: [],
   },
   reducers: {
+    // search
+    openSearchResult: (state, payload) => {
+      state.searchResult = true;
+    },
+    closeSearchResult: (state, payload) => {
+      state.searchResult = false;
+    },
+    openFindBetween: (state, payload) => {
+      state.findBetweenChat = true;
+    },
+    closeFindBetween: (state, payload) => {
+      state.findBetweenChat = false;
+    },
+    setSearchData: (state, payload) => {
+      state.searchData = payload.payload;
+    },
+    setFindData: (state, payload) => {
+      state.findData = payload.payload;
+    },
     // announce
     setAllAnnounce: (state, payload) => {
       state.allAnnounce = payload.payload;
@@ -241,6 +265,12 @@ export const {
   setHasAnnounce,
   setAnnounce,
   setAllAnnounce,
+  openSearchResult,
+  closeSearchResult,
+  openFindBetween,
+  closeFindBetween,
+  setFindData,
+  setSearchData,
 } = globalState.actions;
 
 export default globalState.reducer;

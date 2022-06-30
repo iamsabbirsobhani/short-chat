@@ -123,6 +123,20 @@ export default function Drawer({ drawerToggle, socket }) {
             </div>
           ) : null}
 
+          {token && token.admin === true ? (
+            <div className=" mt-2">
+              <button
+                onClick={() => {
+                  navigate("search");
+                  drawerToggle();
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              >
+                Search
+              </button>
+            </div>
+          ) : null}
+
           <div className=" mt-2">
             <button
               onClick={() => {

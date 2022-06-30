@@ -31,6 +31,7 @@ import Social from "./Social";
 import Logs from "../components/Logs";
 import Admin from "./Admin";
 import Call from "./Call";
+import Search from "../components/Search";
 
 export default function Chat(props) {
   let navigate = useNavigate();
@@ -425,6 +426,7 @@ export default function Chat(props) {
         <Route path="transcript" element={<TranscriptChat />} />
         <Route path="social" element={<Social socket={props.socket} />} />
         <Route path="logs" element={<Logs socket={props.socket} />} />
+        <Route path="search" element={<Search socket={props.socket} />} />
         <Route
           path="callinprogress"
           element={<Call peer={props.peer} socket={props.socket} />}
