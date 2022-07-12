@@ -136,6 +136,7 @@ export default function Admin(props) {
     if (fetchOnce) {
       props.socket.on("admin-post", function () {
         console.log("Execute once");
+        getPosts();
         setfetchOnce(false);
       });
     }

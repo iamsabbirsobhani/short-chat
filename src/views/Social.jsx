@@ -41,7 +41,7 @@ export default function Social(props) {
 
   async function getPosts() {
     setisLoading(true);
-    if (fetchOnce) {
+    if (!fetchOnce) {
       setmoreLoading(true);
     }
     const response = await axios.get(postsAPI + page, {
@@ -133,9 +133,6 @@ export default function Social(props) {
         setfetchOnce(false);
       });
     }
-    console.log("Executing");
-    // getPosts();
-
     props.socket.on("site-blocked", () => {
       console.log("Site blocked");
     });
@@ -145,7 +142,7 @@ export default function Social(props) {
   useEffect(() => {
     setfetchOnce(false);
     getPosts();
-  }, [page, fetchOnce]);
+  }, [page, fetchOnce, confirmDelete]);
 
   return (
     <>

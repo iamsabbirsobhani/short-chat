@@ -43,8 +43,17 @@ export const globalState = createSlice({
     searchData: [],
     // imageGallery
     limitGallery: 5,
+    // SOcial post delete
+    socialPostDeleted: false,
   },
   reducers: {
+    // SOcial post delete
+    setSocialPostDelete: (state) => {
+      state.socialPostDeleted = true;
+    },
+    setSocialPostReset: (state) => {
+      state.socialPostDeleted = false;
+    },
     // imageGallery
     incrLimitGallery: (state) => {
       state.limitGallery += 5;
@@ -282,6 +291,8 @@ export const {
   setSearchData,
   incrLimitGallery,
   resetLimitGallery,
+  setSocialPostReset,
+  setSocialPostDelete,
 } = globalState.actions;
 
 export default globalState.reducer;
