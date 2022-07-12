@@ -32,6 +32,7 @@ export default function Social(props) {
   const [url, seturl] = useState(null);
   const [fetchOnce, setfetchOnce] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const [moreLoading, setmoreLoading] = useState(false);
   const [alignment, setAlignment] = useState("normal");
 
   const handleChange = (event, newAlignment) => {
@@ -40,6 +41,9 @@ export default function Social(props) {
 
   async function getPosts() {
     setisLoading(true);
+    if (fetchOnce) {
+      setmoreLoading(true);
+    }
     const response = await axios.get(postsAPI + page, {
       headers: { code: 1379 },
     });
@@ -56,6 +60,7 @@ export default function Social(props) {
     }
     setpostLoading(false);
     setisLoading(false);
+    setmoreLoading(false);
   }
 
   //   on scroll bottom
@@ -85,6 +90,7 @@ export default function Social(props) {
       sensitive: alignment === "normal" || alignment === null ? false : true,
     };
     try {
+      setfetchOnce(true);
       setpostLoading(true);
       if (post !== "" || url !== null) {
         props.socket.emit("social-post", data);
@@ -119,10 +125,27 @@ export default function Social(props) {
     seturl(null);
   }
 
+  useEffect(() => {
+    if (fetchOnce) {
+      props.socket.on("admin-post", function () {
+        console.log("Execute once");
+        getPosts();
+        setfetchOnce(false);
+      });
+    }
+    console.log("Executing");
+    // getPosts();
+
+    props.socket.on("site-blocked", () => {
+      console.log("Site blocked");
+    });
+  });
+
   // watcher/watching for page to update and fetch posts once page updated
   useEffect(() => {
+    setfetchOnce(false);
     getPosts();
-  }, [page]);
+  }, [page, fetchOnce]);
 
   return (
     <>
@@ -230,7 +253,7 @@ export default function Social(props) {
             isLoading={isLoading}
           />
           {posts && posts.rows.length < posts.count ? (
-            isLoading ? (
+            moreLoading ? (
               <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
             ) : (
               <div className=" text-center mb-2">
