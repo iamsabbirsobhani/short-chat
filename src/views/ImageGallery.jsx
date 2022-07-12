@@ -1,13 +1,20 @@
-import { useSelector } from "react-redux";
 import ImagePreviewer from "../components/ImagePreviewer";
 import { img } from "./ArrayOfImages";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import LoginPlus from "../components/LoginPlus";
+import LoadMore from "../components/image-gallery/LoadMore";
+import {
+  incrLimitGallery,
+  resetLimitGallery,
+} from "../features/state/globalState";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function ImageGallery() {
+  const dispatch = useDispatch();
   const value = useSelector((state) => state.global.value);
+  const limit = useSelector((state) => state.global.limitGallery);
   const [isPreviewOpen, setisPreviewOpen] = useState(false);
   const [isLogin, setisLogin] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -15,19 +22,27 @@ export default function ImageGallery() {
   const [imageError, setimageError] = useState(null);
   const [url, seturl] = useState(null);
   const noScroll = isPreviewOpen ? "overflow-hidden" : "";
+  const [loading, setLoading] = useState(false);
 
-  let API = "https://short-chat-backend.herokuapp.com/images";
+  const [fetchCount, sefetchCount] = useState(0);
+  let API = "https://short-chat-backend.herokuapp.com/images/";
 
   async function fetchImages(code) {
-    const response = await axios.get(API, { headers: { code: code } });
+    setLoading(true);
+
+    const response = await axios.get(API + limit, { headers: { code: code } });
     if ("error" in response.data) {
       setimages(null);
       setimageError(response.data.error);
       setisLogin(true);
+      setLoading(false);
     } else {
+      console.log(limit);
+      console.log(response.data);
       setimages(response.data);
       setimageError(null);
       setisLogin(false);
+      setLoading(false);
     }
   }
 
@@ -42,7 +57,9 @@ export default function ImageGallery() {
     setisLogin(!isLogin);
   };
   const resetGallery = () => {
+    sefetchCount(0);
     setimages(null);
+    dispatch(resetLimitGallery());
   };
 
   const handleClosePreview = (e) => {
@@ -56,6 +73,27 @@ export default function ImageGallery() {
       }, 250);
     }
   };
+
+  // load more implementation
+  const loadMore = () => {
+    sefetchCount(10);
+    dispatch(incrLimitGallery());
+  };
+
+  useEffect(() => {
+    if (fetchCount > 5) {
+      fetchImages(1379);
+    }
+  }, [limit]);
+  // load more implementation
+
+  useEffect(() => {
+    return () => {
+      console.log("Image Gallery Dismounted.");
+      sefetchCount(0);
+      dispatch(resetLimitGallery());
+    };
+  }, []);
 
   return (
     <>
@@ -130,15 +168,25 @@ export default function ImageGallery() {
         className={`grid   lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 grid-cols-2 gap-4 ${noScroll} m-5`}
       >
         {images
-          ? images.rows.map((link) => (
-              <img
-                onClick={(e) => handleClosePreview(e)}
-                className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
-                key={link.id}
-                src={link.url}
-                alt=""
-              />
-            ))
+          ? images.rows.map((link) =>
+              link.url.includes("video") ? (
+                <div key={link.id}>
+                  <video width="" height="" controls muted>
+                    <source src={link.url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ) : (
+                <img
+                  onClick={(e) => handleClosePreview(e)}
+                  className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
+                  key={link.id}
+                  src={link.url}
+                  alt=""
+                  loading="lazy"
+                />
+              )
+            )
           : img.map((link) => (
               <img
                 onClick={(e) => handleClosePreview(e)}
@@ -149,6 +197,11 @@ export default function ImageGallery() {
               />
             ))}
       </div>
+      {images ? (
+        <div className=" text-center mt-3 mb-3">
+          <LoadMore loadMore={loadMore} loading={loading} />
+        </div>
+      ) : null}
     </>
   );
 }

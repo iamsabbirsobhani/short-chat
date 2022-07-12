@@ -15,7 +15,7 @@ export default function TranscriptChat() {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView();
   };
 
   async function getTranscript() {
@@ -40,8 +40,6 @@ export default function TranscriptChat() {
 
   //   execute only once after mounted
   useEffect(() => {
-    dispatch(pageIncrement());
-    getTranscript();
     return () => {
       console.log("transcript unmounted");
       // after leaving the transcript default pagination
@@ -63,9 +61,13 @@ export default function TranscriptChat() {
     if (onBottom.current.scrollTop === 0) {
       console.log("You have reached top");
       dispatch(pageIncrement());
-      getTranscript();
     }
   };
+
+  // watching page when it gets updated
+  useEffect(() => {
+    getTranscript();
+  }, [page]);
 
   return (
     <>

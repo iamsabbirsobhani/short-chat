@@ -41,8 +41,17 @@ export const globalState = createSlice({
     findBetweenChat: false,
     findData: [],
     searchData: [],
+    // imageGallery
+    limitGallery: 5,
   },
   reducers: {
+    // imageGallery
+    incrLimitGallery: (state) => {
+      state.limitGallery += 5;
+    },
+    resetLimitGallery: (state) => {
+      state.limitGallery = 5;
+    },
     // search
     openSearchResult: (state, payload) => {
       state.searchResult = true;
@@ -271,6 +280,8 @@ export const {
   closeFindBetween,
   setFindData,
   setSearchData,
+  incrLimitGallery,
+  resetLimitGallery,
 } = globalState.actions;
 
 export default globalState.reducer;

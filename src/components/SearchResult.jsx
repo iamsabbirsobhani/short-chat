@@ -73,9 +73,13 @@ export default function SearchResult() {
           <List>
             <div>
               {find && find[0]?.length <= 0 ? (
-                <div className=" text-black">No chat found!</div>
+                <div className=" text-rose-500 text-lg font-bold text-center mt-3 border-2 p-2 ml-2 mr-2 border-red-500 shadow-lg bg-gray-700 uppercase">
+                  No chat found!
+                </div>
               ) : null}
-              <h1>Total Match found: {find[0]?.length}</h1>
+              <h1 className=" font-semibold ml-2 mt-2">
+                Total Match found: {find[0]?.length}
+              </h1>
               <div className=" flex flex-col">
                 {find &&
                   find[0]?.map((item) =>

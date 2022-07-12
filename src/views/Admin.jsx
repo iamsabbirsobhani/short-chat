@@ -89,8 +89,6 @@ export default function Admin(props) {
     ) {
       console.log("Your have reached end");
       dispatch(adminPaginationIncrement());
-      // console.log(page);
-      getPosts();
     }
   };
 
@@ -128,9 +126,6 @@ export default function Admin(props) {
 
   useEffect(() => {
     console.log("admin mounted");
-    dispatch(adminPaginationIncrement());
-    getPosts();
-    // console.log(page);
     return () => {
       console.log("admin dismounted");
       dispatch(setAdminPagination(8));
@@ -141,7 +136,6 @@ export default function Admin(props) {
     if (fetchOnce) {
       props.socket.on("admin-post", function () {
         console.log("Execute once");
-        getPosts();
         setfetchOnce(false);
       });
     }
@@ -159,8 +153,12 @@ export default function Admin(props) {
     console.log("Image upload canceled");
     inputFile.current.value = "";
     seturl(null);
-    // console.log(url);
   }
+
+  // watching page to update and fetch posts
+  useEffect(() => {
+    getPosts();
+  }, [page]);
 
   return (
     <>
@@ -208,6 +206,11 @@ export default function Admin(props) {
                 Day has been blocked.
               </Alert>
             ) : null}
+            {siteStatus && !siteStatus.search ? (
+              <Alert className="mt-2" severity="warning">
+                Search has been blocked.
+              </Alert>
+            ) : null}
             {siteStatus && !siteStatus.menu ? (
               <Alert className="mt-2" severity="warning">
                 Menu has been blocked.
@@ -244,6 +247,22 @@ export default function Admin(props) {
                   "aria-labelledby": "basic-button",
                 }}
               >
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("block-site-search", false);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Block Search
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    props.socket.emit("block-site-search", true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  Enable Search
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     navigate("chat/loghistory");
@@ -332,9 +351,10 @@ export default function Admin(props) {
                 >
                   Enable Chat(in)
                 </MenuItem>
+
                 <MenuItem
                   onClick={() => {
-                    props.socket.emit("block-blockFile", false);
+                    props.socket.emit("block-blockFile", true);
                     setAnchorEl(null);
                   }}
                 >
@@ -342,12 +362,13 @@ export default function Admin(props) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    props.socket.emit("block-blockFile", true);
+                    props.socket.emit("block-blockFile", false);
                     setAnchorEl(null);
                   }}
                 >
                   Disable File Input(Chat)
                 </MenuItem>
+
                 <MenuItem
                   onClick={() => {
                     props.socket.emit("blocked-call", false);

@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setPage } from "../features/state/globalState";
+import { Button } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function Drawer({ drawerToggle, socket }) {
   const token = useSelector((state) => state.global.token);
@@ -38,7 +40,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 navigate("/");
                 drawerToggle();
               }}
-              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full"
             >
               <div className="  flex justify-center items-center text-2xl">
                 {/* <h1 className=" mr-2">Chat</h1> */}
@@ -46,6 +48,34 @@ export default function Drawer({ drawerToggle, socket }) {
               </div>
             </button>
           </div>
+
+          <div className=" mt-2 ">
+            {(siteStatus && siteStatus.search) || (token && token.admin) ? (
+              <Button
+                className="w-full"
+                type="submit"
+                startIcon={<SearchIcon />}
+                variant="contained"
+                onClick={() => {
+                  navigate("search");
+                  drawerToggle();
+                }}
+              >
+                Search
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                type="submit"
+                disabled
+                startIcon={<SearchIcon />}
+                variant="contained"
+              >
+                Search
+              </Button>
+            )}
+          </div>
+
           <div className=" mt-2">
             {(siteStatus && siteStatus.partager) || (token && token.admin) ? (
               <button
@@ -53,7 +83,7 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("social");
                   drawerToggle();
                 }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 Partager
               </button>
@@ -64,7 +94,7 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("social");
                   drawerToggle();
                 }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 Partager
               </button>
@@ -78,7 +108,7 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("transcript");
                   drawerToggle();
                 }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 Transcript
               </button>
@@ -89,7 +119,7 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("transcript");
                   drawerToggle();
                 }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 Transcript
               </button>
@@ -103,7 +133,7 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("admin");
                   drawerToggle();
                 }}
-                className=" text-white bg-orange-500 p-2 rounded-sm shadow-md"
+                className=" text-white bg-orange-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 Admin
               </button>
@@ -116,23 +146,9 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("logs");
                   drawerToggle();
                 }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 User Logs
-              </button>
-            </div>
-          ) : null}
-
-          {token && token.admin === true ? (
-            <div className=" mt-2">
-              <button
-                onClick={() => {
-                  navigate("search");
-                  drawerToggle();
-                }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
-              >
-                Search
               </button>
             </div>
           ) : null}
@@ -143,7 +159,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 navigate("images");
                 drawerToggle();
               }}
-              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md"
+              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
             >
               Image Gallery
             </button>

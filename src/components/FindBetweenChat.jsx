@@ -71,6 +71,14 @@ export default function FindBetweenChat() {
           </AppBar>
           <List>
             <div>
+              {find && find.rows && find?.rows.length <= 0 ? (
+                <div className=" text-rose-500 text-lg font-bold text-center mt-3 border-2 p-2 ml-2 mr-2 border-red-500 shadow-lg bg-gray-700 uppercase">
+                  No chat found!
+                </div>
+              ) : null}
+              <h1 className=" font-semibold ml-2 mt-2">
+                Total Match found: {find && find.rows && find?.rows.length}
+              </h1>
               {find?.rows?.map((item) =>
                 token.id === item.uId ? (
                   <div

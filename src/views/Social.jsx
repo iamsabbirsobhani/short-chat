@@ -65,15 +65,11 @@ export default function Social(props) {
       socialRef.current.scrollHeight
     ) {
       dispatch(socialPaginationIncrement());
-      getPosts();
     }
   };
 
   const loadMore = () => {
-    // console.log("Load more", page);
     dispatch(socialPaginationIncrement());
-    // console.log("Load more 2", page);
-    getPosts();
   };
 
   const sumbitPost = async (e) => {
@@ -89,7 +85,6 @@ export default function Social(props) {
       sensitive: alignment === "normal" || alignment === null ? false : true,
     };
     try {
-      setfetchOnce(true);
       setpostLoading(true);
       if (post !== "" || url !== null) {
         props.socket.emit("social-post", data);
@@ -103,31 +98,16 @@ export default function Social(props) {
   };
 
   const handleUpload = async (e) => {
-    // console.log(e.target.files[0]);
     await fileUpload(e.target.files[0], setUploading, seturl);
-    // console.log(url);
   };
 
   useEffect(() => {
     console.log("Social mounted");
-    dispatch(socialPaginationIncrement());
-    // console.log("First page value ", page);
-    getPosts();
     return () => {
       console.log("Social dismounted");
       dispatch(setSocialPagination(8));
     };
   }, []);
-
-  useEffect(() => {
-    if (fetchOnce) {
-      props.socket.on("social-post", function () {
-        console.log("Execute once");
-        getPosts();
-        setfetchOnce(false);
-      });
-    }
-  });
 
   function handlePost(e) {
     setpost(e.target.value);
@@ -138,6 +118,11 @@ export default function Social(props) {
     inputFile.current.value = "";
     seturl(null);
   }
+
+  // watcher/watching for page to update and fetch posts once page updated
+  useEffect(() => {
+    getPosts();
+  }, [page]);
 
   return (
     <>
@@ -244,19 +229,20 @@ export default function Social(props) {
             posts={posts}
             isLoading={isLoading}
           />
-
-          {isLoading ? (
-            <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
-          ) : (
-            <div className=" text-center mb-2">
-              <button
-                className="text-white bg-gray-800 p-2 font-semibold rounded-sm shadow-md"
-                onClick={() => loadMore()}
-              >
-                Load More...
-              </button>
-            </div>
-          )}
+          {posts && posts.rows.length < posts.count ? (
+            isLoading ? (
+              <div className=" m-auto  animate-spin w-10 h-10 border-t-gray-800 border-4 border-l-gray-800 border-b-gray-800 border-r-white rounded-full"></div>
+            ) : (
+              <div className=" text-center mb-2">
+                <button
+                  className="text-white uppercase px-3 bg-rose-700 p-2 font-bold rounded-md shadow-lg transition-all duration-150 hover:bg-rose-800"
+                  onClick={() => loadMore()}
+                >
+                  Load More
+                </button>
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </>
