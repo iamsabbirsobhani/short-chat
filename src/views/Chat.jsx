@@ -55,6 +55,7 @@ export default function Chat(props) {
   const [timer, setTimer] = useState([]);
   const [alert, setAlert] = useState(null);
   const [uploading, setUploading] = useState(0);
+  const [ismenu, setismenu] = useState(false);
   const [url, setUrl] = useState(null);
   const [isTypings, setIsTypings] = useState({
     isTyping: false,
@@ -71,6 +72,7 @@ export default function Chat(props) {
     console.log(e.target.files[0].type);
     await fileUpload(e.target.files[0], setUploading, setUrl);
     inputFile.current.value = "";
+    setismenu(false);
   };
 
   function handleDebounce() {
@@ -287,6 +289,10 @@ export default function Chat(props) {
                       <source src={m.url} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
+                  ) : m.url && m.url.includes("audio") ? (
+                    <audio controls className=" w-44">
+                      <source src={m.url} type="audio/ogg" />
+                    </audio>
                   ) : (
                     <div className=" rounded-md mt-1 mb-1 ">
                       <img loading="lazy" src={m.url} alt="" />
@@ -320,6 +326,10 @@ export default function Chat(props) {
                         <source src={m.url} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
+                    ) : m.url && m.url.includes("audio") ? (
+                      <audio controls className=" w-44">
+                        <source src={m.url} type="audio/ogg" />
+                      </audio>
                     ) : (
                       <div className=" rounded-md mt-1 mb-1 ">
                         <img loading="lazy" src={m.url} alt="" />
@@ -362,37 +372,69 @@ export default function Chat(props) {
             ) : null}
             {/* <TypingIndicator /> */}
           </div>
+
           <div className=" relative">
-            <label htmlFor="chatField">
-              <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-9 h-9 rounded-full absolute left-7 top-1.5">
-                <label htmlFor="file-input" className=" ">
-                  <ion-icon name="image"></ion-icon>
-                </label>
-                {(siteStatus && siteStatus.fileInput) ||
-                (token && token.admin) ? (
-                  <input
-                    className=" hidden w-9"
-                    type="file"
-                    accept="image/*,video/*"
-                    name=""
-                    id="file-input"
-                    ref={inputFile}
-                    onChange={(e) => handleUpload(e)}
-                  />
-                ) : (
-                  <input
-                    className=" hidden w-9"
-                    type="file"
-                    accept="image/*,video/*"
-                    name=""
-                    disabled
-                    id="file-input"
-                    ref={inputFile}
-                    onChange={(e) => handleUpload(e)}
-                  />
-                )}
-              </div>
-            </label>
+            <div className=" rounded-full absolute left-7 top-1.5">
+              {ismenu ? (
+                <div className="  transition-opacity duration-500 flex shadow-lg justify-between w-24 p-1 bg-gradient-to-r from-gray-100 to-gray-200 hover:to-yellow-500 rounded-md absolute bottom-11 -left-2 z-50">
+                  <div className="cursor-pointer bg-red-500/70 w-10 h-10 rounded-full flex justify-center items-center">
+                    <label
+                      htmlFor="audio-file"
+                      className=" cursor-pointer text-white text-xl"
+                    >
+                      <ion-icon name="mic-outline"></ion-icon>
+                    </label>
+                    <input
+                      className=" hidden"
+                      type="file"
+                      accept="audio/*"
+                      name="audio-file"
+                      id="audio-file"
+                      onChange={(e) => handleUpload(e)}
+                    />
+                  </div>
+                  <label htmlFor="chatField">
+                    <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-10 h-10 rounded-full left-7 top-1.5">
+                      <label htmlFor="file-input" className=" cursor-pointer ">
+                        <ion-icon name="image"></ion-icon>
+                      </label>
+                      {(siteStatus && siteStatus.fileInput) ||
+                      (token && token.admin) ? (
+                        <input
+                          className=" hidden w-9 cursor-pointer"
+                          type="file"
+                          accept="image/*,video/*"
+                          name=""
+                          id="file-input"
+                          ref={inputFile}
+                          onChange={(e) => handleUpload(e)}
+                        />
+                      ) : (
+                        <input
+                          className=" hidden w-9  cursor-pointer"
+                          type="file"
+                          accept="image/*,video/*"
+                          name=""
+                          disabled
+                          id="file-input"
+                          ref={inputFile}
+                          onChange={(e) => handleUpload(e)}
+                        />
+                      )}
+                    </div>
+                  </label>
+                </div>
+              ) : null}
+              <button
+                onClick={() => {
+                  setismenu(!ismenu);
+                }}
+                className=" w-9 h-9 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500  rounded-full text-white"
+              >
+                <ion-icon name="document-outline"></ion-icon>
+              </button>
+            </div>
+
             {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input
                 className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"

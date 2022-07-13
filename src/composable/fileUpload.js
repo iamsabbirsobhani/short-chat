@@ -16,6 +16,14 @@ const fileUpload = async (file, setProgress, setUrl) => {
         `${format(new Date(), "PPPp")} ` +
         file.name
     );
+  } else if (file && file.type.includes("audio")) {
+    storageRef = ref(
+      storage,
+      "audio/" +
+        `${format(new Date(), "PP")}/` +
+        `${format(new Date(), "PPPp")} ` +
+        file.name
+    );
   } else {
     storageRef = ref(
       storage,
