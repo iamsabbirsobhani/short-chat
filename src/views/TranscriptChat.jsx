@@ -31,6 +31,7 @@ export default function TranscriptChat() {
     setdata(finalRes);
     setisLoading(false);
     onBottom.current.scrollTop = 100;
+    console.log(finalRes);
   }
 
   const showMore = () => {
@@ -102,13 +103,17 @@ export default function TranscriptChat() {
                 </h1>
 
                 <div className=" break-words bg-gray-800/20 p-2 rounded-sm">
-                  {chat.msg.includes("firebase") ? (
-                    <img src={chat.msg} />
-                  ) : chat.msg.includes("mp4") ? (
+                  {chat.msg.includes("mp4") ? (
                     <video width="320" height="240" muted controls>
                       <source src={chat.msg} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
+                  ) : chat.msg.includes("audio") ? (
+                    <audio controls className=" w-44">
+                      <source src={chat.msg} type="audio/ogg" />
+                    </audio>
+                  ) : chat.msg.includes("image") ? (
+                    <img src={chat.msg} />
                   ) : (
                     <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
                       {chat.msg}
@@ -133,13 +138,17 @@ export default function TranscriptChat() {
                 </h1>
 
                 <div className=" break-words bg-gray-800/20 p-2 rounded-sm">
-                  {chat.msg.includes("firebase") ? (
-                    <img src={chat.msg} />
-                  ) : chat.msg.includes("mp4") ? (
+                  {chat.msg.includes("mp4") ? (
                     <video width="320" height="240" muted controls>
                       <source src={chat.msg} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
+                  ) : chat.msg && chat.msg.includes("audio") ? (
+                    <audio controls className=" w-44">
+                      <source src={chat.msg} type="audio/ogg" />
+                    </audio>
+                  ) : chat.msg.includes("image") ? (
+                    <img src={chat.msg} />
                   ) : (
                     <p className=" antialiased text-gray-100 font-semibold mt-3 mb-3">
                       {chat.msg}

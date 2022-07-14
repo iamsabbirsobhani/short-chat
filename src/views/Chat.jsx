@@ -426,6 +426,7 @@ export default function Chat(props) {
                 </div>
               ) : null}
               <button
+                type="button"
                 onClick={() => {
                   setismenu(!ismenu);
                 }}

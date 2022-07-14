@@ -10,6 +10,7 @@ import {
   resetLimitGallery,
 } from "../features/state/globalState";
 import { useSelector, useDispatch } from "react-redux";
+import { format } from "date-fns";
 
 export default function ImageGallery() {
   const dispatch = useDispatch();
@@ -170,21 +171,44 @@ export default function ImageGallery() {
         {images
           ? images.rows.map((link) =>
               link.url.includes("video") ? (
-                <div key={link.id}>
+                <div key={link.id} className=" flex flex-col">
                   <video width="" height="" controls muted>
                     <source src={link.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
+                  <div>
+                    <p className=" text-gray-300 text-xs mt-1">
+                      {format(new Date(link.createdAt), "PPp")}
+                    </p>
+                  </div>
+                </div>
+              ) : link.url.includes("audio") ? (
+                <div className=" flex flex-col" key={link.id}>
+                  <audio controls className=" w-44">
+                    <source src={link.url} type="audio/ogg" />
+                  </audio>
+                  <div>
+                    <p className=" text-gray-300 text-xs mt-1">
+                      {format(new Date(link.createdAt), "PPp")}
+                    </p>
+                  </div>
                 </div>
               ) : (
-                <img
-                  onClick={(e) => handleClosePreview(e)}
-                  className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
-                  key={link.id}
-                  src={link.url}
-                  alt=""
-                  loading="lazy"
-                />
+                <div className=" flex flex-col">
+                  <img
+                    onClick={(e) => handleClosePreview(e)}
+                    className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
+                    key={link.id}
+                    src={link.url}
+                    alt=""
+                    loading="lazy"
+                  />
+                  <div>
+                    <p className=" text-gray-300 text-xs mt-1">
+                      {format(new Date(link.createdAt), "PPp")}
+                    </p>
+                  </div>
+                </div>
               )
             )
           : img.map((link) => (
