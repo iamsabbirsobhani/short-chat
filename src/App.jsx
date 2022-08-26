@@ -12,6 +12,7 @@ import {
   setAnnounce,
   setHasAnnounce,
   setAllAnnounce,
+  setVideoPermission,
 } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -32,6 +33,7 @@ const API = "https://short-chat-backend.herokuapp.com/verifyToken/";
 
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
+  const isVideo = useSelector((state) => state.global.videoPermission);
   const token = useSelector((state) => state.global.token);
   const pId = useSelector((state) => state.global.peerId);
   const [state, setstate] = useState(true);
@@ -192,71 +194,113 @@ function App(props) {
   }, []);
   // fcm
 
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(
+      (stream) => {
+        console.log("video available");
+        dispatch(setVideoPermission(true));
+      },
+      (e) => {
+        console.log("video not available");
+        dispatch(setVideoPermission(false));
+      }
+    );
+  });
+
   return (
     <div className="App">
-      {(token && token.admin) || block ? (
-        <>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/signin"
-                element={
-                  JSON.parse(localStorage.getItem("user")) === null ? (
-                    <Signin />
-                  ) : (
-                    <Navigate to="/" />
-                  )
-                }
-              />
-              <Route
-                path="/signup"
-                element={
-                  JSON.parse(localStorage.getItem("user")) === null ? (
-                    <Signup />
-                  ) : (
-                    <Navigate to="/" />
-                  )
-                }
-              />
+      {isVideo ? (
+        (token && token.admin) || block ? (
+          <>
+            <BrowserRouter>
+              <Routes>
+                <Route
+                  path="/signin"
+                  element={
+                    JSON.parse(localStorage.getItem("user")) === null ? (
+                      <Signin />
+                    ) : (
+                      <Navigate to="/" />
+                    )
+                  }
+                />
+                <Route
+                  path="/signup"
+                  element={
+                    JSON.parse(localStorage.getItem("user")) === null ? (
+                      <Signup />
+                    ) : (
+                      <Navigate to="/" />
+                    )
+                  }
+                />
 
-              <Route
-                path="/*"
-                element={
-                  JSON.parse(localStorage.getItem("user")) ? (
-                    <Chat
-                      socket={props.socket}
-                      peer={props.peer}
-                      peerId={props.peerId}
-                    />
-                  ) : (
-                    <Navigate to="signin" />
-                  )
-                }
-              />
-              <Route path="/images" element={<ImageGallery />} />
-            </Routes>
-          </BrowserRouter>
-          <header>
-            {/* {callTimer && (
+                <Route
+                  path="/*"
+                  element={
+                    JSON.parse(localStorage.getItem("user")) ? (
+                      <Chat
+                        socket={props.socket}
+                        peer={props.peer}
+                        peerId={props.peerId}
+                      />
+                    ) : (
+                      <Navigate to="signin" />
+                    )
+                  }
+                />
+                <Route path="/images" element={<ImageGallery />} />
+              </Routes>
+            </BrowserRouter>
+            <header>
+              {/* {callTimer && (
               <CallingTimer
                 peerId={pId}
                 peer={props.peer}
                 socket={props.socket}
               />
             )} */}
-            {state && (
-              <Login
-                isError={isError}
-                isLodaing={isLodaing}
-                isWrong={isWrong}
-                state={state}
-                handleLogin={handleLogin}
-              />
-            )}
-          </header>
-        </>
+              {state && (
+                <Login
+                  isError={isError}
+                  isLodaing={isLodaing}
+                  isWrong={isWrong}
+                  state={state}
+                  handleLogin={handleLogin}
+                />
+              )}
+            </header>
+          </>
+        ) : (
+          <BlockNotice />
+        )
       ) : (
-        <BlockNotice />
+        <div className=" border-dashed border-2 p-2 m-5">
+          <div className=" text-white">
+            <p className=" text-lg font-semibold">To remove this page: </p>
+            <h1>
+              1. Delete all the{" "}
+              <span className=" text-yellow-400"> cookies </span> or{" "}
+              <span className=" text-yellow-400"> Reset permissions</span> from
+              website lock &nbsp;
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 inline border-[1px] p-[1px] rounded-full "
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>{" "}
+              &nbsp; icon.
+            </h1>
+            <h1>2. Allow permission to all that wanted.</h1>
+            <h1>3. Reload the site.</h1>
+          </div>
+        </div>
       )}
     </div>
   );

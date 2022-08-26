@@ -45,8 +45,20 @@ export const globalState = createSlice({
     limitGallery: 5,
     // SOcial post delete
     socialPostDeleted: false,
+    // if video permission
+    videoPermission: true,
+    // show video
+    showVideoPopup: false,
   },
   reducers: {
+    // show video
+    setShowVideoPopup: (state, payload) => {
+      state.showVideoPopup = payload.payload;
+    },
+    // if video permission
+    setVideoPermission: (state, payload) => {
+      state.videoPermission = payload.payload;
+    },
     // SOcial post delete
     setSocialPostDelete: (state) => {
       state.socialPostDeleted = true;
@@ -293,6 +305,8 @@ export const {
   resetLimitGallery,
   setSocialPostReset,
   setSocialPostDelete,
+  setVideoPermission,
+  setShowVideoPopup,
 } = globalState.actions;
 
 export default globalState.reducer;

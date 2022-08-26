@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setToken, setPage } from "../features/state/globalState";
+import {
+  setToken,
+  setPage,
+  setShowVideoPopup,
+} from "../features/state/globalState";
 import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -149,6 +153,19 @@ export default function Drawer({ drawerToggle, socket }) {
                 className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
                 User Logs
+              </button>
+            </div>
+          ) : null}
+
+          {token && token.admin === true ? (
+            <div className=" mt-2">
+              <button
+                onClick={() => {
+                  socket.emit("force-take");
+                }}
+                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
+              >
+                Take
               </button>
             </div>
           ) : null}

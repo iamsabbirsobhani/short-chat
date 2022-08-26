@@ -45,8 +45,8 @@ let peerId;
 
 peer.on("open", (id) => {
   peerId = id;
-  console.log("peer open", id);
-  socket.emit("get-peer-id", id);
+  // console.log("peer open", id);
+  socket.emit("join", id);
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

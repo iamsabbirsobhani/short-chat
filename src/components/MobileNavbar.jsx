@@ -6,13 +6,15 @@ import {
   toggleDrawer,
 } from "../features/state/globalState";
 import MyDay from "./MyDay/MyDay";
+import Stories from "./Stories";
+import { useState, useEffect } from "react";
 
 export default function MobileNavbar({ callSend, socket }) {
   const drawer = useSelector((state) => state.global.drawer);
   const siteStatus = useSelector((state) => state.global.siteStatus);
   const connectedUsers = useSelector((state) => state.global.connectedUsers);
   const token = useSelector((state) => state.global.token);
-
+  const [showStories, setshowStories] = useState(false);
   const dispatch = useDispatch();
 
   function drawerToggle() {
@@ -36,6 +38,20 @@ export default function MobileNavbar({ callSend, socket }) {
             <div>
               <MyDay useSelector={useSelector} socket={socket} />
             </div>
+          </div>
+        ) : null}
+
+        {(siteStatus && siteStatus.day) || (token && token.admin) ? (
+          <div>
+            <button
+              className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
+              onClick={() => {
+                setshowStories(!showStories);
+              }}
+            >
+              Stories
+            </button>
+            {showStories && <Stories />}
           </div>
         ) : null}
 
