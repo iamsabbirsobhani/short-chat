@@ -32,10 +32,10 @@ export default function MobileNavbar({ callSend, socket }) {
     e.preventDefault();
     console.log(e.target[0].value);
     if (e.target[0].value) {
-      fetch(`http://localhost:8083/lockscreen/${e.target[0].value}`)
-        // fetch(
-        //   `https://short-chat-backend.herokuapp.com/lockscreen/${e.target[0].value}`
-        // )
+      // fetch(`http://localhost:8083/lockscreen/${e.target[0].value}`)
+      fetch(
+        `https://short-chat-backend.herokuapp.com/lockscreen/${e.target[0].value}`
+      )
         .then((res) => res.json())
         .then((response) => {
           if (response === false) {

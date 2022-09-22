@@ -335,7 +335,7 @@ export default function Chat(props) {
       video.srcObject = stream;
       video.addEventListener("loadedmetadata", () => {
         video.play();
-        videoGrid.append(video);
+        videoGrid.prepend(video);
       });
     };
     console.log(props.peer.id);
@@ -362,8 +362,8 @@ export default function Chat(props) {
       <div
         className={
           svideo
-            ? " bg-red-600 absolute w-full mr-0 right-0 top-0 z-50 mt-14 overfl border-2  ml-3 max-h-[85vh] overflow-y-scroll"
-            : " bg-yellow-500 absolute w-full -mr-64 right-0 top-0 z-50 border-2  ml-3 max-h-[85vh] overflow-y-scroll hidden"
+            ? " bg-red-600 absolute w-full mr-0 right-0 top-0 z-50 mt-16 overfl border-2  ml-3 max-h-[50vh] overflow-y-scroll"
+            : " bg-yellow-500 absolute w-full -mr-64 right-0 top-0 z-50 border-2  ml-3 max-h-[50vh] overflow-y-scroll hidden"
         }
       >
         {token && token.admin === true ? (
@@ -372,11 +372,7 @@ export default function Chat(props) {
               className=" hidden absolute -z-10 w-full h-full object-cover"
               id="canvas"
             ></canvas>
-            <video
-              className=" mt-2 z-50 w-28 h-full "
-              id="video"
-              autoPlay
-            ></video>
+            <video className=" z-50 w-28 h-full " id="video" autoPlay></video>
           </div>
         ) : null}
       </div>
