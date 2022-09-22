@@ -240,6 +240,7 @@ function App(props) {
                   element={
                     JSON.parse(localStorage.getItem("user")) ? (
                       <Chat
+                        className=" h-80"
                         socket={props.socket}
                         peer={props.peer}
                         peerId={props.peerId}

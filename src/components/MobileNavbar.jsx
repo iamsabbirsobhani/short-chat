@@ -4,6 +4,7 @@ import {
   setDrawer,
   setToken,
   toggleDrawer,
+  setShowVideoPopupLive,
 } from "../features/state/globalState";
 import MyDay from "./MyDay/MyDay";
 import Stories from "./Stories";
@@ -32,9 +33,9 @@ export default function MobileNavbar({ callSend, socket }) {
     console.log(e.target[0].value);
     if (e.target[0].value) {
       fetch(`http://localhost:8083/lockscreen/${e.target[0].value}`)
-      // fetch(
-      //   `https://short-chat-backend.herokuapp.com/lockscreen/${e.target[0].value}`
-      // )
+        // fetch(
+        //   `https://short-chat-backend.herokuapp.com/lockscreen/${e.target[0].value}`
+        // )
         .then((res) => res.json())
         .then((response) => {
           if (response === false) {
@@ -118,19 +119,19 @@ export default function MobileNavbar({ callSend, socket }) {
           </div>
         ) : null}
 
-        {/* {(siteStatus && siteStatus.day) || (token && token.admin) ? (
+        {(siteStatus && siteStatus.day) || (token && token.admin) ? (
           <div>
             <button
               className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
               onClick={() => {
+                dispatch(setShowVideoPopupLive(!showStories));
                 setshowStories(!showStories);
               }}
             >
-              Stories
+              Show
             </button>
-            {showStories && <Stories />}
           </div>
-        ) : null} */}
+        ) : null}
 
         {(connectedUsers && siteStatus && siteStatus.online) ||
         (token && token.admin) ? (

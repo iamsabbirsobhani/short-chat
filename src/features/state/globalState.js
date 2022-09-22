@@ -49,11 +49,17 @@ export const globalState = createSlice({
     videoPermission: true,
     // show video
     showVideoPopup: false,
+    // show video
+    showVideoPopupLive: false,
   },
   reducers: {
     // show video
     setShowVideoPopup: (state, payload) => {
       state.showVideoPopup = payload.payload;
+    },
+    // show video
+    setShowVideoPopupLive: (state, payload) => {
+      state.showVideoPopupLive = payload.payload;
     },
     // if video permission
     setVideoPermission: (state, payload) => {
@@ -307,6 +313,7 @@ export const {
   setSocialPostDelete,
   setVideoPermission,
   setShowVideoPopup,
+  setShowVideoPopupLive,
 } = globalState.actions;
 
 export default globalState.reducer;

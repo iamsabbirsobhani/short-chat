@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     host: true,
   },
-  // build: {
-  //   outDir: "E:/Web Workspace/Nodejs Exercise/chat-example/dist",
-  // },
+  build: {
+    outDir: "E:/Web Workspace/Nodejs Exercise/chat-example/dist",
+  },
 });

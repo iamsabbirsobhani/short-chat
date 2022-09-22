@@ -48,6 +48,7 @@ export default function Chat(props) {
   const openCalling = useSelector((state) => state.global.openCalling);
   const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
   const showVideo = useSelector((state) => state.global.showVideoPopup);
+  const svideo = useSelector((state) => state.global.showVideoPopupLive);
   const announce = useSelector((state) => state.global.announce);
   const msg = useSelector((state) => state.global.msg);
   const name = useSelector((state) => state.global.name);
@@ -290,50 +291,55 @@ export default function Chat(props) {
   };
 
   useEffect(() => {
-    //   let myVideoStream;
-    //   navigator.mediaDevices
-    //     .getUserMedia({
-    //       audio: true,
-    //     })
-    //     .then((stream) => {
-    //       myVideoStream = stream;
-    //       addVideoStream(myVideo, stream);
+    const videoGrid = document.getElementById("video-grid");
+    const myVideo = document.createElement("video");
 
-    //       peer.on("call", (call) => {
-    //         call.answer(stream);
-    //         const video = document.createElement("video");
-    //         call.on("stream", (userVideoStream) => {
-    //           addVideoStream(video, userVideoStream);
-    //         });
-    //       });
+    myVideo.muted = false;
+    let myVideoStream;
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: false,
+        video: true,
+      })
+      .then((stream) => {
+        myVideoStream = stream;
+        addVideoStream(myVideo, stream);
 
-    props.socket.on("user-connected", (userId) => {
-      console.log(userId);
-      // connectToNewUser(userId, stream);
+        props.peer.on("call", (call) => {
+          call.answer(stream);
+          const video = document.createElement("video");
+          call.on("stream", (userVideoStream) => {
+            addVideoStream(video, userVideoStream);
+          });
+        });
+
+        props.socket.on("user-connected", (userId) => {
+          console.log(userId);
+          connectToNewUser(userId, stream);
+        });
+      });
+
+    const connectToNewUser = (userId, stream) => {
+      const call = props.peer.call(userId, stream);
+      const video = document.createElement("video");
+      call.on("stream", (userVideoStream) => {
+        addVideoStream(video, userVideoStream);
+      });
+    };
+
+    props.peer.on("open", (id) => {
+      props.socket.emit("join-room", ROOM_ID, id, user);
     });
-    //     });
 
-    //   const connectToNewUser = (userId, stream) => {
-    //     const call = peer.call(userId, stream);
-    //     const video = document.createElement("video");
-    //     call.on("stream", (userVideoStream) => {
-    //       addVideoStream(video, userVideoStream);
-    //     });
-    //   };
-
-    //   peer.on("open", (id) => {
-    //     socket.emit("join-room", ROOM_ID, id, user);
-    //   });
-
-    //   const addVideoStream = (video, stream) => {
-    //     video.srcObject = stream;
-    //     video.addEventListener("loadedmetadata", () => {
-    //       video.play();
-    //       videoGrid.append(video);
-    //     });
-    //   };
+    const addVideoStream = (video, stream) => {
+      video.srcObject = stream;
+      video.addEventListener("loadedmetadata", () => {
+        video.play();
+        videoGrid.append(video);
+      });
+    };
     console.log(props.peer.id);
-  });
+  }, [props.peer.id]);
 
   return (
     <>
@@ -352,20 +358,33 @@ export default function Chat(props) {
           </Alert>
         </Snackbar>
       ) : null}
-
-      <div className=" hidden ">
-        <canvas
-          className=" absolute w-full h-full object-cover"
-          id="canvas"
-        ></canvas>
-        <video id="video" autoPlay></video>
+      {}{" "}
+      <div
+        className={
+          svideo
+            ? " bg-red-600 absolute w-full mr-0 right-0 top-0 z-50 mt-14 overfl border-2  ml-3 max-h-[85vh] overflow-y-scroll"
+            : " bg-yellow-500 absolute w-full -mr-64 right-0 top-0 z-50 border-2  ml-3 max-h-[85vh] overflow-y-scroll hidden"
+        }
+      >
+        {token && token.admin === true ? (
+          <div className="  relative " id="video-grid">
+            <canvas
+              className=" hidden absolute -z-10 w-full h-full object-cover"
+              id="canvas"
+            ></canvas>
+            <video
+              className=" mt-2 z-50 w-28 h-full "
+              id="video"
+              autoPlay
+            ></video>
+          </div>
+        ) : null}
       </div>
       <Navbar callSend={callSend} socket={props.socket} />
       <Progress uploading={uploading} />
       {hasAnnounce && announce?.published ? (
         <Announce socket={props.socket} />
       ) : null}
-
       {alert ? (
         <div className=" absolute z-20 left-0 right-0 bg-red-500 transition duration-300 w-72 m-auto p-3">
           <p className=" text-white uppercase font-semibold text-center">
@@ -373,7 +392,6 @@ export default function Chat(props) {
           </p>
         </div>
       ) : null}
-
       <div className="scroll-style w-[350px] h-[70vh] overflow-y-scroll m-auto">
         <div>
           {openCalling && <Caller closeCall={closeCall} />}
@@ -467,7 +485,6 @@ export default function Chat(props) {
           </div>
         )}
       </div>
-
       {(siteStatus && siteStatus.chat) || (token && token.admin) ? (
         <form
           onSubmit={sendMsg}
