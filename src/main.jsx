@@ -45,7 +45,7 @@ let peerId;
 
 peer.on("open", (id) => {
   peerId = id;
-  // console.log("peer open", id);
+  console.log("peer open", id);
   socket.emit("join", id);
 });
 

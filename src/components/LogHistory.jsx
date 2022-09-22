@@ -33,6 +33,7 @@ export default function LogHistory(props) {
         <div className=" flex-wrap ml-2 text-white top-14 fixed z-50 text-center flex ">
           {/* <h1 className=" mb-2 font-bold">Log History</h1>
           <div> */}
+
           {users &&
             users?.rows &&
             users?.rows.map((item) => (

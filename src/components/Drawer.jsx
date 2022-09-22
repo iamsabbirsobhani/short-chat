@@ -143,19 +143,19 @@ export default function Drawer({ drawerToggle, socket }) {
               </button>
             </div>
           ) : null}
-          {token && token.admin === true ? (
-            <div className=" mt-2">
-              <button
-                onClick={() => {
-                  navigate("logs");
-                  drawerToggle();
-                }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
-              >
-                User Logs
-              </button>
-            </div>
-          ) : null}
+          {/* {token && token.admin === true ? ( */}
+          <div className=" mt-2">
+            <button
+              onClick={() => {
+                navigate("logs");
+                drawerToggle();
+              }}
+              className=" text-white bg-rose-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider hover:bg-rose-600 duration-500"
+            >
+              User Logs
+            </button>
+          </div>
+          {/* ) : null} */}
 
           {token && token.admin === true ? (
             <div className=" mt-2">

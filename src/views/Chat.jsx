@@ -289,6 +289,52 @@ export default function Chat(props) {
     setpickSuccess(false);
   };
 
+  useEffect(() => {
+    //   let myVideoStream;
+    //   navigator.mediaDevices
+    //     .getUserMedia({
+    //       audio: true,
+    //     })
+    //     .then((stream) => {
+    //       myVideoStream = stream;
+    //       addVideoStream(myVideo, stream);
+
+    //       peer.on("call", (call) => {
+    //         call.answer(stream);
+    //         const video = document.createElement("video");
+    //         call.on("stream", (userVideoStream) => {
+    //           addVideoStream(video, userVideoStream);
+    //         });
+    //       });
+
+    props.socket.on("user-connected", (userId) => {
+      console.log(userId);
+      // connectToNewUser(userId, stream);
+    });
+    //     });
+
+    //   const connectToNewUser = (userId, stream) => {
+    //     const call = peer.call(userId, stream);
+    //     const video = document.createElement("video");
+    //     call.on("stream", (userVideoStream) => {
+    //       addVideoStream(video, userVideoStream);
+    //     });
+    //   };
+
+    //   peer.on("open", (id) => {
+    //     socket.emit("join-room", ROOM_ID, id, user);
+    //   });
+
+    //   const addVideoStream = (video, stream) => {
+    //     video.srcObject = stream;
+    //     video.addEventListener("loadedmetadata", () => {
+    //       video.play();
+    //       videoGrid.append(video);
+    //     });
+    //   };
+    console.log(props.peer.id);
+  });
+
   return (
     <>
       {token?.admin ? (

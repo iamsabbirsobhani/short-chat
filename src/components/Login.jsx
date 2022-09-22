@@ -7,7 +7,7 @@ export default function Login({
 }) {
   return (
     <>
-      <div className=" fixed w-full h-full left-0 right-0 bottom-0 top-0  backdrop-blur-sm z-50"></div>
+      <div className=" fixed w-full h-full left-0 right-0 bottom-0 top-0  backdrop-blur-xl z-50"></div>
 
       <div className=" z-[60] absolute left-0 right-0 top-0 bottom-0 flex justify-center items-center">
         <form

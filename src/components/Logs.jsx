@@ -19,9 +19,11 @@ export default function Logs(props) {
   return (
     <>
       <div className=" w-full h-full fixed top-14 right-0 left-0 backdrop-blur-md  z-40"></div>
-      <h1>Logs</h1>
-      <div className=" z-50 text-white fixed top-0 left-0 right-0 bottom-0 w-[280px]  flex justify-center items-center m-auto">
+      <div className=" overflow-y-scroll z-50 text-white fixed top-0 left-0 right-0 bottom-0 w-[280px]  flex justify-center items-center m-auto">
         <div className=" bg-gray-700/90 p-3 rounded-sm shadow-md">
+          <h1 className=" font-bold mt-2 mb-2 uppercase tracking-wider text-center text-blue-500">
+            Last Seen
+          </h1>
           {users &&
             users.rows.map((item) => (
               <div className=" mb-2 break-words" key={item.id}>

@@ -4,14 +4,14 @@ import qs from "qs";
 export default function Stories() {
   const [data, setdata] = useState(null);
   const [story, setstory] = useState(null);
-  fetch("http://localhost:8083/api/puppet")
+  fetch("https://sc-chat.onrender.com/api/puppet")
     .then((res) => res.text())
     .then((response) => {
       setdata(response);
     });
 
   function fetchStory(url) {
-    fetch("http://localhost:8083/api/puppet/post", {
+    fetch("https://sc-chat.onrender.com/api/puppet/post", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -48,7 +48,7 @@ export default function Stories() {
       Array.from(an).forEach((item) => {
         item.style.color = "red";
         // item.href = "";
-        item.addEventListener("mouseenter", () => {
+        item.addEventListener("click", () => {
           fetchStory(item.href.split("story")[1]);
           console.log("Mouse over: ", item.href.split("story")[1]);
         });
