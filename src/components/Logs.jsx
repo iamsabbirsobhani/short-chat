@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { setAllUsers } from "../features/state/globalState";
 import { useSelector, useDispatch } from "react-redux";
+import { Timestamp } from "firebase/firestore";
 import { format } from "date-fns";
 export default function Logs(props) {
   const users = useSelector((state) => state.global.allUsers);
@@ -25,7 +26,7 @@ export default function Logs(props) {
             Last Seen
           </h1>
           {users &&
-            users.rows.map((item) => (
+            users.map((item) => (
               <div className=" mb-2 break-words" key={item.id}>
                 <div>
                   <h1 className=" uppercase font-bold antialiased">
@@ -33,9 +34,14 @@ export default function Logs(props) {
                   </h1>
                 </div>
                 <div>
-                  <p className="">
-                    {format(new Date(item.updatedAt), "PPPpp")}
-                  </p>
+                  {format(
+                    new Timestamp(
+                      item.updatedAt.seconds,
+                      item.updatedAt.nanoseconds
+                    ).toDate(),
+                    "PPPpp"
+                  )}
+                  <p className=""></p>
                 </div>
               </div>
             ))}

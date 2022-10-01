@@ -34,25 +34,13 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-const socket = io("https://short-chat-backend.herokuapp.com");
-
-var peer = new Peer(undefined, {
-  path: "/peerjs",
-  host: "short-chat-backend.herokuapp.com",
-});
-
-let peerId;
-
-peer.on("open", (id) => {
-  peerId = id;
-  console.log("peer open", id);
-  socket.emit("join", id);
-});
+// const socket = io("https://sc-backend-akjr.onrender.com");
+const socket = io("http://localhost:8083");
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <Provider store={store}>
-    <App socket={socket} peerId={peerId} peer={peer} />
+    <App socket={socket} />
   </Provider>
 );

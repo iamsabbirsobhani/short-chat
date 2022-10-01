@@ -1,5 +1,5 @@
 import Chat from "./views/Chat";
-import CallingTimer from "./components/CallingTimer";
+
 import {
   setName,
   setToken,
@@ -91,12 +91,16 @@ function App(props) {
   // online-offline status code
   useEffect(() => {
     props.socket.on("online", () => {
-      const data = {
-        online: true,
-        socketId: props.socket.id,
-        id: JSON.parse(localStorage.getItem("user")).id,
-      };
-      props.socket.emit("update-to-online", data);
+      if (JSON.parse(localStorage.getItem("user"))) {
+        const data = {
+          id: JSON.parse(localStorage.getItem("user")).id,
+          name: JSON.parse(localStorage.getItem("user"))?.name,
+          email: JSON.parse(localStorage.getItem("user"))?.email,
+          online: true,
+          socketId: props.socket.id,
+        };
+        props.socket.emit("update-to-online", data);
+      }
     });
   });
   useEffect(() => {

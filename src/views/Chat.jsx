@@ -24,13 +24,13 @@ import {
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { io } from "socket.io-client";
-import CallingTimer from "../components/CallingTimer";
+
 import { fileUpload } from "../composable/fileUpload";
 import { async } from "@firebase/util";
 import Progress from "../components/Progress";
 import { Route, Routes } from "react-router-dom";
 import TranscriptChat from "./TranscriptChat";
-import Social from "./Social";
+
 import Logs from "../components/Logs";
 import Admin from "./Admin";
 import Call from "./Call";
@@ -47,16 +47,15 @@ export default function Chat(props) {
 
   const openCalling = useSelector((state) => state.global.openCalling);
   const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
-  const showVideo = useSelector((state) => state.global.showVideoPopup);
+
   const svideo = useSelector((state) => state.global.showVideoPopupLive);
-  const svideoevent = useSelector((state) => state.global.isVideoOnFromEvent);
+
   const announce = useSelector((state) => state.global.announce);
   const msg = useSelector((state) => state.global.msg);
-  const name = useSelector((state) => state.global.name);
+
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const token = useSelector((state) => state.global.token);
-  const callTimer = useSelector((state) => state.global.callTimer);
-  const pId = useSelector((state) => state.global.peerId);
+
   const siteStatus = useSelector((state) => state.global.siteStatus);
   const [pickSuccess, setpickSuccess] = React.useState(false);
 
@@ -64,8 +63,7 @@ export default function Chat(props) {
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
   const [id, setId] = useState([]);
   const [chat, setChat] = useState(null);
-  const [imgChunks, setImgChunks] = useState([]);
-  const [timer, setTimer] = useState([]);
+
   const [alert, setAlert] = useState(null);
   const [uploading, setUploading] = useState(0);
   const [ismenu, setismenu] = useState(false);
@@ -143,7 +141,6 @@ export default function Chat(props) {
         createdAt: new Date(),
       };
     }
-    // console.log(msg);
 
     if (chat) {
       props.socket.emit("chat message", msg);
@@ -182,8 +179,6 @@ export default function Chat(props) {
     }, 700);
 
     props.socket.on("incoming-call", (caller) => {
-      // console.log(caller);
-      // console.log(caller.id);
       if (caller.id !== props.socket.id) {
         dispatch(receiverUIFnOn());
       }
@@ -196,7 +191,6 @@ export default function Chat(props) {
       if (id !== props.socket.id) {
         dispatch(receiverUIFnOff());
         navigate("/");
-        // console.log("closed call");
       }
     });
 
@@ -205,21 +199,13 @@ export default function Chat(props) {
         dispatch(openCallerScreenOff());
         dispatch(receiverUIFnOff());
         navigate("/");
-        // console.log("call ended inside logic");
       }
-      // console.log("call-end");
     });
     props.socket.on("call-received", (id) => {
-      // if (id !== props.socket.id) {
       dispatch(openCallerScreenOff());
       dispatch(receiverUIFnOff());
-      // dispatch(callTimerOn());
-      // navigate("https://audio-call.vercel.app/");
+
       window.location.replace("https://audio-call.vercel.app/");
-      // console.log("PeerId props", props.peerId);
-      // console.log("call-received inside logic");
-      // }
-      // console.log("call-received in event");
     });
 
     props.socket.on("get-peer-id", (id) => {
@@ -239,13 +225,11 @@ export default function Chat(props) {
   };
 
   const callEnd = () => {
-    // console.log("call ended");
     props.socket.emit("call-end", props.socket.id);
     dispatch(receiverUIFnOff());
   };
 
   const callSend = () => {
-    // console.log("call send");
     dispatch(openCallerScreenOn());
     let caller = {
       id: props.socket.id,
@@ -256,9 +240,6 @@ export default function Chat(props) {
   };
 
   const callReceive = () => {
-    // console.log("call received");
-    // dispatch(callTimerOn());
-    // navigate("https://audio-call.vercel.app/");
     props.socket.emit("call-received", props.socket.id);
     props.socket.emit("all-mic-on", false);
     window.location.replace("https://audio-call.vercel.app/");
@@ -291,62 +272,6 @@ export default function Chat(props) {
     setpickSuccess(false);
   };
 
-  useEffect(() => {
-    const videoGrid = document.getElementById("video-grid");
-    const myVideo = document.createElement("video");
-
-    myVideo.muted = false;
-    let myVideoStream;
-    if (svideoevent) {
-      navigator.mediaDevices
-        .getUserMedia({
-          audio: false,
-          video: true,
-        })
-        .then((stream) => {
-          myVideoStream = stream;
-          addVideoStream(myVideo, stream);
-
-          props.peer.on("call", (call) => {
-            call.answer(stream);
-            const video = document.createElement("video");
-            call.on("stream", (userVideoStream) => {
-              addVideoStream(video, userVideoStream);
-            });
-          });
-
-          props.socket.on("user-connected", (userId) => {
-            console.log(userId);
-            connectToNewUser(userId, stream);
-          });
-        });
-
-      const connectToNewUser = (userId, stream) => {
-        const call = props.peer.call(userId, stream);
-        const video = document.createElement("video");
-        call.on("stream", (userVideoStream) => {
-          addVideoStream(video, userVideoStream);
-        });
-      };
-
-      props.peer.on("open", (id) => {
-        props.socket.emit("join-room", ROOM_ID, id, user);
-      });
-
-      const addVideoStream = (video, stream) => {
-        video.srcObject = stream;
-        video.addEventListener("loadedmetadata", () => {
-          // videoGrid.innerHTML = "";
-          video.play();
-          videoGrid.prepend(video);
-        });
-      };
-    } else {
-      // window.location.reload();
-    }
-    console.log(props.peer.id);
-  }, [props.peer.id, svideoevent]);
-
   return (
     <>
       {token?.admin ? (
@@ -364,7 +289,7 @@ export default function Chat(props) {
           </Alert>
         </Snackbar>
       ) : null}
-      {}{" "}
+
       <div
         className={
           svideo
@@ -405,7 +330,7 @@ export default function Chat(props) {
         {msg.length ? (
           <div className="">
             {msg.map((m, index) =>
-              m.id == token.id ? (
+              token && m.id == token.id ? (
                 <div
                   ref={messagesEndRef}
                   className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words"
@@ -608,7 +533,7 @@ export default function Chat(props) {
       ) : null}
       <Routes>
         <Route path="transcript" element={<TranscriptChat />} />
-        <Route path="social" element={<Social socket={props.socket} />} />
+
         <Route path="logs" element={<Logs socket={props.socket} />} />
         <Route path="search" element={<Search socket={props.socket} />} />
         <Route

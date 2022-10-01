@@ -6,7 +6,7 @@ import {
   toggleDrawer,
   setShowVideoPopupLive,
 } from "../features/state/globalState";
-import MyDay from "./MyDay/MyDay";
+
 import Stories from "./Stories";
 import { useState, useEffect } from "react";
 
@@ -54,7 +54,9 @@ export default function MobileNavbar({ callSend, socket }) {
   return (
     <>
       <div className=" w-full flex justify-between items-center p-3 bg-gray-900 shadow-2xl mb-2 text-white ">
-        {(siteStatus && siteStatus.menu) || (token && token.admin) ? (
+        {/* {(siteStatus && siteStatus.menu) || (token && token.admin) ? ( */}
+        {/* {token && token.admin ? ( */}
+        {token ? (
           <div
             onClick={() => drawerToggle()}
             className=" text-2xl ml-2 cursor-pointer  flex  justify-center items-center"
@@ -111,60 +113,11 @@ export default function MobileNavbar({ callSend, socket }) {
         ) : null}
         {/* end lockscreen overlay */}
 
-        {(siteStatus && siteStatus.day) || (token && token.admin) ? (
-          <div>
-            <div>
-              <MyDay useSelector={useSelector} socket={socket} />
-            </div>
-          </div>
-        ) : null}
-
-        {(siteStatus && siteStatus.day) || (token && token.admin) ? (
-          <div className=" group relative">
-            <button className=" bg-gray-600 p-1 py-2 rounded-sm font-semibold">
-              Options
-            </button>
-            <div className="z-[50] rounded-sm bg-gray-600 p-2 right-0 w-32  hidden group-hover:block absolute">
-              <button
-                onClick={() => {
-                  socket.emit("reload", token.admin);
-                }}
-                className=" mr-3 w-7 bg-blue-500 rounded-sm shadow-md h-9"
-              >
-                R
-              </button>
-              {showStories ? (
-                <button
-                  className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
-                  onClick={() => {
-                    socket.emit("video-on", !showStories);
-                    dispatch(setShowVideoPopupLive(!showStories));
-                    setshowStories(!showStories);
-                  }}
-                >
-                  Hide
-                </button>
-              ) : (
-                <button
-                  className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
-                  onClick={() => {
-                    socket.emit("video-on", !showStories);
-                    dispatch(setShowVideoPopupLive(!showStories));
-                    setshowStories(!showStories);
-                  }}
-                >
-                  Show
-                </button>
-              )}
-            </div>
-          </div>
-        ) : null}
-
         {(connectedUsers && siteStatus && siteStatus.online) ||
         (token && token.admin) ? (
           <div className=" flex">
             {connectedUsers.map((item, index) =>
-              item.id !== token.id && item.online ? (
+              item && item.id !== token.id && item.online ? (
                 <div
                   key={index}
                   className="flex items-center ml-2 border-2  p-1"

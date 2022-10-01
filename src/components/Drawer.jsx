@@ -80,30 +80,6 @@ export default function Drawer({ drawerToggle, socket }) {
             )}
           </div>
 
-          <div className=" mt-2">
-            {(siteStatus && siteStatus.partager) || (token && token.admin) ? (
-              <button
-                onClick={() => {
-                  navigate("social");
-                  drawerToggle();
-                }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
-              >
-                Partager
-              </button>
-            ) : (
-              <button
-                disabled
-                onClick={() => {
-                  navigate("social");
-                  drawerToggle();
-                }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
-              >
-                Partager
-              </button>
-            )}
-          </div>
           {/* {token && token.admin === true ? ( */}
           <div className=" mt-2">
             {(siteStatus && siteStatus.transcript) || (token && token.admin) ? (
@@ -130,19 +106,7 @@ export default function Drawer({ drawerToggle, socket }) {
             )}
           </div>
           {/* ) : null} */}
-          {token && token.admin === true ? (
-            <div className=" mt-2">
-              <button
-                onClick={() => {
-                  navigate("admin");
-                  drawerToggle();
-                }}
-                className=" text-white bg-orange-500 p-2 rounded-sm shadow-md w-full uppercase"
-              >
-                Admin
-              </button>
-            </div>
-          ) : null}
+
           {/* {token && token.admin === true ? ( */}
           <div className=" mt-2">
             <button
@@ -156,19 +120,6 @@ export default function Drawer({ drawerToggle, socket }) {
             </button>
           </div>
           {/* ) : null} */}
-
-          {token && token.admin === true ? (
-            <div className=" mt-2">
-              <button
-                onClick={() => {
-                  socket.emit("force-take");
-                }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
-              >
-                Take
-              </button>
-            </div>
-          ) : null}
 
           <div className=" mt-2">
             <button
