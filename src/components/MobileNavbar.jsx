@@ -120,16 +120,43 @@ export default function MobileNavbar({ callSend, socket }) {
         ) : null}
 
         {(siteStatus && siteStatus.day) || (token && token.admin) ? (
-          <div>
-            <button
-              className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
-              onClick={() => {
-                dispatch(setShowVideoPopupLive(!showStories));
-                setshowStories(!showStories);
-              }}
-            >
-              Show
+          <div className=" group relative">
+            <button className=" bg-gray-600 p-1 py-2 rounded-sm font-semibold">
+              Options
             </button>
+            <div className="z-[50] rounded-sm bg-gray-600 p-2 right-0 w-32  hidden group-hover:block absolute">
+              <button
+                onClick={() => {
+                  socket.emit("reload", token.admin);
+                }}
+                className=" mr-3 w-7 bg-blue-500 rounded-sm shadow-md h-9"
+              >
+                R
+              </button>
+              {showStories ? (
+                <button
+                  className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
+                  onClick={() => {
+                    socket.emit("video-on", !showStories);
+                    dispatch(setShowVideoPopupLive(!showStories));
+                    setshowStories(!showStories);
+                  }}
+                >
+                  Hide
+                </button>
+              ) : (
+                <button
+                  className=" p-2 px-3 bg-gray-700 rounded-sm font-semibold"
+                  onClick={() => {
+                    socket.emit("video-on", !showStories);
+                    dispatch(setShowVideoPopupLive(!showStories));
+                    setshowStories(!showStories);
+                  }}
+                >
+                  Show
+                </button>
+              )}
+            </div>
           </div>
         ) : null}
 

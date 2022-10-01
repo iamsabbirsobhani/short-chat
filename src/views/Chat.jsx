@@ -49,6 +49,7 @@ export default function Chat(props) {
   const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
   const showVideo = useSelector((state) => state.global.showVideoPopup);
   const svideo = useSelector((state) => state.global.showVideoPopupLive);
+  const svideoevent = useSelector((state) => state.global.isVideoOnFromEvent);
   const announce = useSelector((state) => state.global.announce);
   const msg = useSelector((state) => state.global.msg);
   const name = useSelector((state) => state.global.name);
@@ -296,50 +297,55 @@ export default function Chat(props) {
 
     myVideo.muted = false;
     let myVideoStream;
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: true,
-      })
-      .then((stream) => {
-        myVideoStream = stream;
-        addVideoStream(myVideo, stream);
+    if (svideoevent) {
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: false,
+          video: true,
+        })
+        .then((stream) => {
+          myVideoStream = stream;
+          addVideoStream(myVideo, stream);
 
-        props.peer.on("call", (call) => {
-          call.answer(stream);
-          const video = document.createElement("video");
-          call.on("stream", (userVideoStream) => {
-            addVideoStream(video, userVideoStream);
+          props.peer.on("call", (call) => {
+            call.answer(stream);
+            const video = document.createElement("video");
+            call.on("stream", (userVideoStream) => {
+              addVideoStream(video, userVideoStream);
+            });
+          });
+
+          props.socket.on("user-connected", (userId) => {
+            console.log(userId);
+            connectToNewUser(userId, stream);
           });
         });
 
-        props.socket.on("user-connected", (userId) => {
-          console.log(userId);
-          connectToNewUser(userId, stream);
+      const connectToNewUser = (userId, stream) => {
+        const call = props.peer.call(userId, stream);
+        const video = document.createElement("video");
+        call.on("stream", (userVideoStream) => {
+          addVideoStream(video, userVideoStream);
         });
+      };
+
+      props.peer.on("open", (id) => {
+        props.socket.emit("join-room", ROOM_ID, id, user);
       });
 
-    const connectToNewUser = (userId, stream) => {
-      const call = props.peer.call(userId, stream);
-      const video = document.createElement("video");
-      call.on("stream", (userVideoStream) => {
-        addVideoStream(video, userVideoStream);
-      });
-    };
-
-    props.peer.on("open", (id) => {
-      props.socket.emit("join-room", ROOM_ID, id, user);
-    });
-
-    const addVideoStream = (video, stream) => {
-      video.srcObject = stream;
-      video.addEventListener("loadedmetadata", () => {
-        video.play();
-        videoGrid.prepend(video);
-      });
-    };
+      const addVideoStream = (video, stream) => {
+        video.srcObject = stream;
+        video.addEventListener("loadedmetadata", () => {
+          // videoGrid.innerHTML = "";
+          video.play();
+          videoGrid.prepend(video);
+        });
+      };
+    } else {
+      // window.location.reload();
+    }
     console.log(props.peer.id);
-  }, [props.peer.id]);
+  }, [props.peer.id, svideoevent]);
 
   return (
     <>

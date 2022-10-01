@@ -51,11 +51,15 @@ export const globalState = createSlice({
     showVideoPopup: false,
     // show video
     showVideoPopupLive: false,
+    isVideoOnFromEvent: false,
   },
   reducers: {
     // show video
     setShowVideoPopup: (state, payload) => {
       state.showVideoPopup = payload.payload;
+    },
+    setIsVideoOnFromEvent: (state, payload) => {
+      state.isVideoOnFromEvent = payload.payload;
     },
     // show video
     setShowVideoPopupLive: (state, payload) => {
@@ -314,6 +318,7 @@ export const {
   setVideoPermission,
   setShowVideoPopup,
   setShowVideoPopupLive,
+  setIsVideoOnFromEvent,
 } = globalState.actions;
 
 export default globalState.reducer;

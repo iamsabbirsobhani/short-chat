@@ -13,6 +13,7 @@ import {
   setHasAnnounce,
   setAllAnnounce,
   setVideoPermission,
+  setIsVideoOnFromEvent,
 } from "./features/state/globalState";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
@@ -99,6 +100,16 @@ function App(props) {
     });
   });
   useEffect(() => {
+    props.socket.on("video-on", (isOn) => {
+      dispatch(setIsVideoOnFromEvent(isOn));
+    });
+
+    props.socket.on("reload", (isAdmin) => {
+      if (!token?.admin) {
+        window.location.reload();
+      }
+    });
+
     props.socket.on("online-status", (connectedUsers) => {
       dispatch(setConnectedUsers(connectedUsers));
     });
