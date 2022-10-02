@@ -52,8 +52,21 @@ export const globalState = createSlice({
     // show video
     showVideoPopupLive: false,
     isVideoOnFromEvent: false,
+    // totalonline users
+    totalOnline: 0,
+    // show offline text popup
+    showOfflineTextPopup: true,
   },
   reducers: {
+    // show offline text popup
+
+    setShowOfflineTextPopup: (state, payload) => {
+      state.showOfflineTextPopup = payload.payload;
+    },
+    // totalonline users
+    setTotalOnlineUsers: (state, payload) => {
+      state.totalOnline = payload.payload;
+    },
     // show video
     setShowVideoPopup: (state, payload) => {
       state.showVideoPopup = payload.payload;
@@ -319,6 +332,8 @@ export const {
   setShowVideoPopup,
   setShowVideoPopupLive,
   setIsVideoOnFromEvent,
+  setTotalOnlineUsers,
+  setShowOfflineTextPopup,
 } = globalState.actions;
 
 export default globalState.reducer;

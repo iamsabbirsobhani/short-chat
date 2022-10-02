@@ -20,6 +20,8 @@ import {
   callTimerOff,
   setMsg,
   setShowVideoPopup,
+  setTotalOnlineUsers,
+  setShowOfflineTextPopup,
 } from "../features/state/globalState";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -37,6 +39,7 @@ import Call from "./Call";
 import Search from "../components/Search";
 import { liveImg } from "../composable/image";
 import React from "react";
+import { serverTimestamp, Timestamp } from "firebase/firestore";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -45,8 +48,14 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 export default function Chat(props) {
   let navigate = useNavigate();
 
+  const offlineTextInput = useRef();
+
   const openCalling = useSelector((state) => state.global.openCalling);
   const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
+  const totalOnlineUsers = useSelector((state) => state.global.totalOnline);
+  const showOfflineTextPopup = useSelector(
+    (state) => state.global.showOfflineTextPopup
+  );
 
   const svideo = useSelector((state) => state.global.showVideoPopupLive);
 
@@ -66,6 +75,7 @@ export default function Chat(props) {
 
   const [alert, setAlert] = useState(null);
   const [uploading, setUploading] = useState(0);
+  const [offlinestatus, setofflinestatus] = useState();
   const [ismenu, setismenu] = useState(false);
   const [url, setUrl] = useState(null);
   const [isTypings, setIsTypings] = useState({
@@ -156,6 +166,11 @@ export default function Chat(props) {
   };
 
   useEffect(() => {
+    props.socket.on("is-there-only-users", (data) => {
+      console.log(data);
+      dispatch(setTotalOnlineUsers(data?.online));
+    });
+
     props.socket.on("chat message", (res) => {
       setId(props.socket.id);
       // console.log("Response ", res);
@@ -271,6 +286,37 @@ export default function Chat(props) {
     }
     setpickSuccess(false);
   };
+
+  function sendOfflineText(e) {
+    e.preventDefault();
+    let text = {
+      id: token.id,
+      name: token.name,
+      email: token.email,
+      text: e.target[0].value,
+    };
+    if (e.target[0].value) {
+      props.socket.emit("send-offline-text", text);
+    }
+  }
+  useEffect(() => {
+    var timeout;
+    props.socket.on("offline-text-sent-successfully", (docId) => {
+      console.log("offline-text-sent-successfully", docId);
+      if (offlineTextInput && offlineTextInput.current) {
+        offlineTextInput.current.form[0].value = "";
+      }
+      if (docId && docId.status) {
+        setofflinestatus(docId.status);
+        timeout = setTimeout(() => {
+          console.log("sdf");
+          setofflinestatus();
+        }, 1000);
+      }
+    });
+
+    return () => clearTimeout(timeout);
+  });
 
   return (
     <>
@@ -411,6 +457,60 @@ export default function Chat(props) {
             Loading...
           </div>
         )}
+        {showOfflineTextPopup && totalOnlineUsers && totalOnlineUsers <= 1 ? (
+          <div className="">
+            <div className=" rounded-sm shadow-sm w-[75vw] bg-orange-900 p-2 m-auto absolute top-[42vh] left-0 right-0">
+              <p className=" text-xs text-white">
+                Since no one is online right now, if you send a message in the
+                original chat, it is very likely that the message will be
+                deleted without the user seeing it for security reasons.
+              </p>
+            </div>
+            <div className=" opacity-90 bg-neutral-800 p-2 absolute text-white text-2xl flex  w-[80vw] left-0 right-0 m-auto  justify-center items-center rounded-sm shadow-md">
+              <div className=" relative">
+                <div
+                  onClick={() => {
+                    dispatch(setShowOfflineTextPopup(!showOfflineTextPopup));
+                  }}
+                  className=" absolute -right-3 -top-0 bg-red-500  w-4 h-4 flex justify-center items-center"
+                >
+                  <h1 className=" text-sm">X</h1>
+                </div>
+                <h1 className=" text-center text-base font-semibold">
+                  No one is online
+                </h1>
+                <p className=" text-sm text-gray-300">
+                  Send offline text, so user can check later.
+                </p>
+
+                <form
+                  onSubmit={sendOfflineText}
+                  className=" relative w-[70vw] mt-3"
+                >
+                  <input
+                    placeholder="Write text..."
+                    ref={offlineTextInput}
+                    type="text"
+                    className=" mr-3 text-sm h-8 w-full px-2 text-white bg-gray-900"
+                  />
+                  <div className=" absolute">
+                    <p
+                      className=" opacity-0 transition-all duration-500 text-sm text-green-500 mt-1"
+                      style={{ opacity: offlinestatus ? "100%" : "0" }}
+                    >
+                      {offlinestatus}
+                    </p>
+                  </div>
+                  <div className=" text-right mt-3 mb-3">
+                    <button className=" bg-blue-500 text-sm h-8 w-16 rounded-sm shadow-md">
+                      Send
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
       {(siteStatus && siteStatus.chat) || (token && token.admin) ? (
         <form
@@ -532,7 +632,10 @@ export default function Chat(props) {
         </form>
       ) : null}
       <Routes>
-        <Route path="transcript" element={<TranscriptChat />} />
+        <Route
+          path="transcript"
+          element={<TranscriptChat socket={props.socket} />}
+        />
 
         <Route path="logs" element={<Logs socket={props.socket} />} />
         <Route path="search" element={<Search socket={props.socket} />} />

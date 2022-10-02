@@ -5,15 +5,23 @@ import {
   setToken,
   toggleDrawer,
   setShowVideoPopupLive,
+  setShowOfflineTextPopup,
 } from "../features/state/globalState";
 
 import Stories from "./Stories";
 import { useState, useEffect } from "react";
 
 export default function MobileNavbar({ callSend, socket }) {
+  const API = "http://localhost:8083/lockscreen/";
+  // const API = "https://short-chat-backend.herokuapp.com/lockscreen/";
+
   const drawer = useSelector((state) => state.global.drawer);
   const siteStatus = useSelector((state) => state.global.siteStatus);
+  const totalOnline = useSelector((state) => state.global.totalOnline);
   const connectedUsers = useSelector((state) => state.global.connectedUsers);
+  const showOfflineTextPopup = useSelector(
+    (state) => state.global.showOfflineTextPopup
+  );
   const token = useSelector((state) => state.global.token);
   const [showStories, setshowStories] = useState(false);
   const [lockscreen, setlockscreen] = useState(false);
@@ -32,10 +40,7 @@ export default function MobileNavbar({ callSend, socket }) {
     e.preventDefault();
     console.log(e.target[0].value);
     if (e.target[0].value) {
-      // fetch(`http://localhost:8083/lockscreen/${e.target[0].value}`)
-      fetch(
-        `https://short-chat-backend.herokuapp.com/lockscreen/${e.target[0].value}`
-      )
+      fetch(API + `${e.target[0].value}`)
         .then((res) => res.json())
         .then((response) => {
           if (response === false) {
@@ -113,11 +118,35 @@ export default function MobileNavbar({ callSend, socket }) {
         ) : null}
         {/* end lockscreen overlay */}
 
-        {(connectedUsers && siteStatus && siteStatus.online) ||
-        (token && token.admin) ? (
+        {totalOnline < 2 ? (
+          <div>
+            <div
+              className=""
+              onClick={() => {
+                dispatch(setShowOfflineTextPopup(!showOfflineTextPopup));
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+                />
+              </svg>
+            </div>
+          </div>
+        ) : null}
+        {(connectedUsers && siteStatus && siteStatus.online) || token ? (
           <div className=" flex">
             {connectedUsers.map((item, index) =>
-              item && item.id !== token.id && item.online ? (
+              item && token && item.id !== token.id && item.online ? (
                 <div
                   key={index}
                   className="flex items-center ml-2 border-2  p-1"
@@ -125,7 +154,12 @@ export default function MobileNavbar({ callSend, socket }) {
                   {item.online ? (
                     <>
                       <div className="name mr-2 ">
-                        <p>{item.name}</p>
+                        <p className=" ">
+                          {item &&
+                            item.name &&
+                            item.name.charAt(0).toUpperCase() +
+                              item.name.substr(1).toLowerCase()}
+                        </p>
                       </div>
                       <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
                     </>

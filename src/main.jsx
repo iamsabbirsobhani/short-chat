@@ -34,8 +34,8 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-// const socket = io("https://sc-backend-akjr.onrender.com");
-const socket = io("http://localhost:8083");
+const socket = io("https://sc-backend-akjr.onrender.com");
+// const socket = io("http://localhost:8083");
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

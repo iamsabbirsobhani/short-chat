@@ -30,8 +30,6 @@ import ImageGallery from "./views/ImageGallery";
 import { messaging, getToken } from "./firebase/config";
 import BlockNotice from "./components/BlockNotice";
 
-const API = "https://short-chat-backend.herokuapp.com/verifyToken/";
-
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
   const isVideo = useSelector((state) => state.global.videoPermission);
@@ -44,6 +42,9 @@ function App(props) {
   const [hasToken, sethasToken] = useState(false);
   const [block, setblock] = useState(true);
   const dispatch = useDispatch();
+  // const API = "http://localhost:8083/unlock/";
+  const API = "https://sc-backend-akjr.onrender.com/unlock/";
+  const APITK = "https://sc-backend-akjr.onrender.com/verifyToken/";
 
   async function handleLogin(code) {
     setIsWrong(false);
@@ -51,12 +52,11 @@ function App(props) {
     setisError(null);
     code.preventDefault();
     try {
-      const response = await axios.get(
-        `https://short-chat-backend.herokuapp.com/${code.target[0].value}`
-      );
+      const response = await axios.get(API + `${code.target[0].value}`);
       const res = await response.data;
-      setstate(res);
-      setIsWrong(res);
+
+      setstate(res && res.lock);
+      setIsWrong(res && res.lock);
       setIsLoading(false);
       if (res && "error" in res) {
         setisError(res);
@@ -72,7 +72,7 @@ function App(props) {
       const token = JSON.parse(localStorage.getItem("user"));
       try {
         if (JSON.parse(localStorage.getItem("user"))) {
-          const verify = await axios.get(API + token.accessToken);
+          const verify = await axios.get(APITK + token.accessToken);
           if (verify.data === true) {
             dispatch(setToken(null));
             localStorage.setItem("user", JSON.stringify(null));

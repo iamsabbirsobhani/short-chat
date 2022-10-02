@@ -53,7 +53,7 @@ export default function Drawer({ drawerToggle, socket }) {
             </button>
           </div>
 
-          <div className=" mt-2 ">
+          {/* <div className=" mt-2 ">
             {(siteStatus && siteStatus.search) || (token && token.admin) ? (
               <Button
                 className="w-full"
@@ -78,7 +78,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 Search
               </Button>
             )}
-          </div>
+          </div> */}
 
           {/* {token && token.admin === true ? ( */}
           <div className=" mt-2">
@@ -88,9 +88,9 @@ export default function Drawer({ drawerToggle, socket }) {
                   navigate("transcript");
                   drawerToggle();
                 }}
-                className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
+                className=" text-white bg-gray-500 p-2 rounded-sm shadow-md w-full uppercase"
               >
-                Transcript
+                Offline Texts
               </button>
             ) : (
               <button
@@ -121,7 +121,7 @@ export default function Drawer({ drawerToggle, socket }) {
           </div>
           {/* ) : null} */}
 
-          <div className=" mt-2">
+          {/* <div className=" mt-2">
             <button
               onClick={() => {
                 navigate("images");
@@ -131,7 +131,7 @@ export default function Drawer({ drawerToggle, socket }) {
             >
               Image Gallery
             </button>
-          </div>
+          </div> */}
           <div className="logout mt-4 text-center">
             <button
               onClick={() => {
