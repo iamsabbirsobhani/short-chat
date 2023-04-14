@@ -1,4 +1,4 @@
-import Chat from "./views/Chat";
+import Chat from './views/Chat';
 
 import {
   setName,
@@ -14,21 +14,22 @@ import {
   setAllAnnounce,
   setVideoPermission,
   setIsVideoOnFromEvent,
-} from "./features/state/globalState";
-import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+} from './features/state/globalState';
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
-import axios from "axios";
-import Login from "./components/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import axios from 'axios';
+import Login from './components/Login';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-import { useDispatch } from "react-redux";
-import Signin from "./views/Signin";
-import Signup from "./views/Signup";
-import ImageGallery from "./views/ImageGallery";
-import { messaging, getToken } from "./firebase/config";
-import BlockNotice from "./components/BlockNotice";
+import { useDispatch } from 'react-redux';
+import Signin from './views/Signin';
+import Signup from './views/Signup';
+import ImageGallery from './views/ImageGallery';
+import { messaging, getToken } from './firebase/config';
+import BlockNotice from './components/BlockNotice';
+import { API } from '../api.js';
 
 function App(props) {
   const callTimer = useSelector((state) => state.global.callTimer);
@@ -42,9 +43,6 @@ function App(props) {
   const [hasToken, sethasToken] = useState(false);
   const [block, setblock] = useState(true);
   const dispatch = useDispatch();
-  // const API = "http://localhost:8083/unlock/";
-  const API = "https://sc-backend-akjr.onrender.com/unlock/";
-  const APITK = "https://sc-backend-akjr.onrender.com/verifyToken/";
 
   async function handleLogin(code) {
     setIsWrong(false);
@@ -52,13 +50,15 @@ function App(props) {
     setisError(null);
     code.preventDefault();
     try {
-      const response = await axios.get(API + `${code.target[0].value}`);
+      const response = await axios.get(
+        API + '/unlock/' + `${code.target[0].value}`,
+      );
       const res = await response.data;
 
       setstate(res && res.lock);
       setIsWrong(res && res.lock);
       setIsLoading(false);
-      if (res && "error" in res) {
+      if (res && 'error' in res) {
         setisError(res);
       }
     } catch (error) {
@@ -69,15 +69,17 @@ function App(props) {
 
   useEffect(() => {
     async function verifyToken() {
-      const token = JSON.parse(localStorage.getItem("user"));
+      const token = JSON.parse(localStorage.getItem('user'));
       try {
-        if (JSON.parse(localStorage.getItem("user"))) {
-          const verify = await axios.get(APITK + token.accessToken);
+        if (JSON.parse(localStorage.getItem('user'))) {
+          const verify = await axios.get(
+            API + '/verifyToken/' + token.accessToken,
+          );
           if (verify.data === true) {
             dispatch(setToken(null));
-            localStorage.setItem("user", JSON.stringify(null));
+            localStorage.setItem('user', JSON.stringify(null));
           } else {
-            dispatch(setToken(JSON.parse(localStorage.getItem("user"))));
+            dispatch(setToken(JSON.parse(localStorage.getItem('user'))));
           }
         }
       } catch (error) {
@@ -90,69 +92,69 @@ function App(props) {
 
   // online-offline status code
   useEffect(() => {
-    props.socket.on("online", () => {
-      if (JSON.parse(localStorage.getItem("user"))) {
+    props.socket.on('online', () => {
+      if (JSON.parse(localStorage.getItem('user'))) {
         const data = {
-          id: JSON.parse(localStorage.getItem("user")).id,
-          name: JSON.parse(localStorage.getItem("user"))?.name,
-          email: JSON.parse(localStorage.getItem("user"))?.email,
+          id: JSON.parse(localStorage.getItem('user')).id,
+          name: JSON.parse(localStorage.getItem('user'))?.name,
+          email: JSON.parse(localStorage.getItem('user'))?.email,
           online: true,
           socketId: props.socket.id,
         };
-        props.socket.emit("update-to-online", data);
+        props.socket.emit('update-to-online', data);
       }
     });
   });
   useEffect(() => {
-    props.socket.on("video-on", (isOn) => {
+    props.socket.on('video-on', (isOn) => {
       dispatch(setIsVideoOnFromEvent(isOn));
     });
 
-    props.socket.on("reload", (isAdmin) => {
+    props.socket.on('reload', (isAdmin) => {
       if (!token?.admin) {
         window.location.reload();
       }
     });
 
-    props.socket.on("online-status", (connectedUsers) => {
+    props.socket.on('online-status', (connectedUsers) => {
       dispatch(setConnectedUsers(connectedUsers));
     });
 
-    props.socket.on("offline", (connectedUsers) => {
+    props.socket.on('offline', (connectedUsers) => {
       dispatch(setConnectedUsers(connectedUsers));
     });
 
-    props.socket.on("block-status", (auth) => {
+    props.socket.on('block-status', (auth) => {
       console.log(auth.rows[0]);
       setblock(auth.rows[0].block);
       dispatch(setSiteBlock(auth.rows[0].block));
       dispatch(setSiteStatus(auth.rows[0]));
     });
 
-    props.socket.on("day", (day) => {
+    props.socket.on('day', (day) => {
       dispatch(setDay(day));
     });
 
-    props.socket.on("get-current-user", (user) => {
-      if (user?.id === JSON.parse(localStorage.getItem("user"))?.id) {
+    props.socket.on('get-current-user', (user) => {
+      if (user?.id === JSON.parse(localStorage.getItem('user'))?.id) {
         dispatch(setLoggedUser(user));
       }
     });
-    props.socket.on("get-all-users", (users) => {
+    props.socket.on('get-all-users', (users) => {
       dispatch(setAllUsers(users));
     });
 
-    props.socket.on("has-announce", (announce) => {
+    props.socket.on('has-announce', (announce) => {
       // console.log("has-announce ", announce);
       dispatch(setHasAnnounce(announce));
     });
 
-    props.socket.on("send-announce", (announce) => {
+    props.socket.on('send-announce', (announce) => {
       // console.log("send-announce ", announce);
       dispatch(setAnnounce(announce));
     });
 
-    props.socket.on("get-all-announce", (announce) => {
+    props.socket.on('get-all-announce', (announce) => {
       // console.log("get-all-announce ", announce);
       dispatch(setAllAnnounce(announce));
     });
@@ -162,65 +164,52 @@ function App(props) {
   useEffect(() => {
     return () => {
       props.socket.emit(
-        "userlog-out",
+        'userlog-out',
         new Date(),
-        JSON.parse(localStorage.getItem("user"))?.id
+        JSON.parse(localStorage.getItem('user'))?.id,
       );
     };
   }, []);
 
   // fcm
   useEffect(() => {
-    props.socket.emit("send-day");
-    props.socket.emit("get-all-users");
-    props.socket.emit("block-site-status");
+    props.socket.emit('send-day');
+    props.socket.emit('get-all-users');
+    props.socket.emit('block-site-status');
     props.socket.emit(
-      "userlog-log",
+      'userlog-log',
       new Date(),
-      JSON.parse(localStorage.getItem("user"))?.id
+      JSON.parse(localStorage.getItem('user'))?.id,
     );
     props.socket.emit(
-      "get-logged-user",
-      JSON.parse(localStorage.getItem("user"))?.id
+      'get-logged-user',
+      JSON.parse(localStorage.getItem('user'))?.id,
     );
 
-    props.socket.emit("has-announce");
-    props.socket.emit("get-announce");
-    props.socket.emit("get-all-announce");
+    props.socket.emit('has-announce');
+    props.socket.emit('get-announce');
+    props.socket.emit('get-all-announce');
 
-    let data = JSON.parse(localStorage.getItem("user"));
+    let data = JSON.parse(localStorage.getItem('user'));
     getToken(messaging, {
       vapidKey:
-        "BK5U3OatUDnGtiYBeLQ3IoB4wNE1mbsCfS30x8SJlwgXZOg4BJGvFGfjio8AdQNKg9u8xC5o_61dsw2pUyY2SCo",
+        'BK5U3OatUDnGtiYBeLQ3IoB4wNE1mbsCfS30x8SJlwgXZOg4BJGvFGfjio8AdQNKg9u8xC5o_61dsw2pUyY2SCo',
     })
       .then((currentToken) => {
         if (currentToken) {
           data.token = currentToken;
-          props.socket.emit("save-fcm-token", data);
+          props.socket.emit('save-fcm-token', data);
         } else {
           console.log(
-            "No registration token available. Request permission to generate one."
+            'No registration token available. Request permission to generate one.',
           );
         }
       })
       .catch((err) => {
-        console.log("An error occurred while retrieving token. ", err);
+        console.log('An error occurred while retrieving token. ', err);
       });
   }, []);
   // fcm
-
-  useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true }).then(
-      (stream) => {
-        console.log("video available");
-        dispatch(setVideoPermission(true));
-      },
-      (e) => {
-        console.log("video not available");
-        dispatch(setVideoPermission(false));
-      }
-    );
-  });
 
   return (
     <div className="App">
@@ -232,7 +221,7 @@ function App(props) {
                 <Route
                   path="/signin"
                   element={
-                    JSON.parse(localStorage.getItem("user")) === null ? (
+                    JSON.parse(localStorage.getItem('user')) === null ? (
                       <Signin />
                     ) : (
                       <Navigate to="/" />
@@ -242,7 +231,7 @@ function App(props) {
                 <Route
                   path="/signup"
                   element={
-                    JSON.parse(localStorage.getItem("user")) === null ? (
+                    JSON.parse(localStorage.getItem('user')) === null ? (
                       <Signup />
                     ) : (
                       <Navigate to="/" />
@@ -253,7 +242,7 @@ function App(props) {
                 <Route
                   path="/*"
                   element={
-                    JSON.parse(localStorage.getItem("user")) ? (
+                    JSON.parse(localStorage.getItem('user')) ? (
                       <Chat
                         className=" h-80"
                         socket={props.socket}
@@ -295,8 +284,8 @@ function App(props) {
           <div className=" text-white">
             <p className=" text-lg font-semibold">To remove this page: </p>
             <h1>
-              1. Delete all the{" "}
-              <span className=" text-yellow-400"> cookies </span> or{" "}
+              1. Delete all the{' '}
+              <span className=" text-yellow-400"> cookies </span> or{' '}
               <span className=" text-yellow-400"> Reset permissions</span> from
               website lock &nbsp;
               <svg
@@ -310,7 +299,7 @@ function App(props) {
                   d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
                   clip-rule="evenodd"
                 />
-              </svg>{" "}
+              </svg>{' '}
               &nbsp; icon.
             </h1>
             <h1>2. Allow permission to all that wanted.</h1>

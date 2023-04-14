@@ -1,20 +1,18 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import qs from "qs";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setToken } from "../features/state/globalState";
-
-// const API = "https://short-chat-backend.herokuapp.com/signin";
-const API = "http://localhost:8083/signin";
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setToken } from '../features/state/globalState';
+import { API } from '../../api';
 
 async function signIn(data) {
   try {
     // console.log(data);
-    const signin = await axios.post(API, qs.stringify(data), {
+    const signin = await axios.post(API + '/signin', qs.stringify(data), {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
     // console.log(signin);
@@ -28,15 +26,15 @@ export default function Signin() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [error, seterror] = useState("");
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const [error, seterror] = useState('');
   const [isLoading, setisLoading] = useState(false);
 
   async function handleSignin(e) {
     e.preventDefault();
     setisLoading(true);
-    seterror("");
+    seterror('');
     const data = {
       email: email,
       password: password,
@@ -44,20 +42,20 @@ export default function Signin() {
     // console.log(data);
     const response = await signIn(data);
     console.log(response);
-    if (response && "error" in response) {
+    if (response && 'error' in response) {
       seterror(response.error);
       setisLoading(false);
     }
-    if ("accessToken" in response) {
+    if ('accessToken' in response) {
       setisLoading(false);
 
-      setemail("");
-      setpassword("");
+      setemail('');
+      setpassword('');
 
-      localStorage.setItem("user", JSON.stringify(response));
+      localStorage.setItem('user', JSON.stringify(response));
       dispatch(setToken(response));
       // console.log(JSON.parse(localStorage.getItem("user")));
-      navigate("/");
+      navigate('/');
     }
     setisLoading(false);
   }
