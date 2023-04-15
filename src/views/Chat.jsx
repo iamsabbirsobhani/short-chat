@@ -443,7 +443,7 @@ export default function Chat(props) {
 
           <div className=" relative">
             {(siteStatus && siteStatus.fileInput) || (token && token.admin) ? (
-              <div className=" rounded-full absolute left-7 top-1.5">
+              <div className=" rounded-full absolute left-3 top-1.5">
                 {ismenu ? (
                   <div className="backdrop-blur-md shadow-lg transition-opacity duration-500 flex  justify-between w-24 p-1 rounded-md absolute bottom-11 -left-2 z-50">
                     <div className="cursor-pointer w-10 h-10 rounded-full flex justify-center items-center">
@@ -512,7 +512,7 @@ export default function Chat(props) {
                 <button
                   type="button"
                   disabled
-                  className=" absolute w-9 h-9 bg-gradient-to-r rounded-full text-white"
+                  className=" absolute w-9 h-9 rounded-full text-white"
                 >
                   <ion-icon name="document-outline"></ion-icon>
                 </button>
@@ -521,7 +521,7 @@ export default function Chat(props) {
 
             {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input
-                className=" bg-gray-700 text-white outline-none w-full py-3 pl-[70px] pr-16 p-10 shadow-sm rounded-sm "
+                className=" bg-gray-700 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-sm "
                 type="text"
                 name="chatField"
                 onChange={(e) => handleChat(e)}
@@ -541,7 +541,7 @@ export default function Chat(props) {
             )}
             <button
               type="submit"
-              className="  h-9 w-9 p-2 text-gray-300 absolute right-[30px] top-[6px] hover:text-gray-400"
+              className="  h-9 w-9 p-2 text-gray-300 absolute right-[10px] top-[6px] hover:text-gray-400"
             >
               <ion-icon name="send"></ion-icon>
             </button>
