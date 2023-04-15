@@ -318,20 +318,20 @@ export default function Chat(props) {
       <Navbar callSend={callSend} socket={props.socket} />
       <Progress uploading={uploading} />
 
-      <div className="scroll-style w-[350px] h-[70.5vh] overflow-y-scroll m-auto">
-        <div>
+      <div className="scroll-style xl:w-[600px] lg:w[500px] md:[350px] h-[70.5vh] overflow-y-scroll m-auto">
+        {/* <div>
           {openCalling && <Caller closeCall={closeCall} />}
           {receiverUI && (
             <Receiver callReceive={callReceive} callEnd={callEnd} />
           )}
-        </div>
+        </div> */}
 
         {msg.length ? (
-          <div className="">
+          <div className="grid grid-cols-2 gap-2">
             {!olderMsgLoading ? (
               <div
                 onClick={handleOlderMessage}
-                className="border-2 border-gray-50 rounded-full w-32 mt-5 mb-5 ml-auto mr-auto p-2 cursor-pointer"
+                className="border-2 col-span-2 border-gray-50 rounded-full w-32 mt-5 mb-5 ml-auto mr-auto p-2 cursor-pointer"
               >
                 <h1 className="text-gray-50 text-center text-xs">
                   Older Messages
@@ -350,7 +350,7 @@ export default function Chat(props) {
               token && m.uId == token.id ? (
                 <div
                   ref={messagesEndRef}
-                  className=" relative float-right mr-1  mb-2 text-white bg-emerald-700 p-3 rounded-lg w-52  break-words shadow-md"
+                  className=" relative col-start-1 col-end-4    text-white bg-emerald-700 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-[300px]  break-words shadow-md ml-auto mr-1"
                   key={index}
                 >
                   {m.url && m.url.includes('mp4') && m.url.includes('video') ? (
@@ -378,14 +378,14 @@ export default function Chat(props) {
                     <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                   )}
 
-                  <p className=" absolute bottom-0 text-[10px] text-gray-300 right-1">
+                  {/* <p className=" absolute bottom-0 text-[10px] text-gray-300 right-1">
                     {format(new Date(m.createdAt), 'PPp')}
-                  </p>
+                  </p> */}
                 </div>
               ) : (
-                <div className="w-52" key={index}>
+                <div className="col-start-1 col-end-4" key={index}>
                   <div
-                    className=" ml-1 relative float-left text-white mb-2 bg-gray-800 p-3 rounded-lg w-52  break-words shadow-md"
+                    className=" ml-1 relative float-left text-white  bg-gray-800 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-full  break-words shadow-md"
                     ref={messagesEndRef}
                   >
                     {m.url &&
@@ -415,9 +415,9 @@ export default function Chat(props) {
                     ) : (
                       <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                     )}
-                    <p className=" absolute bottom-0 text-[10px] text-gray-300 right-1">
+                    {/* <p className=" relative bottom-0 text-[10px] text-gray-300 right-1">
                       {format(new Date(m.createdAt), 'PPp')}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               ),
@@ -432,7 +432,7 @@ export default function Chat(props) {
       {(siteStatus && siteStatus.chat) || (token && token.admin) ? (
         <form
           onSubmit={sendMsg}
-          className=" relative mb-3 text-center w-80 m-auto mt-5"
+          className=" relative mb-3 text-center max-w-[600px] m-auto mt-5"
         >
           <div>
             {isTypings && isTypings.isTyping && isTypings.id != id ? (
@@ -521,7 +521,7 @@ export default function Chat(props) {
 
             {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input
-                className=" bg-gray-700 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 shadow-sm rounded-sm "
+                className=" bg-gray-700 text-white outline-none w-full py-3 pl-[70px] pr-16 p-10 shadow-sm rounded-sm "
                 type="text"
                 name="chatField"
                 onChange={(e) => handleChat(e)}
@@ -530,7 +530,7 @@ export default function Chat(props) {
               />
             ) : (
               <input
-                className=" bg-gray-800 text-white outline-none w-[280px] py-3 pl-[50px] pr-14 p-10 rounded-3xl"
+                className=" bg-gray-800 text-white outline-none w-full py-3 pl-[70px] pr-16 p-10 rounded-3xl"
                 type="text"
                 name="chatField"
                 disabled
