@@ -1,9 +1,9 @@
-import avatar from "../assets/avatar.png";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { setPage } from "../features/state/globalState";
-import MobileNavbar from "./MobileNavbar";
+import avatar from '../assets/avatar.png';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { setPage } from '../features/state/globalState';
+import MobileNavbar from './MobileNavbar';
 export default function Navbar({ callSend, socket }) {
   const name = useSelector((state) => state.global.name);
   const token = useSelector((state) => state.global.token);
@@ -17,7 +17,7 @@ export default function Navbar({ callSend, socket }) {
           <Link to="/" onClick={() => dispatch(setPage(8))} className="text-xl">
             <ion-icon className=" w-9 mr-3" name="home"></ion-icon>
           </Link>
-          {token && token.name.toLowerCase() === "albion" && (
+          {token && token.name.toLowerCase() === 'albion' && (
             <Link
               to="/images"
               className=" font-semibold bg-white/10 p-1 px-3 rounded-md"
@@ -25,7 +25,7 @@ export default function Navbar({ callSend, socket }) {
               Image Gallery
             </Link>
           )}
-          {token && token.name.toLowerCase() === "albion" && (
+          {token && token.name.toLowerCase() === 'albion' && (
             <Link to="/transcript">Transcript</Link>
           )}
           <div className=" font-semibold bg-blue-500 p-1 rounded-sm shadow-md">
