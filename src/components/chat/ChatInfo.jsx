@@ -55,7 +55,15 @@ export default function ChatInfo({ props }) {
             </div>
           </div>
         ) : null}
-        {chatInfo?.url ? <p>URL: {chatInfo?.url}</p> : null}
+        {chatInfo?.url ? (
+          <div>
+            <p>URL:</p>
+            <div className=" bg-stone-900 p-2 rounded-sm break-words shadow-md">
+              {chatInfo?.url}
+            </div>
+          </div>
+        ) : null}
+
         {token.id === 32 && chatInfo?.deletedMsg ? (
           <div>
             <p>Deleted Msg:</p>
