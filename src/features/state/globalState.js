@@ -62,8 +62,14 @@ export const globalState = createSlice({
     chatInfo: {},
     delLoading: false,
     chatDeleted: false,
+    // imageGallery
+    imageGalleryCode: null,
   },
   reducers: {
+    // imageGallery
+    setImageGalleryCode: (state, payload) => {
+      state.imageGalleryCode = payload.payload;
+    },
     // chat Component
     // chat deleted
     setChatDeleted: (state, payload) => {
@@ -360,7 +366,8 @@ export const {
   setOpenChatInfo,
   setChatInfo,
   setDelLoading,
-  setChatDeleted
+  setChatDeleted,
+  setImageGalleryCode
 } = globalState.actions;
 
 export default globalState.reducer;

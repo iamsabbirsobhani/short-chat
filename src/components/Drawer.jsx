@@ -57,17 +57,19 @@ export default function Drawer({ drawerToggle, socket }) {
           </div>
           {/* ) : null} */}
 
-          {/* <div className=" mt-2">
-            <button
-              onClick={() => {
-                navigate("images");
-                drawerToggle();
-              }}
-              className=" text-white bg-blue-500 p-2 rounded-sm shadow-md w-full uppercase"
-            >
-              Image Gallery
-            </button>
-          </div> */}
+          {token && token.admin === true ? (
+            <div className=" mt-2">
+              <button
+                onClick={() => {
+                  navigate('images');
+                  drawerToggle();
+                }}
+                className=" text-white border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+              >
+                Image Gallery
+              </button>
+            </div>
+          ) : null}
           <div className="logout mt-4 text-center relative -bottom-32">
             <button
               onClick={() => {

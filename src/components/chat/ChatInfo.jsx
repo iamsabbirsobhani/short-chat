@@ -24,7 +24,7 @@ export default function ChatInfo({ props }) {
   };
   return (
     <>
-      <div className=" bg-gray-700 p-2 text-gray-50 2xl:max-w-2xl xl:max-w-2xl  lg:max-w-2xl md:max-w-xs sm:max-w-xs max-w-xs  rounded-sm shadow-md break-words ">
+      <div className=" font-mono bg-gray-700 p-2 text-gray-50 2xl:max-w-2xl xl:max-w-2xl  lg:max-w-2xl md:max-w-xs sm:max-w-xs max-w-xs  rounded-sm shadow-md break-words ">
         <div className=" text-right">
           <button onClick={handleClose} className=" text-gray-50">
             <svg

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 export default function LoginPlus({
   handleSharedPictures,
   isWrong,
@@ -30,7 +30,7 @@ export default function LoginPlus({
           />
         </svg>
       </div>
-      <div className=" z-[51] absolute left-0 right-0 top-0 bottom-0 flex justify-center items-center">
+      <div className=" z-[51] fixed left-0 right-0 top-0 bottom-0 flex justify-center items-center">
         <form
           className=" shadow-lg p-5 w-80 bg-gray-900 flex flex-col rounded-sm"
           onSubmit={(e) => handleSharedPictures(e)}
