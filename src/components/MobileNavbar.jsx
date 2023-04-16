@@ -101,12 +101,12 @@ export default function MobileNavbar({ callSend, socket }) {
               item && token && item.id !== token.id && item.online ? (
                 <div
                   key={index}
-                  className="flex items-center ml-2 border-2  p-1"
+                  className="flex items-center rounded-full ml-2 border-2  p-2 border-gray-500 shadow-sm cursor-pointer"
                 >
                   {item.online ? (
                     <>
                       <div className="name mr-2 ">
-                        <p className=" ">
+                        <p className=" text-xs text-gray-200">
                           {item &&
                             item.name &&
                             item.name.charAt(0).toUpperCase() +
@@ -145,7 +145,8 @@ export default function MobileNavbar({ callSend, socket }) {
             </button>
           </div>
 
-          {(siteStatus && siteStatus.call) || (token && token.admin) ? (
+          {true ? (
+            // {(siteStatus && siteStatus.call) || (token && token.admin) ? (
             <div
               onClick={callSend}
               className=" cursor-pointer w-8 h-8 flex justify-center items-center rounded-md"

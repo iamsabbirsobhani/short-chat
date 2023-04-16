@@ -8,6 +8,7 @@ export default defineConfig({
     host: true,
   },
   build: {
-    outDir: "E:/Web Workspace/Nodejs Exercise/chat-example/dist",
+    outDir: "G:/Web Workspace/node/exercise/sc-backend/dist",
+
   },
 });

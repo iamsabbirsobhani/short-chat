@@ -94,7 +94,7 @@ export default function Chat(props) {
   };
 
   const handleUpload = async (e) => {
-    console.log(e.target.files[0].type);
+    // console.log(e.target.files[0].type);
     await fileUpload(e.target.files[0], setUploading, setUrl);
     inputFile.current.value = '';
     setismenu(false);
@@ -128,7 +128,7 @@ export default function Chat(props) {
   useEffect(() => {
     if (url) {
       sendMsg(undefined, url);
-      console.log('uploaded');
+      // console.log('uploaded');
       setUploading(null);
     }
   }, [url]);
@@ -175,7 +175,7 @@ export default function Chat(props) {
 
   useEffect(() => {
     props.socket.on('is-there-only-users', (data) => {
-      console.log(data);
+      // console.log(data);
       dispatch(setTotalOnlineUsers(data?.online));
     });
 
@@ -200,7 +200,7 @@ export default function Chat(props) {
     });
 
     props.socket.on('close-call', (id) => {
-      console.log('call fire', id === props.socket.id);
+      // console.log('call fire', id === props.socket.id);
       navigate('/');
 
       if (id !== props.socket.id) {
@@ -282,14 +282,13 @@ export default function Chat(props) {
   useEffect(() => {
     var timeout;
     props.socket.on('offline-text-sent-successfully', (docId) => {
-      console.log('offline-text-sent-successfully', docId);
+      // console.log('offline-text-sent-successfully', docId);
       if (offlineTextInput && offlineTextInput.current) {
         offlineTextInput.current.form[0].value = '';
       }
       if (docId && docId.status) {
         setofflinestatus(docId.status);
         timeout = setTimeout(() => {
-          console.log('sdf');
           setofflinestatus();
         }, 1000);
       }
@@ -306,7 +305,7 @@ export default function Chat(props) {
 
   useEffect(() => {
     props.socket.on('getscchatevent', (data) => {
-      console.log(data);
+      // console.log(data);
       dispatch(setMsg(data));
       setolderMsgLoading(false);
       dispatch(setDelLoading(false));
@@ -333,13 +332,13 @@ export default function Chat(props) {
   const handleSelfChatInfo = (m) => {
     dispatch(setOpenChatInfo(true));
     dispatch(setChatInfo(m));
-    console.log(m);
+    // console.log(m);
   };
 
   const handleOtherChatInfo = (m) => {
     dispatch(setOpenChatInfo(true));
     dispatch(setChatInfo(m));
-    console.log(m);
+    // console.log(m);
   };
   return (
     <>
@@ -407,6 +406,10 @@ export default function Chat(props) {
                       <source src={m.chat} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
+                  ) : m.deletedMsg ? (
+                    <h1 className=" mt-1 mb-1 font-bold  uppercase">
+                      {m.chat}
+                    </h1>
                   ) : (
                     <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
                   )}
@@ -463,7 +466,7 @@ export default function Chat(props) {
           </div>
         )}
       </div>
-      {(siteStatus && siteStatus.chat) || (token && token.admin) ? (
+      {true ? (
         <form
           onSubmit={sendMsg}
           className=" relative  mb-3 text-center 2xl:max-w-[600px] xl:max-w-[600px] lg:max-w-[600px] md:max-w-[600px] max-w-xs m-auto mt-5"
@@ -476,7 +479,7 @@ export default function Chat(props) {
           </div>
 
           <div className=" relative">
-            {(siteStatus && siteStatus.fileInput) || (token && token.admin) ? (
+            {true ? (
               <div className=" rounded-full absolute left-3 top-1.5">
                 {ismenu ? (
                   <div className="backdrop-blur-md shadow-lg transition-opacity duration-500 flex  justify-between w-24 p-1 rounded-md absolute bottom-11 -left-2 z-50">
@@ -564,10 +567,9 @@ export default function Chat(props) {
               />
             ) : (
               <input
-                className=" bg-gray-800 text-white outline-none w-full py-3 pl-[70px] pr-16 p-10 rounded-3xl"
+                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
                 type="text"
                 name="chatField"
-                disabled
                 onChange={(e) => handleChat(e)}
                 placeholder="Message..."
                 autoComplete="off"

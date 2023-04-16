@@ -55,10 +55,10 @@ export default function ImageGallery() {
         setimageError("You don't have access to this gallery");
         setLoading(false);
         setisLogin(true);
-        console.log(response.data);
+        // console.log(response.data);
       } else if (response?.data?.lock === false) {
-        console.log(limit);
-        console.log(response.data);
+        // console.log(limit);
+        // console.log(response.data);
         setimages(response?.data?.data);
         setimageError(null);
         setLoading(false);

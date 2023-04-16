@@ -12,13 +12,11 @@ export default function ChatInfo({ props }) {
   const dispatch = useDispatch();
 
   const handleClose = () => {
-    console.log(token);
     dispatch(setOpenChatInfo(false));
     dispatch(setChatInfo(null));
   };
 
   const handleDelete = () => {
-    console.log({ chatInfo });
     dispatch(setDelLoading(true));
     props.socket.emit('deleteMongoChat', chatInfo?._id, chatInfo);
   };
