@@ -22,6 +22,9 @@ import {
   setShowVideoPopup,
   setTotalOnlineUsers,
   setShowOfflineTextPopup,
+  setOpenChatInfo,
+  setChatInfo,
+  setDelLoading,
 } from '../features/state/globalState';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -40,6 +43,7 @@ import Search from '../components/Search';
 import { liveImg } from '../composable/image';
 import React from 'react';
 import { serverTimestamp, Timestamp } from 'firebase/firestore';
+import ChatInfo from '../components/chat/ChatInfo';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -139,7 +143,9 @@ export default function Chat(props) {
         id: token.id,
         name: token.name,
         uId: token.id,
+        email: token?.email,
         url: url,
+        deletedMsg: '',
         createdAt: new Date(),
       };
     } else if (chat) {
@@ -147,7 +153,9 @@ export default function Chat(props) {
         id: token.id,
         name: token.name,
         uId: token.id,
+        email: token?.email,
         chat: chat,
+        deletedMsg: '',
         createdAt: new Date(),
       };
     }
@@ -184,14 +192,6 @@ export default function Chat(props) {
     props.socket.on('alert', function (msg) {
       setAlert(msg);
     });
-
-    const stopScrol = setInterval(() => {
-      scrollToBottom();
-    }, 10);
-
-    setTimeout(() => {
-      clearInterval(stopScrol);
-    }, 700);
 
     props.socket.on('incoming-call', (caller) => {
       if (caller.id !== props.socket.id) {
@@ -309,15 +309,47 @@ export default function Chat(props) {
       console.log(data);
       dispatch(setMsg(data));
       setolderMsgLoading(false);
+      dispatch(setDelLoading(false));
+      dispatch(setOpenChatInfo(false));
     });
+  });
+
+  useEffect(() => {
     props.socket.emit('getscchat', 60);
   }, []);
 
+  useEffect(() => {
+    const stopScrol = setInterval(() => {
+      scrollToBottom();
+    }, 10);
+
+    setTimeout(() => {
+      clearInterval(stopScrol);
+    }, 700);
+  }, [msg]);
+
+  const openChatInfo = useSelector((state) => state.global.openChatInfo);
+
+  const handleSelfChatInfo = (m) => {
+    dispatch(setOpenChatInfo(true));
+    dispatch(setChatInfo(m));
+    console.log(m);
+  };
+
+  const handleOtherChatInfo = (m) => {
+    dispatch(setOpenChatInfo(true));
+    dispatch(setChatInfo(m));
+    console.log(m);
+  };
   return (
     <>
       <Navbar callSend={callSend} socket={props.socket} />
       <Progress uploading={uploading} />
-
+      {openChatInfo ? (
+        <div className="fixed left-0 right-0 top-0 bottom-0 flex justify-center items-center bg-gray-800/80 z-50">
+          <ChatInfo props={props} />
+        </div>
+      ) : null}
       <div className="scroll-style xl:w-[600px] lg:w[500px] md:[350px] h-[70.5vh] overflow-y-scroll m-auto">
         {/* <div>
           {openCalling && <Caller closeCall={closeCall} />}
@@ -349,8 +381,9 @@ export default function Chat(props) {
             {msg.map((m, index) =>
               token && m.uId == token.id ? (
                 <div
+                  onClick={() => handleSelfChatInfo(m)}
                   ref={messagesEndRef}
-                  className=" relative col-start-1 col-end-4    text-white bg-emerald-700 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-[300px]  break-words shadow-md ml-auto mr-1"
+                  className=" cursor-pointer relative col-start-1 col-end-4    text-white bg-emerald-700 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-[300px]  break-words shadow-md ml-auto mr-1"
                   key={index}
                 >
                   {m.url && m.url.includes('mp4') && m.url.includes('video') ? (
@@ -383,9 +416,10 @@ export default function Chat(props) {
                   </p> */}
                 </div>
               ) : (
-                <div className="col-start-1 col-end-4" key={index}>
+                <div className="col-start-1 col-end-4 " key={index}>
                   <div
-                    className=" ml-1 relative float-left text-white  bg-gray-800 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-full  break-words shadow-md"
+                    onClick={() => handleOtherChatInfo(m)}
+                    className="cursor-pointer ml-1 relative float-left text-white  bg-gray-800 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-full  break-words shadow-md"
                     ref={messagesEndRef}
                   >
                     {m.url &&
@@ -432,7 +466,7 @@ export default function Chat(props) {
       {(siteStatus && siteStatus.chat) || (token && token.admin) ? (
         <form
           onSubmit={sendMsg}
-          className=" relative mb-3 text-center max-w-[600px] m-auto mt-5"
+          className=" relative  mb-3 text-center 2xl:max-w-[600px] xl:max-w-[600px] lg:max-w-[600px] md:max-w-[600px] max-w-xs m-auto mt-5"
         >
           <div>
             {isTypings && isTypings.isTyping && isTypings.id != id ? (
@@ -502,7 +536,7 @@ export default function Chat(props) {
                   onClick={() => {
                     setismenu(!ismenu);
                   }}
-                  className=" w-9 h-9 border-[1px] border-gray-500 rounded-md text-white"
+                  className=" w-9 h-9 text-gray-300 hover:text-gray-400"
                 >
                   <ion-icon name="document-outline"></ion-icon>
                 </button>
@@ -521,7 +555,7 @@ export default function Chat(props) {
 
             {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input
-                className=" bg-gray-700 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-sm "
+                className=" bg-gray-900 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
                 type="text"
                 name="chatField"
                 onChange={(e) => handleChat(e)}

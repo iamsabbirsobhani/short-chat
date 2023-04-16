@@ -56,8 +56,31 @@ export const globalState = createSlice({
     totalOnline: 0,
     // show offline text popup
     showOfflineTextPopup: true,
+    // chat Component
+    // open chat info
+    openChatInfo: false,
+    chatInfo: {},
+    delLoading: false,
+    chatDeleted: false,
   },
   reducers: {
+    // chat Component
+    // chat deleted
+    setChatDeleted: (state, payload) => {
+      state.chatDeleted = payload.payload;
+    },
+    // delete loading
+    setDelLoading: (state, payload) => {
+      state.delLoading = payload.payload;
+    },
+    // chat info
+    setChatInfo: (state, payload) => {
+      state.chatInfo = payload.payload;
+    },
+    //  open chat info
+    setOpenChatInfo: (state, payload) => {
+      state.openChatInfo = payload.payload;
+    },
     // show offline text popup
 
     setShowOfflineTextPopup: (state, payload) => {
@@ -334,6 +357,10 @@ export const {
   setIsVideoOnFromEvent,
   setTotalOnlineUsers,
   setShowOfflineTextPopup,
+  setOpenChatInfo,
+  setChatInfo,
+  setDelLoading,
+  setChatDeleted
 } = globalState.actions;
 
 export default globalState.reducer;

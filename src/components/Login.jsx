@@ -11,7 +11,7 @@ export default function Login({
 
       <div className=" z-[60] absolute left-0 right-0 top-0 bottom-0 flex justify-center items-center">
         <form
-          className=" shadow-lg p-5 w-80 bg-gray-900 flex flex-col rounded-sm"
+          className=" shadow-lg p-5 w-80 bg-gray-800 flex flex-col rounded-sm"
           onSubmit={handleLogin}
         >
           <input
@@ -33,11 +33,11 @@ export default function Login({
 
           <div className=" text-center">
             {isLodaing ? (
-              <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">
-                <div className="border-4 flex justify-center items-center   border-t-4 border-t-gray-500 border-white animate-spin  relative m-auto h-6 w-6 bg-sky-500 rounded-full"></div>
+              <button className=" shadow-md w-40 text-white rounded-sm bg-gray-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-gray-600">
+                <div className="border-4 flex justify-center items-center   border-t-4 border-t-gray-500 border-white animate-spin  relative m-auto h-6 w-6 bg-gray-500 rounded-full"></div>
               </button>
             ) : (
-              <button className=" shadow-md w-40 text-white rounded-sm bg-sky-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-sky-600">
+              <button className=" shadow-md w-40 text-white rounded-sm bg-gray-500 p-3 transition duration-200 mt-4 uppercase font-semibold hover:bg-gray-600">
                 Submit
               </button>
             )}
