@@ -13,10 +13,8 @@ export default function Drawer({ drawerToggle, socket }) {
       <div
         onClick={drawerToggle}
         className="background w-full h-full backdrop-blur-sm z-[80] fixed left-0 right-0 top-0 bottom-0"
-      >
-        <h1>Drawer</h1>
-      </div>
-      <div className="drawer p-2 w-[220px] h-full bg-gray-700/80 z-[100] fixed top-0 left-0 ">
+      ></div>
+      <div className="drawer p-2 w-[220px] h-full  bg-gradient-to-r from-gray-600/50 to-gray-700/50 z-[100] fixed top-0 left-0 ">
         <div className=" flex items-center justify-end mt-2 mb-2 mr-2">
           <div
             onClick={drawerToggle}
@@ -37,7 +35,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 navigate('/');
                 drawerToggle();
               }}
-              className=" text-white bg-gray-500 p-2 rounded-sm shadow-md w-full hover:bg-gray-600 duration-300"
+              className=" text-white border-[1px] border-gray-500 bg-gray-700 p-2 rounded-sm shadow-md w-full  duration-300"
             >
               <div className="  flex justify-center items-center text-2xl">
                 <ion-icon name="chatbox-ellipses"></ion-icon>
@@ -52,7 +50,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 navigate('logs');
                 drawerToggle();
               }}
-              className=" text-white bg-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider hover:bg-gray-600 duration-500"
+              className=" text-white border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
             >
               User Logs
             </button>

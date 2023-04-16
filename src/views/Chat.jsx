@@ -555,7 +555,7 @@ export default function Chat(props) {
 
             {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
               <input
-                className=" bg-gray-900 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
+                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
                 type="text"
                 name="chatField"
                 onChange={(e) => handleChat(e)}
