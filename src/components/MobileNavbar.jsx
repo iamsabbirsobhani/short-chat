@@ -69,7 +69,7 @@ export default function MobileNavbar({ callSend, socket }) {
 
         {/* lockscreen overlay no business with nav menus */}
         {lockscreen ? (
-          <div className=" flex justify-center items-center w-full h-full fixed top-0 left-0 right-0 bottom-0 z-[100] backdrop-blur-xl">
+          <div className=" flex justify-center items-center w-full h-full fixed top-0 left-0 right-0 bottom-0 z-[100] bg-gray-900">
             <div className=" ">
               <form onSubmit={unlockScreen}>
                 <input
