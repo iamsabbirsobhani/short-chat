@@ -70,7 +70,7 @@ export default function ChatTypingForm({
                             type="file"
                             accept="image/*,video/*"
                             name=""
-                            disabled
+                            // disabled
                             id="file-input"
                             ref={inputFile}
                             onChange={(e) => handleUpload(e)}
