@@ -1,37 +1,28 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { format } from 'date-fns';
 import '../styles/chat.scss';
 import _debounce from 'lodash/debounce';
-import TypingIndicator from '../components/TypingIndicator';
 import Caller from '../components/Caller';
 import { useSelector, useDispatch } from 'react-redux';
 import Receiver from '../components/Receiver';
 import Navbar from '../components/Navbar';
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Announce from '../components/Announce';
+
 import {
   openCallerScreenOn,
   openCallerScreenOff,
   receiverUIFnOn,
   receiverUIFnOff,
-  callTimerOn,
   setPeerId,
   callTimerOff,
   setMsg,
-  setShowVideoPopup,
   setTotalOnlineUsers,
-  setShowOfflineTextPopup,
   setOpenChatInfo,
   setChatInfo,
   setDelLoading,
 } from '../features/state/globalState';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import { io } from 'socket.io-client';
 
 import { fileUpload } from '../composable/fileUpload';
-import { async } from '@firebase/util';
 import Progress from '../components/Progress';
 import { Route, Routes } from 'react-router-dom';
 import TranscriptChat from './TranscriptChat';
@@ -40,16 +31,10 @@ import Logs from '../components/Logs';
 import Admin from './Admin';
 import Call from './Call';
 import Search from '../components/Search';
-import { liveImg } from '../composable/image';
 import React from 'react';
-import { serverTimestamp, Timestamp } from 'firebase/firestore';
 import ChatInfo from '../components/chat/ChatInfo';
-import Chats from '../components/chat/Chats';
+import ChatConroller from '../components/chat/ChatController';
 import ChatTypingForm from '../components/chat/ChatTypingForm';
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export default function Chat(props) {
   let navigate = useNavigate();
@@ -57,22 +42,13 @@ export default function Chat(props) {
   const offlineTextInput = useRef();
 
   const openCalling = useSelector((state) => state.global.openCalling);
-  const hasAnnounce = useSelector((state) => state.global.hasAnnounce);
-  const totalOnlineUsers = useSelector((state) => state.global.totalOnline);
-  const showOfflineTextPopup = useSelector(
-    (state) => state.global.showOfflineTextPopup,
-  );
 
-  const svideo = useSelector((state) => state.global.showVideoPopupLive);
-
-  const announce = useSelector((state) => state.global.announce);
   const msg = useSelector((state) => state.global.msg);
 
   const receiverUI = useSelector((state) => state.global.receiverUI);
   const token = useSelector((state) => state.global.token);
 
   const siteStatus = useSelector((state) => state.global.siteStatus);
-  const [pickSuccess, setpickSuccess] = React.useState(false);
 
   const dispatch = useDispatch();
   const debounceFn = useCallback(_debounce(handleDebounce, 600), []);
@@ -360,13 +336,14 @@ export default function Chat(props) {
         </div>
 
         {/* all Chats component */}
-        <Chats
+        <ChatConroller
           msg={msg}
           handleOlderMessage={handleOlderMessage}
           olderMsgLoading={olderMsgLoading}
           token={token}
           messagesEndRef={messagesEndRef}
           handleSelfChatInfo={handleSelfChatInfo}
+          handleOtherChatInfo={handleOtherChatInfo}
         />
       </div>
       {/* Chat typing form and indicator component */}
