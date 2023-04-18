@@ -44,6 +44,8 @@ import { liveImg } from '../composable/image';
 import React from 'react';
 import { serverTimestamp, Timestamp } from 'firebase/firestore';
 import ChatInfo from '../components/chat/ChatInfo';
+import Chats from '../components/chat/Chats';
+import ChatTypingForm from '../components/chat/ChatTypingForm';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -350,240 +352,36 @@ export default function Chat(props) {
         </div>
       ) : null}
       <div className="scroll-style xl:w-[600px] lg:w[500px] md:[350px] h-[70.5vh] overflow-y-scroll m-auto">
-        {/* <div>
+        <div>
           {openCalling && <Caller closeCall={closeCall} />}
           {receiverUI && (
             <Receiver callReceive={callReceive} callEnd={callEnd} />
           )}
-        </div> */}
+        </div>
 
-        {msg.length ? (
-          <div className="grid grid-cols-2 gap-2">
-            {!olderMsgLoading ? (
-              <div
-                onClick={handleOlderMessage}
-                className="border-2 col-span-2 border-gray-50 rounded-full w-32 mt-5 mb-5 ml-auto mr-auto p-2 cursor-pointer"
-              >
-                <h1 className="text-gray-50 text-center text-xs">
-                  Older Messages
-                </h1>
-              </div>
-            ) : (
-              <div>
-                <div className=" z-50 fixed w-full h-full left-0 right-0 bottom-0 top-0  ml-auto mr-auto flex justify-center items-center bg-gray-400/50">
-                  <h1 className="text-gray-50 text-center text-lg font-bold">
-                    Loading...
-                  </h1>
-                </div>
-              </div>
-            )}
-            {msg.map((m, index) =>
-              token && m.uId == token.id ? (
-                <div
-                  onClick={() => handleSelfChatInfo(m)}
-                  ref={messagesEndRef}
-                  className=" cursor-pointer relative col-start-1 col-end-4    text-white bg-emerald-700 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-[300px]  break-words shadow-md ml-auto mr-1"
-                  key={index}
-                >
-                  {m.url && m.url.includes('mp4') && m.url.includes('video') ? (
-                    <video width="320" height="240" muted controls>
-                      <source src={m.url} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : m.url && m.url.includes('audio') ? (
-                    <audio controls className=" w-44">
-                      <source src={m.url} type="audio/ogg" />
-                    </audio>
-                  ) : (
-                    <div className=" rounded-md mt-1 mb-1 ">
-                      <img loading="lazy" src={m.url} alt="" />
-                    </div>
-                  )}
-                  {m.chat &&
-                  m.chat.includes('mp4') &&
-                  m.chat.includes('video') ? (
-                    <video width="320" height="240" muted controls>
-                      <source src={m.chat} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : m.deletedMsg ? (
-                    <h1 className=" mt-1 mb-1 font-bold  uppercase">
-                      {m.chat}
-                    </h1>
-                  ) : (
-                    <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
-                  )}
-
-                  {/* <p className=" absolute bottom-0 text-[10px] text-gray-300 right-1">
-                    {format(new Date(m.createdAt), 'PPp')}
-                  </p> */}
-                </div>
-              ) : (
-                <div className="col-start-1 col-end-4 " key={index}>
-                  <div
-                    onClick={() => handleOtherChatInfo(m)}
-                    className="cursor-pointer ml-1 relative float-left text-white  bg-gray-800 p-3 rounded-lg xl:max-w-full lg:max-w-full max-w-full  break-words shadow-md"
-                    ref={messagesEndRef}
-                  >
-                    {m.url &&
-                    m.url.includes('mp4') &&
-                    m.url.includes('video') ? (
-                      <video width="320" height="240" muted controls>
-                        <source src={m.url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : m.url && m.url.includes('audio') ? (
-                      <audio controls className=" w-44">
-                        <source src={m.url} type="audio/ogg" />
-                      </audio>
-                    ) : (
-                      <div className=" rounded-md mt-1 mb-1 ">
-                        <img loading="lazy" src={m.url} alt="" />
-                      </div>
-                    )}
-
-                    {m.chat &&
-                    m.chat.includes('mp4') &&
-                    m.chat.includes('video') ? (
-                      <video width="320" height="240" muted controls>
-                        <source src={m.chat} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : (
-                      <h1 className=" mt-1 mb-1 ">{m.chat}</h1>
-                    )}
-                    {/* <p className=" relative bottom-0 text-[10px] text-gray-300 right-1">
-                      {format(new Date(m.createdAt), 'PPp')}
-                    </p> */}
-                  </div>
-                </div>
-              ),
-            )}
-          </div>
-        ) : (
-          <div className=" text-white text-2xl flex h-full w-full  justify-center items-center">
-            Loading...
-          </div>
-        )}
+        {/* all Chats component */}
+        <Chats
+          msg={msg}
+          handleOlderMessage={handleOlderMessage}
+          olderMsgLoading={olderMsgLoading}
+          token={token}
+          messagesEndRef={messagesEndRef}
+          handleSelfChatInfo={handleSelfChatInfo}
+        />
       </div>
-      {true ? (
-        <form
-          onSubmit={sendMsg}
-          className=" relative  mb-3 text-center 2xl:max-w-[600px] xl:max-w-[600px] lg:max-w-[600px] md:max-w-[600px] max-w-xs m-auto mt-5"
-        >
-          <div>
-            {isTypings && isTypings.isTyping && isTypings.id != id ? (
-              <TypingIndicator />
-            ) : null}
-            {/* <TypingIndicator /> */}
-          </div>
-
-          <div className=" relative">
-            {true ? (
-              <div className=" rounded-full absolute left-3 top-1.5">
-                {ismenu ? (
-                  <div className="backdrop-blur-md shadow-lg transition-opacity duration-500 flex  justify-between w-24 p-1 rounded-md absolute bottom-11 -left-2 z-50">
-                    <div className="cursor-pointer w-10 h-10 rounded-full flex justify-center items-center">
-                      <label
-                        htmlFor="audio-file"
-                        className=" cursor-pointer text-white text-xl"
-                      >
-                        <ion-icon name="mic-outline"></ion-icon>
-                      </label>
-                      <input
-                        className=" hidden"
-                        type="file"
-                        accept="audio/*"
-                        name="audio-file"
-                        id="audio-file"
-                        onChange={(e) => handleUpload(e)}
-                      />
-                    </div>
-                    <label htmlFor="chatField">
-                      <div className="text-gray-50 p-2 cursor-pointer   w-10 h-10 rounded-full left-7 top-1.5">
-                        <label
-                          htmlFor="file-input"
-                          className=" cursor-pointer "
-                        >
-                          <ion-icon name="image"></ion-icon>
-                        </label>
-                        {(siteStatus && siteStatus.fileInput) ||
-                        (token && token.admin) ? (
-                          <input
-                            className=" hidden w-9 cursor-pointer"
-                            type="file"
-                            accept="image/*,video/*"
-                            name=""
-                            id="file-input"
-                            ref={inputFile}
-                            onChange={(e) => handleUpload(e)}
-                          />
-                        ) : (
-                          <input
-                            className=" hidden w-9  cursor-pointer"
-                            type="file"
-                            accept="image/*,video/*"
-                            name=""
-                            disabled
-                            id="file-input"
-                            ref={inputFile}
-                            onChange={(e) => handleUpload(e)}
-                          />
-                        )}
-                      </div>
-                    </label>
-                  </div>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setismenu(!ismenu);
-                  }}
-                  className=" w-9 h-9 text-gray-300 hover:text-gray-400"
-                >
-                  <ion-icon name="document-outline"></ion-icon>
-                </button>
-              </div>
-            ) : (
-              <div className=" rounded-full absolute left-7 top-1.5">
-                <button
-                  type="button"
-                  disabled
-                  className=" absolute w-9 h-9 rounded-full text-white"
-                >
-                  <ion-icon name="document-outline"></ion-icon>
-                </button>
-              </div>
-            )}
-
-            {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
-              <input
-                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
-                type="text"
-                name="chatField"
-                onChange={(e) => handleChat(e)}
-                placeholder="Message..."
-                autoComplete="off"
-              />
-            ) : (
-              <input
-                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
-                type="text"
-                name="chatField"
-                onChange={(e) => handleChat(e)}
-                placeholder="Message..."
-                autoComplete="off"
-              />
-            )}
-            <button
-              type="submit"
-              className="  h-9 w-9 p-2 text-gray-300 absolute right-[10px] top-[6px] hover:text-gray-400"
-            >
-              <ion-icon name="send"></ion-icon>
-            </button>
-          </div>
-        </form>
-      ) : null}
+      {/* Chat typing form and indicator component */}
+      <ChatTypingForm
+        isTypings={isTypings}
+        sendMsg={sendMsg}
+        ismenu={ismenu}
+        siteStatus={siteStatus}
+        token={token}
+        inputFile={inputFile}
+        setismenu={setismenu}
+        handleChat={handleChat}
+        id={id}
+        handleUpload={handleUpload}
+      />
       <Routes>
         <Route
           path="transcript"
