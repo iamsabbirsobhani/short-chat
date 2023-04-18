@@ -70,8 +70,8 @@ export default function ChatInfo({ props }) {
             </div>
           </div>
         ) : null}
-        <p className="">
-          Received: {format(new Date(chatInfo?.createdAt), 'PPPPpp')}
+        <p className=" bg-yellow-900 p-1 mt-3">
+          Time: {format(new Date(chatInfo?.createdAt), 'PPPPpp')}
         </p>
 
         <div className="mt-5">
@@ -82,7 +82,7 @@ export default function ChatInfo({ props }) {
                 onClick={handleDelete}
                 className="flex items-center text-red-500 bg-gray-50 font-bold p-2 rounded-sm shadow-md"
               >
-                <h1>Delete!</h1>
+                <h1>Unsend!</h1>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -103,7 +103,7 @@ export default function ChatInfo({ props }) {
                 className="flex items-center text-red-500 bg-gray-50 font-bold p-2 rounded-sm shadow-md"
                 disabled
               >
-                <h1>Deleting...</h1>
+                <h1>Unseding...</h1>
                 <div className="animate-spin">
                   <ion-icon name="reload"></ion-icon>
                 </div>
