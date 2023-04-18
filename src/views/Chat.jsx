@@ -68,7 +68,8 @@ export default function Chat(props) {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView();
+    // messagesEndRef.current?.scrollIntoView();
+    messagesEndRef.current?.scrollTo(0, messagesEndRef.current.scrollHeight);
   };
 
   const handleUpload = async (e) => {
@@ -150,6 +151,11 @@ export default function Chat(props) {
       e.target.chatField.value = null;
     }
   };
+
+  // task: try to fix scroll to bottom
+  useEffect(() => {
+    scrollToBottom();
+  });
 
   useEffect(() => {
     props.socket.on('is-there-only-users', (data) => {
@@ -298,7 +304,7 @@ export default function Chat(props) {
   useEffect(() => {
     const stopScrol = setInterval(() => {
       scrollToBottom();
-    }, 10);
+    }, 100);
 
     setTimeout(() => {
       clearInterval(stopScrol);
@@ -358,6 +364,7 @@ export default function Chat(props) {
         handleChat={handleChat}
         id={id}
         handleUpload={handleUpload}
+        scrollToBottom={scrollToBottom}
       />
       <Routes>
         <Route

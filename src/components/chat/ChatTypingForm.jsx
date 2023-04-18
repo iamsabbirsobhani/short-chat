@@ -1,3 +1,5 @@
+import TypingIndicator from '../../components/TypingIndicator';
+
 export default function ChatTypingForm({
   isTypings,
   sendMsg,

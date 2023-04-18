@@ -35,7 +35,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 navigate('/');
                 drawerToggle();
               }}
-              className=" text-white border-[1px] border-gray-500 bg-gray-700 p-2 rounded-sm shadow-md w-full  duration-300"
+              className=" text-white border-[1px] border-gray-500  p-2 rounded-sm shadow-md w-full  duration-300"
             >
               <div className="  flex justify-center items-center text-2xl">
                 <ion-icon name="chatbox-ellipses"></ion-icon>
