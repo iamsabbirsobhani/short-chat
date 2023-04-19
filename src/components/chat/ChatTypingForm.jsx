@@ -1,5 +1,5 @@
 import TypingIndicator from '../../components/TypingIndicator';
-
+import { useSelector } from 'react-redux';
 export default function ChatTypingForm({
   isTypings,
   sendMsg,
@@ -12,6 +12,7 @@ export default function ChatTypingForm({
   id,
   handleUpload,
 }) {
+  const permit = useSelector((state) => state.global.adminPermissions);
   return (
     <>
       {true ? (
@@ -29,7 +30,7 @@ export default function ChatTypingForm({
           <div className=" relative">
             {true ? (
               <div className=" rounded-full absolute left-3 top-1.5">
-                {ismenu ? (
+                {ismenu && permit && permit.fileInput ? (
                   <div className="backdrop-blur-md shadow-lg transition-opacity duration-500 flex  justify-between w-24 p-1 rounded-md absolute bottom-11 -left-2 z-50">
                     <div className="cursor-pointer w-10 h-10 rounded-full flex justify-center items-center">
                       <label
@@ -55,7 +56,7 @@ export default function ChatTypingForm({
                         >
                           <ion-icon name="image"></ion-icon>
                         </label>
-                        {(siteStatus && siteStatus.fileInput) ||
+                        {(permit && permit.fileInput) ||
                         (token && token.admin) ? (
                           <input
                             className=" hidden w-9 cursor-pointer"
@@ -72,7 +73,7 @@ export default function ChatTypingForm({
                             type="file"
                             accept="image/*,video/*"
                             name=""
-                            // disabled
+                            disabled
                             id="file-input"
                             ref={inputFile}
                             onChange={(e) => handleUpload(e)}
@@ -104,7 +105,7 @@ export default function ChatTypingForm({
               </div>
             )}
 
-            {(siteStatus && siteStatus.chatInput) || (token && token.admin) ? (
+            {(permit && permit.chatInput) || (token && token.admin) ? (
               <input
                 className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
                 type="text"
@@ -118,6 +119,7 @@ export default function ChatTypingForm({
                 className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
                 type="text"
                 name="chatField"
+                disabled
                 onChange={(e) => handleChat(e)}
                 placeholder="Message..."
                 autoComplete="off"

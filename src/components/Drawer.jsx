@@ -4,6 +4,7 @@ import { setToken, setPage } from '../features/state/globalState';
 
 export default function Drawer({ drawerToggle, socket }) {
   const token = useSelector((state) => state.global.token);
+  const permit = useSelector((state) => state.global.adminPermissions);
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
@@ -70,6 +71,91 @@ export default function Drawer({ drawerToggle, socket }) {
               </button>
             </div>
           ) : null}
+
+          {token && token.admin === true ? (
+            permit && permit.fileInput ? (
+              <div className=" mt-2">
+                <button
+                  onClick={() => {
+                    socket.emit('set-admin-permissions', 'fileInput', false);
+                    // drawerToggle();
+                  }}
+                  className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                >
+                  File Off
+                </button>
+              </div>
+            ) : (
+              <div className=" mt-2">
+                <button
+                  onClick={() => {
+                    socket.emit('set-admin-permissions', 'fileInput', true);
+                    // drawerToggle();
+                  }}
+                  className=" text-green-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                >
+                  File On?
+                </button>
+              </div>
+            )
+          ) : null}
+
+          {token && token.admin === true ? (
+            permit && permit.online ? (
+              <div className=" mt-2">
+                <button
+                  onClick={() => {
+                    socket.emit('set-admin-permissions', 'online', false);
+                    // drawerToggle();
+                  }}
+                  className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                >
+                  Online Off
+                </button>
+              </div>
+            ) : (
+              <div className=" mt-2">
+                <button
+                  onClick={() => {
+                    socket.emit('set-admin-permissions', 'online', true);
+                    // drawerToggle();
+                  }}
+                  className=" text-green-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                >
+                  Online On?
+                </button>
+              </div>
+            )
+          ) : null}
+
+          {token && token.admin === true ? (
+            permit && permit.chatInput ? (
+              <div className=" mt-2">
+                <button
+                  onClick={() => {
+                    socket.emit('set-admin-permissions', 'chatInput', false);
+                    // drawerToggle();
+                  }}
+                  className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                >
+                  Chat Input Off
+                </button>
+              </div>
+            ) : (
+              <div className=" mt-2">
+                <button
+                  onClick={() => {
+                    socket.emit('set-admin-permissions', 'chatInput', true);
+                    // drawerToggle();
+                  }}
+                  className=" text-green-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                >
+                  Chat Input On?
+                </button>
+              </div>
+            )
+          ) : null}
+
           <div className="logout mt-4 text-center relative -bottom-32">
             <button
               onClick={() => {

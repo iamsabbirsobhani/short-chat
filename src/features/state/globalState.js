@@ -64,8 +64,14 @@ export const globalState = createSlice({
     chatDeleted: false,
     // imageGallery
     imageGalleryCode: null,
+    // admin permissions
+    adminPermissions: [],
   },
   reducers: {
+    // admin permissions
+    setAdminPermissions: (state, payload) => {
+      state.adminPermissions = payload.payload;
+    },
     // imageGallery
     setImageGalleryCode: (state, payload) => {
       state.imageGalleryCode = payload.payload;
@@ -367,7 +373,8 @@ export const {
   setChatInfo,
   setDelLoading,
   setChatDeleted,
-  setImageGalleryCode
+  setImageGalleryCode,
+  setAdminPermissions
 } = globalState.actions;
 
 export default globalState.reducer;

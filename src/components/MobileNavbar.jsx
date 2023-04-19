@@ -16,6 +16,7 @@ export default function MobileNavbar({ callSend, socket }) {
   const drawer = useSelector((state) => state.global.drawer);
   const siteStatus = useSelector((state) => state.global.siteStatus);
   const totalOnline = useSelector((state) => state.global.totalOnline);
+  const permit = useSelector((state) => state.global.adminPermissions);
   const connectedUsers = useSelector((state) => state.global.connectedUsers);
   const showOfflineTextPopup = useSelector(
     (state) => state.global.showOfflineTextPopup,
@@ -98,7 +99,31 @@ export default function MobileNavbar({ callSend, socket }) {
         {(connectedUsers && siteStatus && siteStatus.online) || token ? (
           <div className=" flex">
             {connectedUsers.map((item, index) =>
-              item && token && item.id !== token.id && item.online ? (
+              item &&
+              token &&
+              item.id !== token.id &&
+              item.online &&
+              permit &&
+              permit.online ? (
+                <div
+                  key={index}
+                  className="flex items-center rounded-full ml-2 border-2  p-2 border-gray-500 shadow-sm cursor-pointer"
+                >
+                  {item.online ? (
+                    <>
+                      <div className="name mr-2 ">
+                        <p className=" text-xs text-gray-200">
+                          {item &&
+                            item.name &&
+                            item.name.charAt(0).toUpperCase() +
+                              item.name.substr(1).toLowerCase()}
+                        </p>
+                      </div>
+                      <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
+                    </>
+                  ) : null}
+                </div>
+              ) : item && item.id !== 32 && token && item.id !== token.id ? (
                 <div
                   key={index}
                   className="flex items-center rounded-full ml-2 border-2  p-2 border-gray-500 shadow-sm cursor-pointer"

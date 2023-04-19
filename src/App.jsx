@@ -14,6 +14,7 @@ import {
   setAllAnnounce,
   setVideoPermission,
   setIsVideoOnFromEvent,
+  setAdminPermissions,
 } from './features/state/globalState';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -170,6 +171,19 @@ function App(props) {
       );
     };
   }, []);
+
+  // all the admin permissions events
+  useEffect(() => {
+    props.socket.on('get-admin-permissions', (data) => {
+      dispatch(setAdminPermissions(data));
+      console.log(data);
+    });
+  });
+
+  useEffect(() => {
+    props.socket.emit('inquiry-admin-permissions');
+  }, []);
+  // end of all the admin permissions events
 
   // fcm
   useEffect(() => {
