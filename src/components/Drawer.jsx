@@ -8,6 +8,8 @@ export default function Drawer({ drawerToggle, socket }) {
   const permit = useSelector((state) => state.global.adminPermissions);
   const [ischangePasswordOpen, setischangePasswordOpen] = useState(false);
   const [ischangePasswordMsg, setischangePasswordMsg] = useState('');
+  const [isinputMsgMaxLengthOpen, setisinputMsgMaxLengthOpen] = useState(false);
+  const [isinputMsgMaxLengthMsg, setisinputMsgMaxLengthMsg] = useState('');
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,15 +23,24 @@ export default function Drawer({ drawerToggle, socket }) {
         setischangePasswordMsg('Try Again!');
       }
     });
+
+    socket.on('get-admin-permissions', (data) => {
+      if (data) {
+        setisinputMsgMaxLengthMsg('Input Message Max Length Changed!');
+      } else {
+        setisinputMsgMaxLengthOpen(true);
+        setisinputMsgMaxLengthMsg('Try Again!');
+      }
+    });
   });
 
   return (
     <>
       <div
         onClick={drawerToggle}
-        className="background w-full h-full backdrop-blur-sm z-[80] fixed left-0 right-0 top-0 bottom-0"
+        className="background w-full h-full backdrop-blur-sm z-[80] fixed left-0 right-0 top-0 bottom-0 "
       ></div>
-      <div className="drawer p-2 w-[220px] h-full  bg-gradient-to-r from-gray-600/50 to-gray-700/50 z-[100] fixed top-0 left-0 ">
+      <div className="overflow-y-scroll drawer p-2 w-[220px] h-full  bg-gradient-to-r from-gray-600/50 to-gray-700/50 z-[100] fixed top-0 left-0 ">
         <div className=" flex items-center justify-end mt-2 mb-2 mr-2">
           <div
             onClick={drawerToggle}
@@ -170,6 +181,7 @@ export default function Drawer({ drawerToggle, socket }) {
             )
           ) : null}
 
+          {/* password change */}
           {token && token.admin === true ? (
             <div className=" mt-3">
               <button
@@ -185,7 +197,7 @@ export default function Drawer({ drawerToggle, socket }) {
           ) : null}
 
           {ischangePasswordOpen ? (
-            <div className=" border p-1 rounded-md mt-3 w-fit border-gray-500">
+            <div className=" border p-1 rounded-md mt-3 w-[100%] border-gray-500">
               <div className=" ml-auto mr-0 w-fit">
                 <button
                   onClick={() => {
@@ -207,7 +219,7 @@ export default function Drawer({ drawerToggle, socket }) {
               >
                 <input
                   type="text"
-                  className="p-2  w-fit"
+                  className="p-2 w-full"
                   placeholder="Password"
                   required
                 />
@@ -216,11 +228,72 @@ export default function Drawer({ drawerToggle, socket }) {
                   className=" p-2 bg-blue-500 rounded-md text-white mt-3 w-full"
                   type="submit"
                 >
-                  Change
+                  Change Password
                 </button>
               </form>
             </div>
           ) : null}
+
+          {/* end of password change */}
+
+          {/* input msg max length change */}
+          {token && token.admin === true ? (
+            <div className=" mt-3">
+              <button
+                onClick={() => {
+                  setisinputMsgMaxLengthOpen(true);
+                  // drawerToggle();
+                }}
+                className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+              >
+                Change Message Max Length
+              </button>
+            </div>
+          ) : null}
+
+          {isinputMsgMaxLengthOpen ? (
+            <div className=" border p-1 rounded-md mt-3 w-[100%] border-gray-500">
+              <div className=" ml-auto mr-0 w-fit">
+                <button
+                  onClick={() => {
+                    setisinputMsgMaxLengthOpen(false);
+                  }}
+                  className=" p-2 bg-red-500 rounded-md text-white mt-3"
+                >
+                  Close
+                </button>
+              </div>
+              <form
+                className=" mt-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setisinputMsgMaxLengthMsg('Changing...');
+                  console.log(e.target[0].value);
+                  socket.emit(
+                    'set-admin-permissions',
+                    'inputMaxLength',
+                    e.target[0].value,
+                  );
+                }}
+              >
+                <input
+                  type="text"
+                  className="p-2 w-full"
+                  placeholder="Input Message Max Length"
+                  required
+                />
+                <p className=" text-red-500 mt-3">{isinputMsgMaxLengthMsg}</p>
+                <button
+                  className=" p-2 bg-blue-500 rounded-md text-white mt-3 w-full"
+                  type="submit"
+                >
+                  Change Limit
+                </button>
+              </form>
+            </div>
+          ) : null}
+
+          {/* end of input msg max length change */}
 
           <div className="logout mt-4 text-center relative -bottom-32">
             <button

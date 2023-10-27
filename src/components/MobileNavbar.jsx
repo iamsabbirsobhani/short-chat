@@ -125,8 +125,9 @@ export default function MobileNavbar({ callSend, socket }) {
                 </div>
               ) : item &&
                 item.online &&
-                item.id !== 32 &&
+                item.id !== 301 &&
                 token &&
+                token.admin &&
                 item.id !== token.id ? (
                 <div
                   key={index}

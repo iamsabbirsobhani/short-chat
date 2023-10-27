@@ -1,5 +1,6 @@
 import TypingIndicator from '../../components/TypingIndicator';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 export default function ChatTypingForm({
   isTypings,
   sendMsg,
@@ -87,6 +88,7 @@ export default function ChatTypingForm({
                             accept="image/*,video/*"
                             name=""
                             disabled
+                            maxLength={permit.inputMaxLength}
                             id="file-input"
                             ref={inputFile}
                             onChange={(e) => handleUpload(e)}
@@ -123,6 +125,16 @@ export default function ChatTypingForm({
                 className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
                 type="text"
                 name="chatField"
+                onChange={(e) => handleChat(e)}
+                placeholder="Message..."
+                autoComplete="off"
+              />
+            ) : permit && !permit.chatInput && permit.inputMaxLength > 0 ? (
+              <input
+                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
+                type="text"
+                name="chatField"
+                maxLength={permit.inputMaxLength}
                 onChange={(e) => handleChat(e)}
                 placeholder="Message..."
                 autoComplete="off"
