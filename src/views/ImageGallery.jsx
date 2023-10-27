@@ -30,6 +30,7 @@ export default function ImageGallery() {
   const [url, seturl] = useState(null);
   const noScroll = isPreviewOpen ? 'overflow-hidden' : '';
   const [loading, setLoading] = useState(false);
+  const [id, setid] = useState('');
 
   const [fetchCount, sefetchCount] = useState(0);
 
@@ -43,10 +44,12 @@ export default function ImageGallery() {
         API + '/unlockImage/' + code + '/' + limit,
       );
       resData(response);
+      // console.log({ code: response.data });
     } else if (imageGalleryCode) {
       const response = await axios.get(
         API + '/unlockImage/' + imageGalleryCode + '/' + limit,
       );
+      // console.log({ imageGalleryCode: response.data });
       resData(response);
     }
     function resData(response) {
@@ -86,16 +89,18 @@ export default function ImageGallery() {
     dispatch(setImageGalleryCode(null));
   };
 
-  const handleClosePreview = (e) => {
+  const handleClosePreview = (e, id) => {
     if (isPreviewOpen) {
-      seturl(e.target.src);
+      seturl(e?.target?.src);
       setisPreviewOpen(!isPreviewOpen);
     } else {
       setTimeout(() => {
-        seturl(e.target.src);
+        seturl(e?.target?.src);
         setisPreviewOpen(!isPreviewOpen);
       }, 250);
     }
+    setid(id);
+    // console.log(id);
   };
 
   // load more implementation
@@ -121,7 +126,13 @@ export default function ImageGallery() {
   return (
     <>
       {isPreviewOpen && (
-        <ImagePreviewer handleClosePreview={handleClosePreview} url={url} />
+        <ImagePreviewer
+          fetchImages={fetchImages}
+          imageGalleryCode={imageGalleryCode}
+          id={id}
+          handleClosePreview={handleClosePreview}
+          url={url}
+        />
       )}
       {isLogin && (
         <LoginPlus
@@ -232,7 +243,7 @@ export default function ImageGallery() {
               ) : (
                 <div className=" flex flex-col">
                   <img
-                    onClick={(e) => handleClosePreview(e)}
+                    onClick={(e) => handleClosePreview(e, link._id)}
                     className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
                     key={link._id}
                     src={link.url}
@@ -256,7 +267,7 @@ export default function ImageGallery() {
             )
           : img.map((link, index) => (
               <img
-                onClick={(e) => handleClosePreview(e)}
+                onClick={(e) => handleClosePreview(e, link._id)}
                 className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
                 key={index}
                 src={link.url}

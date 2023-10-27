@@ -125,7 +125,7 @@ export default function Chat(props) {
         email: token?.email,
         url: url,
         deletedMsg: '',
-        createdAt: new Date(),
+        createdAt: Date.now(),
       };
     } else if (chat) {
       msg = {
@@ -135,7 +135,7 @@ export default function Chat(props) {
         email: token?.email,
         chat: chat,
         deletedMsg: '',
-        createdAt: new Date(),
+        createdAt: Date.now(),
       };
     }
 
@@ -490,7 +490,7 @@ export default function Chat(props) {
                             >
                               <button
                                 onClick={() => handleBlurImageSelf(m._id)}
-                                className=" border-2 rounded-full text-yellow-500 p-2 border-yellow-500 italic hover:text-yellow-600 hover:border-yellow-600 duration-300 shadow-md backdrop-blur-lg font-bold"
+                                className=" border-2 rounded-full text-yellow-500 p-2 border-yellow-500 italic hover:text-yellow-600 outline   drop-shadow-md  hover:border-yellow-600 duration-300 shadow-md backdrop-blur-lg font-bold bg-yellow-900/80"
                               >
                                 Tap to see clear
                               </button>
@@ -600,7 +600,7 @@ export default function Chat(props) {
                           >
                             <button
                               onClick={() => handleBlurImageOther(m._id)}
-                              className=" border-2 rounded-full text-yellow-500 p-2 border-yellow-500 italic hover:text-yellow-600 hover:border-yellow-600 duration-300 shadow-md backdrop-blur-lg font-bold"
+                              className=" border-2 rounded-full text-yellow-500 p-2 border-yellow-500 italic hover:text-yellow-600 outline   drop-shadow-md  hover:border-yellow-600 duration-300 shadow-md backdrop-blur-lg font-bold bg-yellow-900/80"
                             >
                               Tap to see clear
                             </button>

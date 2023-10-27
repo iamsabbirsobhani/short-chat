@@ -96,7 +96,7 @@ export default function MobileNavbar({ callSend, socket }) {
         ) : null}
         {/* end lockscreen overlay */}
 
-        {(connectedUsers && siteStatus && siteStatus.online) || token ? (
+        {(connectedUsers && permit && permit.online) || token ? (
           <div className=" flex">
             {connectedUsers.map((item, index) =>
               item &&
@@ -123,7 +123,11 @@ export default function MobileNavbar({ callSend, socket }) {
                     </>
                   ) : null}
                 </div>
-              ) : item && item.id !== 32 && token && item.id !== token.id ? (
+              ) : item &&
+                item.online &&
+                item.id !== 32 &&
+                token &&
+                item.id !== token.id ? (
                 <div
                   key={index}
                   className="flex items-center rounded-full ml-2 border-2  p-2 border-gray-500 shadow-sm cursor-pointer"

@@ -1,13 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setToken, setPage } from '../features/state/globalState';
+import { useEffect, useState } from 'react';
 
 export default function Drawer({ drawerToggle, socket }) {
   const token = useSelector((state) => state.global.token);
   const permit = useSelector((state) => state.global.adminPermissions);
+  const [ischangePasswordOpen, setischangePasswordOpen] = useState(false);
+  const [ischangePasswordMsg, setischangePasswordMsg] = useState('');
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket.on('change-startup-password', (data) => {
+      if (data && data.status === true) {
+        setischangePasswordMsg('Password Changed!');
+      } else {
+        setischangePasswordOpen(true);
+        setischangePasswordMsg('Try Again!');
+      }
+    });
+  });
 
   return (
     <>
@@ -156,6 +170,58 @@ export default function Drawer({ drawerToggle, socket }) {
             )
           ) : null}
 
+          {token && token.admin === true ? (
+            <div className=" mt-3">
+              <button
+                onClick={() => {
+                  setischangePasswordOpen(true);
+                  // drawerToggle();
+                }}
+                className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+              >
+                Change Password
+              </button>
+            </div>
+          ) : null}
+
+          {ischangePasswordOpen ? (
+            <div className=" border p-1 rounded-md mt-3 w-fit border-gray-500">
+              <div className=" ml-auto mr-0 w-fit">
+                <button
+                  onClick={() => {
+                    setischangePasswordOpen(false);
+                  }}
+                  className=" p-2 bg-red-500 rounded-md text-white mt-3"
+                >
+                  Close
+                </button>
+              </div>
+              <form
+                className=" mt-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setischangePasswordMsg('Changing...');
+                  console.log(e.target[0].value);
+                  socket.emit('change-startup-password', e.target[0].value);
+                }}
+              >
+                <input
+                  type="text"
+                  className="p-2  w-fit"
+                  placeholder="Password"
+                  required
+                />
+                <p className=" text-red-500 mt-3">{ischangePasswordMsg}</p>
+                <button
+                  className=" p-2 bg-blue-500 rounded-md text-white mt-3 w-full"
+                  type="submit"
+                >
+                  Change
+                </button>
+              </form>
+            </div>
+          ) : null}
+
           <div className="logout mt-4 text-center relative -bottom-32">
             <button
               onClick={() => {
@@ -169,6 +235,10 @@ export default function Drawer({ drawerToggle, socket }) {
             >
               Logout
             </button>
+
+            <div className="mt-10 text-gray-500">
+              <h1>Copyright &copy; 2023</h1>
+            </div>
           </div>
         </div>
       </div>

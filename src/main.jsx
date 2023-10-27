@@ -13,8 +13,8 @@ import Signup from './views/Signup';
 import { Navigate } from 'react-router-dom';
 import { API } from '../api';
 // const socket = io(
-//   "http://192.168.0.100:8080",
-//   JSON.parse(localStorage.getItem("user"))
+//   'http://192.168.0.100:8083',
+//   JSON.parse(localStorage.getItem('user')),
 // );
 
 // var peer = new Peer(undefined, {
@@ -35,7 +35,7 @@ if ('serviceWorker' in navigator) {
 }
 
 const socket = io(API);
-// const socket = io("http://localhost:8083");
+// const socket = io('http://localhost:8083');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

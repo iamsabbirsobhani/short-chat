@@ -176,7 +176,7 @@ function App(props) {
   useEffect(() => {
     props.socket.on('get-admin-permissions', (data) => {
       dispatch(setAdminPermissions(data));
-      console.log(data);
+      // console.log(data);
     });
   });
 
@@ -207,7 +207,7 @@ function App(props) {
     let data = JSON.parse(localStorage.getItem('user'));
     getToken(messaging, {
       vapidKey:
-        'BK5U3OatUDnGtiYBeLQ3IoB4wNE1mbsCfS30x8SJlwgXZOg4BJGvFGfjio8AdQNKg9u8xC5o_61dsw2pUyY2SCo',
+        'BBEa_nuJNnpBv-PFvKl2M2kw2i9o8t8q8OhituylMdaZ7AaJlr51508TghS36s3Aofz-S3W-ddWIyxyNEubWl1s',
     })
       .then((currentToken) => {
         if (currentToken) {

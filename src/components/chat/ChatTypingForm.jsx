@@ -30,7 +30,7 @@ export default function ChatTypingForm({
           <div className=" relative">
             {true ? (
               <div className=" rounded-full absolute left-3 top-1.5">
-                {ismenu && permit && permit.fileInput ? (
+                {ismenu ? (
                   <div className="backdrop-blur-md shadow-lg transition-opacity duration-500 flex  justify-between w-24 p-1 rounded-md absolute bottom-11 -left-2 z-50">
                     <div className="cursor-pointer w-10 h-10 rounded-full flex justify-center items-center">
                       <label
@@ -39,14 +39,27 @@ export default function ChatTypingForm({
                       >
                         <ion-icon name="mic-outline"></ion-icon>
                       </label>
-                      <input
-                        className=" hidden"
-                        type="file"
-                        accept="audio/*"
-                        name="audio-file"
-                        id="audio-file"
-                        onChange={(e) => handleUpload(e)}
-                      />
+                      {(permit && permit.fileInput) ||
+                      (token && token.admin) ? (
+                        <input
+                          className=" hidden"
+                          type="file"
+                          accept="audio/*"
+                          name="audio-file"
+                          id="audio-file"
+                          onChange={(e) => handleUpload(e)}
+                        />
+                      ) : (
+                        <input
+                          className=" hidden"
+                          type="file"
+                          accept="audio/*"
+                          disabled
+                          name="audio-file"
+                          id="audio-file"
+                          onChange={(e) => handleUpload(e)}
+                        />
+                      )}
                     </div>
                     <label htmlFor="chatField">
                       <div className="text-gray-50 p-2 cursor-pointer   w-10 h-10 rounded-full left-7 top-1.5">

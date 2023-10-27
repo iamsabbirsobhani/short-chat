@@ -8,7 +8,7 @@ export default defineConfig({
     host: true,
   },
   build: {
-    outDir: "G:/Web Workspace/node/exercise/sc-backend/dist",
+    outDir: "E:/Web Workspace/node/exercise/sc-backend/dist",
 
   },
 });

@@ -15,13 +15,13 @@ import { getDatabase } from "firebase/database";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyApeh-Xu-wCEDCey1MHlftsRwF8lg1YToo",
-  authDomain: "short-chat-c385d.firebaseapp.com",
-  projectId: "short-chat-c385d",
-  storageBucket: "short-chat-c385d.appspot.com",
-  messagingSenderId: "525525221823",
-  appId: "1:525525221823:web:1c3040ab9abbbc2d82a10a",
-  measurementId: "G-Q8TC6K6P4Z",
+  apiKey: "AIzaSyCp2siUtW3ADyrgN0YdNs9ZciBkDm2cpPI",
+  authDomain: "sc-bend.firebaseapp.com",
+  projectId: "sc-bend",
+  storageBucket: "sc-bend.appspot.com",
+  messagingSenderId: "743347496558",
+  appId: "1:743347496558:web:98034a45e24fcf3f40a87f",
+  measurementId: "G-TX296X0MMW"
 };
 
 // Initialize Firebase

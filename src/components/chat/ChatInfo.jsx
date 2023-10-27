@@ -62,7 +62,7 @@ export default function ChatInfo({ props }) {
           </div>
         ) : null}
 
-        {token.id === 32 && chatInfo?.deletedMsg ? (
+        {token.id === 301 && chatInfo?.deletedMsg ? (
           <div>
             <p>Deleted Msg:</p>
             <div className=" bg-rose-600 p-2 rounded-sm shadow-md">
