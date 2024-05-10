@@ -213,7 +213,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 onSubmit={(e) => {
                   e.preventDefault();
                   setischangePasswordMsg('Changing...');
-                  console.log(e.target[0].value);
+                  // console.log(e.target[0].value);
                   socket.emit('change-startup-password', e.target[0].value);
                 }}
               >
@@ -268,7 +268,7 @@ export default function Drawer({ drawerToggle, socket }) {
                 onSubmit={(e) => {
                   e.preventDefault();
                   setisinputMsgMaxLengthMsg('Changing...');
-                  console.log(e.target[0].value);
+                  // console.log(e.target[0].value);
                   socket.emit(
                     'set-admin-permissions',
                     'inputMaxLength',
@@ -310,7 +310,7 @@ export default function Drawer({ drawerToggle, socket }) {
             </button>
 
             <div className="mt-10 text-gray-500">
-              <h1>Copyright &copy; 2023</h1>
+              <h1>Copyright &copy; {new Date().getFullYear()}</h1>
             </div>
           </div>
         </div>
