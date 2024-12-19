@@ -11,6 +11,8 @@ import {
 import Stories from './Stories';
 import { useState, useEffect } from 'react';
 import { API } from '../../api';
+import OnlineStatusPopup from './OnlineStatusPopup';
+import OnlineDemoPopup from './OnlineDemoPopup';
 
 export default function MobileNavbar({ callSend, socket }) {
   const drawer = useSelector((state) => state.global.drawer);
@@ -20,6 +22,9 @@ export default function MobileNavbar({ callSend, socket }) {
   const connectedUsers = useSelector((state) => state.global.connectedUsers);
   const showOfflineTextPopup = useSelector(
     (state) => state.global.showOfflineTextPopup,
+  );
+  const isOnlineStatusPopupOpen = useSelector(
+    (state) => state.global.isOnlineStatusPopupOpen,
   );
   const token = useSelector((state) => state.global.token);
   const [showStories, setshowStories] = useState(false);
@@ -56,6 +61,7 @@ export default function MobileNavbar({ callSend, socket }) {
 
   return (
     <>
+      {isOnlineStatusPopupOpen ? <OnlineDemoPopup /> : null}
       <div className=" w-full flex justify-between items-center p-3 bg-gray-700 shadow-2xl text-white ">
         {/* {(siteStatus && siteStatus.menu) || (token && token.admin) ? ( */}
         {/* {token && token.admin ? ( */}
@@ -117,6 +123,16 @@ export default function MobileNavbar({ callSend, socket }) {
                             item.name &&
                             item.name.charAt(0).toUpperCase() +
                               item.name.substr(1).toLowerCase()}
+                          {isOnlineStatusPopupOpen ? (
+                            <OnlineStatusPopup
+                              name={
+                                item &&
+                                item.name &&
+                                item.name.charAt(0).toUpperCase() +
+                                  item.name.substr(1).toLowerCase()
+                              }
+                            />
+                          ) : null}
                         </p>
                       </div>
                       <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
@@ -141,6 +157,16 @@ export default function MobileNavbar({ callSend, socket }) {
                             item.name &&
                             item.name.charAt(0).toUpperCase() +
                               item.name.substr(1).toLowerCase()}
+                          {isOnlineStatusPopupOpen ? (
+                            <OnlineStatusPopup
+                              name={
+                                item &&
+                                item.name &&
+                                item.name.charAt(0).toUpperCase() +
+                                  item.name.substr(1).toLowerCase()
+                              }
+                            />
+                          ) : null}
                         </p>
                       </div>
                       <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>

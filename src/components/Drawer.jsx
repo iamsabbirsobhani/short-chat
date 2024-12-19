@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setToken, setPage } from '../features/state/globalState';
+import {
+  setToken,
+  setPage,
+  setIsOnlineStatusPopupOpen,
+} from '../features/state/globalState';
 import { useEffect, useState } from 'react';
 
 export default function Drawer({ drawerToggle, socket }) {
@@ -10,7 +14,6 @@ export default function Drawer({ drawerToggle, socket }) {
   const [ischangePasswordMsg, setischangePasswordMsg] = useState('');
   const [isinputMsgMaxLengthOpen, setisinputMsgMaxLengthOpen] = useState(false);
   const [isinputMsgMaxLengthMsg, setisinputMsgMaxLengthMsg] = useState('');
-
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -82,6 +85,18 @@ export default function Drawer({ drawerToggle, socket }) {
             </button>
           </div>
           {/* ) : null} */}
+
+          <div className=" mt-2">
+            <button
+              onClick={() => {
+                dispatch(setIsOnlineStatusPopupOpen(true));
+                // drawerToggle();
+              }}
+              className=" text-white border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+            >
+              Online
+            </button>
+          </div>
 
           {token && token.admin === true ? (
             <div className=" mt-2">

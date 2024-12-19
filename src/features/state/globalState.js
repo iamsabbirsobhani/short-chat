@@ -66,6 +66,7 @@ export const globalState = createSlice({
     imageGalleryCode: null,
     // admin permissions
     adminPermissions: [],
+    isOnlineStatusPopupOpen: false,
   },
   reducers: {
     // admin permissions
@@ -305,6 +306,9 @@ export const globalState = createSlice({
     incrementByAmount: (state, action) => {
       state.value += action.payload;
     },
+    setIsOnlineStatusPopupOpen: (state, payload) => {
+      state.isOnlineStatusPopupOpen = payload.payload;
+    }
   },
 });
 
@@ -374,7 +378,8 @@ export const {
   setDelLoading,
   setChatDeleted,
   setImageGalleryCode,
-  setAdminPermissions
+  setAdminPermissions,
+  setIsOnlineStatusPopupOpen
 } = globalState.actions;
 
 export default globalState.reducer;
