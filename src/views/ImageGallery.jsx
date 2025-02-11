@@ -7,6 +7,8 @@ import LoginPlus from '../components/LoginPlus';
 import LoadMore from '../components/image-gallery/LoadMore';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 import {
   incrLimitGallery,
@@ -136,6 +138,12 @@ export default function ImageGallery() {
       dispatch(setImageGalleryCode(null));
     };
   }, []);
+
+  const handlePageByDirectInput = (e) => {
+    e.preventDefault();
+    console.log(e.target[0].value);
+    setcurrentPage(e.target[0].value);
+  };
 
   return (
     <>
@@ -292,7 +300,7 @@ export default function ImageGallery() {
       {images ? (
         <div className=" text-center mt-3 mb-3 m-auto">
           {/* <LoadMore loadMore={loadMore} loading={loading} /> */}
-          <Stack spacing={2} className="w-fit m-auto text-center">
+          <Stack spacing={2} className="w-fit text-center mt-3 mb-3  m-auto">
             <Pagination
               defaultPage={1}
               count={totalPage}
@@ -305,6 +313,37 @@ export default function ImageGallery() {
               }}
             />
           </Stack>
+          <div className="mt-[10vh] mb-[10vh]">
+            <form
+              onSubmit={handlePageByDirectInput}
+              className="flex justify-center items-center"
+            >
+              <div className="">
+                <TextField
+                  id="outlined-number"
+                  className=""
+                  size="small"
+                  label="Number"
+                  type="number"
+                  slotProps={{
+                    inputLabel: {
+                      shrink: true,
+                    },
+                  }}
+                />
+              </div>
+              <div className="ml-4">
+                <Button
+                  size="small"
+                  variant="contained"
+                  type="submit"
+                  className="h-9"
+                >
+                  Go
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       ) : null}
     </>
