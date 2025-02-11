@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import LoginPlus from '../components/LoginPlus';
 import LoadMore from '../components/image-gallery/LoadMore';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 import {
   incrLimitGallery,
   resetLimitGallery,
@@ -31,8 +34,11 @@ export default function ImageGallery() {
   const noScroll = isPreviewOpen ? 'overflow-hidden' : '';
   const [loading, setLoading] = useState(false);
   const [id, setid] = useState('');
+  const [totalPage, setTotalPage] = useState(0);
 
   const [fetchCount, sefetchCount] = useState(0);
+
+  const [currentPage, setcurrentPage] = useState(1);
 
   // const [code, setcode] = useState(null);
 
@@ -41,13 +47,19 @@ export default function ImageGallery() {
 
     if (code) {
       const response = await axios.get(
-        API + '/unlockImage/' + code + '/' + limit,
+        API + '/unlockImage/' + code + '/' + 10 + '/' + (currentPage - 1),
       );
       resData(response);
       // console.log({ code: response.data });
     } else if (imageGalleryCode) {
       const response = await axios.get(
-        API + '/unlockImage/' + imageGalleryCode + '/' + limit,
+        API +
+          '/unlockImage/' +
+          imageGalleryCode +
+          '/' +
+          10 +
+          '/' +
+          (currentPage - 1),
       );
       // console.log({ imageGalleryCode: response.data });
       resData(response);
@@ -62,7 +74,9 @@ export default function ImageGallery() {
       } else if (response?.data?.lock === false) {
         // console.log(limit);
         // console.log(response.data);
-        setimages(response?.data?.data);
+        setimages(response?.data?.data?.documents);
+        console.log(response?.data?.data?.totalPage);
+        setTotalPage(response?.data?.data?.totalPage);
         setimageError(null);
         setLoading(false);
         setisLogin(false);
@@ -111,7 +125,7 @@ export default function ImageGallery() {
 
   useEffect(() => {
     fetchImages();
-  }, [limit]);
+  }, [limit, currentPage]);
   // load more implementation
 
   useEffect(() => {
@@ -276,8 +290,21 @@ export default function ImageGallery() {
             ))}
       </div>
       {images ? (
-        <div className=" text-center mt-3 mb-3">
-          <LoadMore loadMore={loadMore} loading={loading} />
+        <div className=" text-center mt-3 mb-3 m-auto">
+          {/* <LoadMore loadMore={loadMore} loading={loading} /> */}
+          <Stack spacing={2} className="w-fit m-auto text-center">
+            <Pagination
+              defaultPage={1}
+              count={totalPage}
+              variant="outlined"
+              shape="rounded"
+              color="primary"
+              onChange={(event, page) => {
+                console.log('page changed', page);
+                setcurrentPage(page);
+              }}
+            />
+          </Stack>
         </div>
       ) : null}
     </>

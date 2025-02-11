@@ -42,7 +42,7 @@ export const globalState = createSlice({
     findData: [],
     searchData: [],
     // imageGallery
-    limitGallery: 5,
+    limitGallery: 10,
     // SOcial post delete
     socialPostDeleted: false,
     // if video permission
