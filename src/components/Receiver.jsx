@@ -1,13 +1,13 @@
-import hacker from "../assets/hacker.png";
-import { useState } from "react";
-import { useRef, useEffect } from "react";
+import hacker from '../assets/hacker.png';
+import { useState } from 'react';
+import { useRef, useEffect } from 'react';
 
 function useOutsideAlerter(ref) {
-  const [state, setstate] = useState("");
+  const [state, setstate] = useState('');
   function shakeControl() {
-    setstate("shake-horizontal");
+    setstate('shake-horizontal');
     setTimeout(() => {
-      setstate("");
+      setstate('');
     }, 700);
   }
   useEffect(() => {
@@ -20,60 +20,63 @@ function useOutsideAlerter(ref) {
       }
     }
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref]);
   return state;
 }
+
 export default function Receiver({ callEnd, callReceive }) {
   const wrapperRef = useRef(null);
   //   useOutsideAlerter(wrapperRef);
+
   return (
     <>
-      <div className=" cursor-pointer fixed h-full z-30 text-white left-0 top-0 right-0 bottom-0 bg backdrop-blur-sm"></div>
-      <div className="slide-in-top bg-none  shadow-xl absolute z-40  top-0 right-0 left-0 bottom-0  text-white  flex justify-center items-center ">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 cursor-pointer"></div>
+      <div className="fixed inset-0 z-40 flex justify-center items-center p-4">
         <div
           ref={wrapperRef}
-          className={`w-80  rounded-xl p-7 bg-indigo-900 relative
-            ${useOutsideAlerter(wrapperRef)}`}
+          className={`bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8 max-w-sm w-full ${useOutsideAlerter(
+            wrapperRef,
+          )}`}
         >
-          <h1 className=" text-lg font-semibold text-center">
-            <span className=" animate-pulse"> Incoming Call</span>
-          </h1>
-          <div className="text-center flex justify-center mt-9 mb-20 animate-bounce">
-            <img className=" w-16 border-4 rounded-full" src={hacker} alt="" />
-          </div>
-          <div className=" absolute right-0 left-0 bottom-3 flex  justify-around">
-            {/* receive call */}
-            <div
-              onClick={callReceive}
-              className=" cursor-pointer text-white-600 bg-green-600 w-14 h-14 ml-5 rounded-full flex justify-center items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-              </svg>
+          <div className="text-center">
+            <h1 className="text-white text-2xl font-bold mb-6">
+              <span className="animate-pulse">Incoming Call</span>
+            </h1>
+
+            {/* Caller Avatar */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <img
+                  className="w-20 h-20 border-4 border-white/20 rounded-full object-cover animate-bounce"
+                  src={hacker}
+                  alt="Caller"
+                />
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-400 rounded-full animate-pulse"></div>
+              </div>
             </div>
-            {/* reject call */}
-            <div
-              onClick={callEnd}
-              className=" cursor-pointer text-white-600 bg-red-600 w-14 h-14 rounded-full mr-5 flex justify-center items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+
+            {/* Call Actions */}
+            <div className="flex justify-center space-x-6">
+              {/* Accept Call */}
+              <button
+                onClick={callReceive}
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white w-16 h-16 rounded-full flex justify-center items-center transition-all duration-300 transform hover:scale-110 shadow-lg"
               >
-                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-              </svg>
+                <ion-icon name="call" className="text-2xl"></ion-icon>
+              </button>
+
+              {/* Reject Call */}
+              <button
+                onClick={callEnd}
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white w-16 h-16 rounded-full flex justify-center items-center transition-all duration-300 transform hover:scale-110 shadow-lg"
+              >
+                <ion-icon name="call" className="text-2xl rotate-90"></ion-icon>
+              </button>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import {
   setDelLoading,
   setOpenChatInfo,
 } from '../../features/state/globalState';
+
 export default function ChatInfo({ props }) {
   const chatInfo = useSelector((state) => state.global.chatInfo);
   const token = useSelector((state) => state.global.token);
@@ -20,98 +21,119 @@ export default function ChatInfo({ props }) {
     dispatch(setDelLoading(true));
     props.socket.emit('deleteMongoChat', chatInfo?._id, chatInfo);
   };
+
   return (
-    <>
-      <div className=" font-mono bg-gray-700 p-2 text-gray-50 2xl:max-w-2xl xl:max-w-2xl  lg:max-w-2xl md:max-w-xs sm:max-w-xs max-w-xs  rounded-sm shadow-md break-words ">
-        <div className=" text-right">
-          <button onClick={handleClose} className=" text-gray-50">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </button>
+    <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-6 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4 sm:mb-6">
+        <h2 className="text-white text-lg sm:text-xl font-semibold">
+          Message Info
+        </h2>
+        <button
+          onClick={handleClose}
+          className="text-white/70 hover:text-white transition-colors duration-200 p-1"
+        >
+          <ion-icon name="close" className="text-xl sm:text-2xl"></ion-icon>
+        </button>
+      </div>
+
+      {/* Message Details */}
+      <div className="space-y-3 sm:space-y-4">
+        <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+          <p className="text-white/60 text-xs sm:text-sm">Sender UID</p>
+          <p className="text-white font-medium text-sm sm:text-base break-all">
+            {chatInfo?.uId}
+          </p>
         </div>
-        <p>Sender UID: {chatInfo?.uId}</p>
-        <h1>Sender: {chatInfo?.name}</h1>
-        <p>Packet UID: {chatInfo?._id}</p>
-        {chatInfo?.email ? <p>Email: {chatInfo?.email}</p> : null}
-        {chatInfo?.chat ? (
-          <div>
-            <p>Msg:</p>
-            <div className=" bg-stone-900 p-2 rounded-sm break-words shadow-md">
-              {chatInfo?.chat}
-            </div>
-          </div>
-        ) : null}
-        {chatInfo?.url ? (
-          <div>
-            <p>URL:</p>
-            <div className=" bg-stone-900 p-2 rounded-sm break-words shadow-md">
-              {chatInfo?.url}
-            </div>
-          </div>
-        ) : null}
 
-        {token.id === 301 && chatInfo?.deletedMsg ? (
-          <div>
-            <p>Deleted Msg:</p>
-            <div className=" bg-rose-600 p-2 rounded-sm shadow-md">
-              <h1 className="">{chatInfo?.deletedMsg}</h1>
+        <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+          <p className="text-white/60 text-xs sm:text-sm">Sender Name</p>
+          <p className="text-white font-medium text-sm sm:text-base">
+            {chatInfo?.name}
+          </p>
+        </div>
+
+        <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+          <p className="text-white/60 text-xs sm:text-sm">Packet UID</p>
+          <p className="text-white font-medium text-xs sm:text-sm break-all">
+            {chatInfo?._id}
+          </p>
+        </div>
+
+        {chatInfo?.email && (
+          <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+            <p className="text-white/60 text-xs sm:text-sm">Email</p>
+            <p className="text-white font-medium text-sm sm:text-base break-all">
+              {chatInfo?.email}
+            </p>
+          </div>
+        )}
+
+        {chatInfo?.chat && (
+          <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+            <p className="text-white/60 text-xs sm:text-sm mb-2">Message</p>
+            <div className="bg-white/10 rounded-lg p-2 sm:p-3">
+              <p className="text-white break-words text-sm sm:text-base">
+                {chatInfo?.chat}
+              </p>
             </div>
           </div>
-        ) : null}
-        <p className=" bg-yellow-900 p-1 mt-3">
-          Time: {format(new Date(chatInfo?.createdAt), 'PPPPpp')}
-        </p>
+        )}
 
-        <div className="mt-5">
-          {(token.id === chatInfo?.uId) &
-          (chatInfo?.deletedMsg?.length <= 0) ? (
-            !delLoading ? (
-              <button
-                onClick={handleDelete}
-                className="flex items-center text-red-500 bg-gray-50 font-bold p-2 rounded-sm shadow-md"
-              >
-                <h1>Unsend!</h1>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className=" w-4 h-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                  />
-                </svg>
-              </button>
-            ) : (
-              <button
-                className="flex items-center text-red-500 bg-gray-50 font-bold p-2 rounded-sm shadow-md"
-                disabled
-              >
-                <h1>Unseding...</h1>
-                <div className="animate-spin">
-                  <ion-icon name="reload"></ion-icon>
-                </div>
-              </button>
-            )
-          ) : null}
+        {chatInfo?.url && (
+          <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+            <p className="text-white/60 text-xs sm:text-sm mb-2">Media URL</p>
+            <div className="bg-white/10 rounded-lg p-2 sm:p-3">
+              <p className="text-white break-all text-xs sm:text-sm">
+                {chatInfo?.url}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {token.id === 301 && chatInfo?.deletedMsg && (
+          <div className="bg-white/5 rounded-lg p-2 sm:p-3">
+            <p className="text-white/60 text-xs sm:text-sm mb-2">
+              Deleted Message
+            </p>
+            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-2 sm:p-3">
+              <p className="text-red-300 text-sm sm:text-base break-words overflow-hidden">
+                {chatInfo?.deletedMsg}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-lg p-2 sm:p-3">
+          <p className="text-white/60 text-xs sm:text-sm">Timestamp</p>
+          <p className="text-white font-medium text-xs sm:text-sm">
+            {format(new Date(chatInfo?.createdAt), 'PPPPpp')}
+          </p>
         </div>
       </div>
-    </>
+
+      {/* Action Buttons */}
+      <div className="mt-4 sm:mt-6">
+        {token.id === chatInfo?.uId && chatInfo?.deletedMsg?.length <= 0 ? (
+          !delLoading ? (
+            <button
+              onClick={handleDelete}
+              className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-2 sm:py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 text-sm sm:text-base"
+            >
+              <ion-icon
+                name="trash"
+                className="text-base sm:text-lg"
+              ></ion-icon>
+              <span>Unsend Message</span>
+            </button>
+          ) : (
+            <div className="w-full bg-gray-500/50 text-white font-semibold py-2 sm:py-3 px-4 rounded-lg flex items-center justify-center space-x-2 text-sm sm:text-base">
+              <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <span>Deleting...</span>
+            </div>
+          )
+        ) : null}
+      </div>
+    </div>
   );
 }

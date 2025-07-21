@@ -25,293 +25,441 @@ export default function Drawer({ drawerToggle, socket }) {
     });
 
     socket.on('get-admin-permissions', (data) => {
-      if (data) {
-        setisinputMsgMaxLengthMsg('Input Message Max Length Changed!');
-      } else {
-        setisinputMsgMaxLengthOpen(true);
-        setisinputMsgMaxLengthMsg('Try Again!');
-      }
+      // This event is handled in App.jsx and stored in Redux
+      // We don't need to handle it here as we get the data from Redux state
+      console.log('Admin permissions updated:', data);
     });
-  });
+
+    // Cleanup event listeners
+    return () => {
+      socket.off('change-startup-password');
+      socket.off('get-admin-permissions');
+    };
+  }, [socket]);
 
   return (
     <>
+      {/* Backdrop */}
       <div
         onClick={drawerToggle}
-        className="background w-full h-full backdrop-blur-sm z-[80] fixed left-0 right-0 top-0 bottom-0 "
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
+        style={{ pointerEvents: 'auto' }}
       ></div>
-      <div className="overflow-y-scroll drawer p-2 w-[220px] h-full  bg-gradient-to-r from-gray-600/50 to-gray-700/50 z-[100] fixed top-0 left-0 ">
-        <div className=" flex items-center justify-end mt-2 mb-2 mr-2">
-          <div
-            onClick={drawerToggle}
-            className=" shadow-md  cursor-pointer rounded-sm close-button font-bold w-7 h-7 flex justify-center items-center  bg-gray-700/80 text-white text-right text-xl "
-          >
-            <ion-icon name="close" className=""></ion-icon>
-          </div>
-        </div>
 
-        <div className=" text-white text-center mt-2 mb-2 font-bold text-xl">
-          <h1>{token.name.toUpperCase()}</h1>
-        </div>
-        <div className="menu mt-3 ml-3  ">
-          <div className=" mt-2 ">
-            <button
-              onClick={() => {
-                dispatch(setPage(8));
-                navigate('/');
-                drawerToggle();
-              }}
-              className=" text-white border-[1px] border-gray-500  p-2 rounded-sm shadow-md w-full  duration-300"
-            >
-              <div className="  flex justify-center items-center text-2xl">
-                <ion-icon name="chatbox-ellipses"></ion-icon>
+      {/* Drawer */}
+      <div className="fixed top-0 left-0 h-full w-80 bg-white/10 backdrop-blur-xl border-r border-white/20 shadow-2xl z-[9999] overflow-y-auto">
+        {/* Header */}
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                <ion-icon
+                  name="person"
+                  className="text-white text-xl"
+                ></ion-icon>
               </div>
-            </button>
-          </div>
-
-          {/* {token && token.admin === true ? ( */}
-          <div className=" mt-2">
+              <div>
+                <h2 className="text-white font-semibold text-lg">
+                  {token.name}
+                </h2>
+                <p className="text-white/60 text-sm">User</p>
+              </div>
+            </div>
             <button
-              onClick={() => {
-                navigate('logs');
-                drawerToggle();
-              }}
-              className=" text-white border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+              onClick={drawerToggle}
+              className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-all duration-300"
             >
-              User Logs
+              <ion-icon name="close" className="text-lg"></ion-icon>
             </button>
           </div>
-          {/* ) : null} */}
+        </div>
 
-          {token && token.admin === true ? (
-            <div className=" mt-2">
+        {/* Menu Items */}
+        <div className="p-4 space-y-2">
+          {/* Chat Button */}
+          <button
+            onClick={() => {
+              dispatch(setPage(8));
+              navigate('/');
+              drawerToggle();
+            }}
+            className="w-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 hover:from-purple-500/30 hover:to-blue-500/30 border border-white/20 rounded-xl p-4 text-left transition-all duration-300 group"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <ion-icon
+                  name="chatbox-ellipses"
+                  className="text-white text-lg"
+                ></ion-icon>
+              </div>
+              <div>
+                <p className="text-white font-medium">Chat</p>
+                <p className="text-white/60 text-sm">Live messaging</p>
+              </div>
+            </div>
+          </button>
+
+          {/* User Logs */}
+          <button
+            onClick={() => {
+              navigate('logs');
+              drawerToggle();
+            }}
+            className="w-full bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-left transition-all duration-300 group"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <ion-icon
+                  name="document-text"
+                  className="text-white text-lg"
+                ></ion-icon>
+              </div>
+              <div>
+                <p className="text-white font-medium">User Logs</p>
+                <p className="text-white/60 text-sm">Activity history</p>
+              </div>
+            </div>
+          </button>
+
+          {/* Admin Section */}
+          {token && token.admin === true && (
+            <div className="space-y-2">
+              <div className="px-4 py-2">
+                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider">
+                  Admin Controls
+                </p>
+              </div>
+
+              {/* Debug Info - Remove in production */}
+              <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-xl p-3 mb-4">
+                <p className="text-yellow-300 text-xs font-medium mb-2">
+                  Debug Info:
+                </p>
+                <div className="text-yellow-200 text-xs space-y-1">
+                  <div>File Input: {permit?.fileInput ? '✅' : '❌'}</div>
+                  <div>Online Status: {permit?.online ? '✅' : '❌'}</div>
+                  <div>Chat Input: {permit?.chatInput ? '✅' : '❌'}</div>
+                  <div>
+                    Input Max Length: {permit?.inputMaxLength || 'Not set'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Image Gallery */}
               <button
                 onClick={() => {
                   navigate('images');
                   drawerToggle();
                 }}
-                className=" text-white border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                className="w-full bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-left transition-all duration-300 group"
               >
-                Image Gallery
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <ion-icon
+                      name="images"
+                      className="text-white text-lg"
+                    ></ion-icon>
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">Image Gallery</p>
+                    <p className="text-white/60 text-sm">Manage media</p>
+                  </div>
+                </div>
               </button>
-            </div>
-          ) : null}
 
-          {token && token.admin === true ? (
-            permit && permit.fileInput ? (
-              <div className=" mt-2">
+              {/* File Input Toggle */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                      <ion-icon
+                        name="folder"
+                        className="text-white text-sm"
+                      ></ion-icon>
+                    </div>
+                    <p className="text-white font-medium">File Upload</p>
+                  </div>
+                  <div
+                    className={`w-12 h-6 rounded-full transition-all duration-300 ${
+                      permit && permit.fileInput
+                        ? 'bg-green-500'
+                        : 'bg-gray-500'
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 bg-white rounded-full transition-all duration-300 transform ${
+                        permit && permit.fileInput
+                          ? 'translate-x-6'
+                          : 'translate-x-0.5'
+                      } translate-y-0.5`}
+                    ></div>
+                  </div>
+                </div>
                 <button
                   onClick={() => {
-                    socket.emit('set-admin-permissions', 'fileInput', false);
-                    // drawerToggle();
+                    console.log(
+                      'File Input Toggle clicked. Current state:',
+                      permit?.fileInput,
+                    );
+                    socket.emit(
+                      'set-admin-permissions',
+                      'fileInput',
+                      !(permit && permit.fileInput),
+                    );
                   }}
-                  className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                  className="text-white/60 text-sm hover:text-white transition-colors duration-200"
                 >
-                  File Off
+                  {permit && permit.fileInput ? 'Enabled' : 'Disabled'}
                 </button>
               </div>
-            ) : (
-              <div className=" mt-2">
-                <button
-                  onClick={() => {
-                    socket.emit('set-admin-permissions', 'fileInput', true);
-                    // drawerToggle();
-                  }}
-                  className=" text-green-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
-                >
-                  File On?
-                </button>
-              </div>
-            )
-          ) : null}
 
-          {token && token.admin === true ? (
-            permit && permit.online ? (
-              <div className=" mt-2">
+              {/* Online Status Toggle */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                      <ion-icon
+                        name="wifi"
+                        className="text-white text-sm"
+                      ></ion-icon>
+                    </div>
+                    <p className="text-white font-medium">Online Status</p>
+                  </div>
+                  <div
+                    className={`w-12 h-6 rounded-full transition-all duration-300 ${
+                      permit && permit.online ? 'bg-green-500' : 'bg-gray-500'
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 bg-white rounded-full transition-all duration-300 transform ${
+                        permit && permit.online
+                          ? 'translate-x-6'
+                          : 'translate-x-0.5'
+                      } translate-y-0.5`}
+                    ></div>
+                  </div>
+                </div>
                 <button
                   onClick={() => {
-                    socket.emit('set-admin-permissions', 'online', false);
-                    // drawerToggle();
+                    console.log(
+                      'Online Status Toggle clicked. Current state:',
+                      permit?.online,
+                    );
+                    socket.emit(
+                      'set-admin-permissions',
+                      'online',
+                      !(permit && permit.online),
+                    );
                   }}
-                  className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                  className="text-white/60 text-sm hover:text-white transition-colors duration-200"
                 >
-                  Online Off
+                  {permit && permit.online ? 'Visible' : 'Hidden'}
                 </button>
               </div>
-            ) : (
-              <div className=" mt-2">
-                <button
-                  onClick={() => {
-                    socket.emit('set-admin-permissions', 'online', true);
-                    // drawerToggle();
-                  }}
-                  className=" text-green-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
-                >
-                  Online On?
-                </button>
-              </div>
-            )
-          ) : null}
 
-          {token && token.admin === true ? (
-            permit && permit.chatInput ? (
-              <div className=" mt-2">
+              {/* Chat Input Toggle */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                      <ion-icon
+                        name="chatbubble"
+                        className="text-white text-sm"
+                      ></ion-icon>
+                    </div>
+                    <p className="text-white font-medium">Chat Input</p>
+                  </div>
+                  <div
+                    className={`w-12 h-6 rounded-full transition-all duration-300 ${
+                      permit && permit.chatInput
+                        ? 'bg-green-500'
+                        : 'bg-gray-500'
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 bg-white rounded-full transition-all duration-300 transform ${
+                        permit && permit.chatInput
+                          ? 'translate-x-6'
+                          : 'translate-x-0.5'
+                      } translate-y-0.5`}
+                    ></div>
+                  </div>
+                </div>
                 <button
                   onClick={() => {
-                    socket.emit('set-admin-permissions', 'chatInput', false);
-                    // drawerToggle();
+                    console.log(
+                      'Chat Input Toggle clicked. Current state:',
+                      permit?.chatInput,
+                    );
+                    socket.emit(
+                      'set-admin-permissions',
+                      'chatInput',
+                      !(permit && permit.chatInput),
+                    );
                   }}
-                  className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                  className="text-white/60 text-sm hover:text-white transition-colors duration-200"
                 >
-                  Chat Input Off
+                  {permit && permit.chatInput ? 'Enabled' : 'Disabled'}
                 </button>
               </div>
-            ) : (
-              <div className=" mt-2">
-                <button
-                  onClick={() => {
-                    socket.emit('set-admin-permissions', 'chatInput', true);
-                    // drawerToggle();
-                  }}
-                  className=" text-green-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
-                >
-                  Chat Input On?
-                </button>
-              </div>
-            )
-          ) : null}
 
-          {/* password change */}
-          {token && token.admin === true ? (
-            <div className=" mt-3">
+              {/* Change Password */}
               <button
                 onClick={() => {
                   setischangePasswordOpen(true);
-                  // drawerToggle();
                 }}
-                className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                className="w-full bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-left transition-all duration-300 group"
               >
-                Change Password
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <ion-icon
+                      name="key"
+                      className="text-white text-lg"
+                    ></ion-icon>
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">Change Password</p>
+                    <p className="text-white/60 text-sm">Update security</p>
+                  </div>
+                </div>
               </button>
-            </div>
-          ) : null}
 
-          {ischangePasswordOpen ? (
-            <div className=" border p-1 rounded-md mt-3 w-[100%] border-gray-500">
-              <div className=" ml-auto mr-0 w-fit">
-                <button
-                  onClick={() => {
-                    setischangePasswordOpen(false);
-                  }}
-                  className=" p-2 bg-red-500 rounded-md text-white mt-3"
-                >
-                  Close
-                </button>
-              </div>
-              <form
-                className=" mt-3"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setischangePasswordMsg('Changing...');
-                  // console.log(e.target[0].value);
-                  socket.emit('change-startup-password', e.target[0].value);
-                }}
-              >
-                <input
-                  type="text"
-                  className="p-2 w-full"
-                  placeholder="Password"
-                  required
-                />
-                <p className=" text-red-500 mt-3">{ischangePasswordMsg}</p>
-                <button
-                  className=" p-2 bg-blue-500 rounded-md text-white mt-3 w-full"
-                  type="submit"
-                >
-                  Change Password
-                </button>
-              </form>
-            </div>
-          ) : null}
-
-          {/* end of password change */}
-
-          {/* input msg max length change */}
-          {token && token.admin === true ? (
-            <div className=" mt-3">
+              {/* Change Message Max Length */}
               <button
                 onClick={() => {
                   setisinputMsgMaxLengthOpen(true);
-                  // drawerToggle();
                 }}
-                className=" text-red-500 border-[1px] border-gray-500 p-2 rounded-sm shadow-md w-full uppercase font-semibold tracking-wider  duration-500"
+                className="w-full bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 text-left transition-all duration-300 group"
               >
-                Change Message Max Length
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <ion-icon
+                      name="settings"
+                      className="text-white text-lg"
+                    ></ion-icon>
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">Message Length</p>
+                    <p className="text-white/60 text-sm">Set character limit</p>
+                  </div>
+                </div>
               </button>
             </div>
-          ) : null}
+          )}
 
-          {isinputMsgMaxLengthOpen ? (
-            <div className=" border p-1 rounded-md mt-3 w-[100%] border-gray-500">
-              <div className=" ml-auto mr-0 w-fit">
-                <button
-                  onClick={() => {
-                    setisinputMsgMaxLengthOpen(false);
+          {/* Password Change Modal */}
+          {ischangePasswordOpen && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 w-full max-w-md">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-white text-lg font-semibold">
+                    Change Password
+                  </h3>
+                  <button
+                    onClick={() => setischangePasswordOpen(false)}
+                    className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-all duration-300"
+                  >
+                    <ion-icon name="close" className="text-lg"></ion-icon>
+                  </button>
+                </div>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setischangePasswordMsg('Changing...');
+                    socket.emit('change-startup-password', e.target[0].value);
                   }}
-                  className=" p-2 bg-red-500 rounded-md text-white mt-3"
+                  className="space-y-4"
                 >
-                  Close
-                </button>
+                  <input
+                    type="text"
+                    className="w-full bg-white/10 border border-white/20 rounded-lg p-3 text-white placeholder-white/60 focus:outline-none focus:border-white/40 transition-all duration-300"
+                    placeholder="New Password"
+                    required
+                  />
+                  {ischangePasswordMsg && (
+                    <p className="text-green-400 text-sm">
+                      {ischangePasswordMsg}
+                    </p>
+                  )}
+                  <button
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
+                    type="submit"
+                  >
+                    Update Password
+                  </button>
+                </form>
               </div>
-              <form
-                className=" mt-3"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setisinputMsgMaxLengthMsg('Changing...');
-                  // console.log(e.target[0].value);
-                  socket.emit(
-                    'set-admin-permissions',
-                    'inputMaxLength',
-                    e.target[0].value,
-                  );
-                }}
-              >
-                <input
-                  type="text"
-                  className="p-2 w-full"
-                  placeholder="Input Message Max Length"
-                  required
-                />
-                <p className=" text-red-500 mt-3">{isinputMsgMaxLengthMsg}</p>
-                <button
-                  className=" p-2 bg-blue-500 rounded-md text-white mt-3 w-full"
-                  type="submit"
+            </div>
+          )}
+
+          {/* Message Length Modal */}
+          {isinputMsgMaxLengthOpen && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 w-full max-w-md">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-white text-lg font-semibold">
+                    Message Length Limit
+                  </h3>
+                  <button
+                    onClick={() => setisinputMsgMaxLengthOpen(false)}
+                    className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-all duration-300"
+                  >
+                    <ion-icon name="close" className="text-lg"></ion-icon>
+                  </button>
+                </div>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setisinputMsgMaxLengthMsg('Changing...');
+                    socket.emit(
+                      'set-admin-permissions',
+                      'inputMaxLength',
+                      e.target[0].value,
+                    );
+                  }}
+                  className="space-y-4"
                 >
-                  Change Limit
-                </button>
-              </form>
+                  <input
+                    type="number"
+                    className="w-full bg-white/10 border border-white/20 rounded-lg p-3 text-white placeholder-white/60 focus:outline-none focus:border-white/40 transition-all duration-300"
+                    placeholder="Max character limit"
+                    required
+                  />
+                  {isinputMsgMaxLengthMsg && (
+                    <p className="text-green-400 text-sm">
+                      {isinputMsgMaxLengthMsg}
+                    </p>
+                  )}
+                  <button
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
+                    type="submit"
+                  >
+                    Update Limit
+                  </button>
+                </form>
+              </div>
             </div>
-          ) : null}
+          )}
+        </div>
 
-          {/* end of input msg max length change */}
+        {/* Footer */}
+        <div className="p-4 mt-auto">
+          <button
+            onClick={() => {
+              dispatch(setPage(8));
+              drawerToggle();
+              dispatch(setToken(null));
+              localStorage.setItem('user', JSON.stringify(null));
+              navigate('signin');
+            }}
+            className="w-full bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
+          >
+            <ion-icon name="log-out" className="text-lg"></ion-icon>
+            <span>Logout</span>
+          </button>
 
-          <div className="logout mt-4 text-center relative -bottom-32">
-            <button
-              onClick={() => {
-                dispatch(setPage(8));
-                drawerToggle();
-                dispatch(setToken(null));
-                localStorage.setItem('user', JSON.stringify(null));
-                navigate('signin');
-              }}
-              className="font-bold border-2 border-gray-500 text-red-500  p-2 rounded-sm shadow-md"
-            >
-              Logout
-            </button>
-
-            <div className="mt-10 text-gray-500">
-              <h1>Copyright &copy; {new Date().getFullYear()}</h1>
-            </div>
+          <div className="text-center mt-6 text-white/40 text-sm">
+            <p>&copy; {new Date().getFullYear()} Chat App</p>
           </div>
         </div>
       </div>

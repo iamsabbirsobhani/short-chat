@@ -12,7 +12,7 @@ import Stories from './Stories';
 import { useState, useEffect } from 'react';
 import { API } from '../../api';
 
-export default function MobileNavbar({ callSend, socket }) {
+export default function MobileNavbar({ socket }) {
   const drawer = useSelector((state) => state.global.drawer);
   const siteStatus = useSelector((state) => state.global.siteStatus);
   const totalOnline = useSelector((state) => state.global.totalOnline);
@@ -27,7 +27,12 @@ export default function MobileNavbar({ callSend, socket }) {
   const [lockscreenmsg, setlockscreenmsg] = useState('');
   const dispatch = useDispatch();
 
+  // Check if we're in the main lock screen (from App.jsx state)
+  // We'll need to get this from a global state or prop
+  const isInLockScreen = !token; // If no token, we're likely in lock screen
+
   function drawerToggle() {
+    console.log('Drawer toggle clicked!'); // Debug log
     dispatch(toggleDrawer());
   }
 
@@ -56,153 +61,112 @@ export default function MobileNavbar({ callSend, socket }) {
 
   return (
     <>
-      <div className=" w-full flex justify-between items-center p-3 bg-gray-700 shadow-2xl text-white ">
-        {/* {(siteStatus && siteStatus.menu) || (token && token.admin) ? ( */}
-        {/* {token && token.admin ? ( */}
-        {token ? (
-          <div
-            onClick={() => drawerToggle()}
-            className=" text-2xl ml-2 cursor-pointer  flex  justify-center items-center"
-          >
-            <ion-icon name="grid"></ion-icon>
-          </div>
-        ) : null}
+      {/* Modern Floating Navbar - Only visible after unlock */}
+      {!isInLockScreen && (
+        <div
+          className={`fixed top-4 left-4 pointer-events-auto ${
+            drawer ? 'z-[9997]' : 'z-[9998]'
+          }`}
+        >
+          {token ? (
+            <button
+              onClick={() => {
+                console.log('Hamburger clicked!');
+                drawerToggle();
+              }}
+              className="w-12 h-12 bg-white/20 backdrop-blur-md border-2 border-white/30 rounded-xl flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 pointer-events-auto"
+              style={{ minWidth: '48px', minHeight: '48px' }}
+            >
+              <ion-icon name="menu" className="text-xl"></ion-icon>
+            </button>
+          ) : (
+            <div className="w-12 h-12 bg-red-500/20 backdrop-blur-md border-2 border-red-300/30 rounded-xl flex items-center justify-center text-red-300">
+              <span className="text-xs">No Token</span>
+            </div>
+          )}
+        </div>
+      )}
 
-        {/* lockscreen overlay no business with nav menus */}
-        {lockscreen ? (
-          <div className=" flex justify-center items-center w-full h-full fixed top-0 left-0 right-0 bottom-0 z-[100] bg-gray-900">
-            <div className=" ">
-              <form onSubmit={unlockScreen}>
-                <input
-                  className=" p-2 px-3 outline-none text-black rounded-sm shadow-md"
-                  type="password"
-                  placeholder="😂"
-                />
-                {lockscreenmsg ? (
-                  <div>
-                    <p className=" w-44 ml-3 mt-3 text-red-500 font-bold break-all">
+      {/* Debug Info - Only visible after unlock */}
+      {!isInLockScreen && (
+        <div
+          className={`fixed top-4 right-4 bg-black/50 text-white p-2 rounded text-xs ${
+            drawer ? 'z-[9997]' : 'z-[9998]'
+          }`}
+        >
+          <div>Token: {token ? 'Yes' : 'No'}</div>
+          <div>Drawer: {drawer ? 'Open' : 'Closed'}</div>
+        </div>
+      )}
+
+      {/* Lockscreen Modal */}
+      {lockscreen ? (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 w-full max-w-sm">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <ion-icon
+                  name="lock-closed"
+                  className="text-white text-2xl"
+                ></ion-icon>
+              </div>
+              <h3 className="text-white text-lg font-semibold mb-2">
+                Welcome to Chat
+              </h3>
+              <p className="text-white/70 text-sm mb-6">
+                Enter your access code to continue
+              </p>
+              <form onSubmit={unlockScreen} className="space-y-4">
+                <div className="relative">
+                  <input
+                    className="w-full bg-white/10 border border-white/20 rounded-lg p-3 pl-4 pr-4 text-white placeholder-white/60 focus:outline-none focus:border-white/40 transition-all duration-300 text-center text-lg font-mono"
+                    type="password"
+                    placeholder="Type code..."
+                    autoFocus
+                    autoComplete="off"
+                    maxLength="10"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <ion-icon
+                      name="key"
+                      className="text-white/40 text-lg"
+                    ></ion-icon>
+                  </div>
+                </div>
+                {lockscreenmsg && (
+                  <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+                    <p className="text-red-300 text-sm font-medium">
                       {lockscreenmsg}
                     </p>
                   </div>
-                ) : null}
-                <div className=" text-center mt-3">
-                  <button className=" w-full h-10 bg-gray-700 rounded-sm shadow-md font-bold">
-                    Yup!
-                  </button>
-                </div>
+                )}
+                <button
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  type="submit"
+                >
+                  <div className="flex items-center justify-center space-x-2">
+                    <ion-icon name="unlock" className="text-lg"></ion-icon>
+                    <span>Unlock Chat</span>
+                  </div>
+                </button>
               </form>
+
+              {/* Help text */}
+              <div className="mt-6 pt-4 border-t border-white/10">
+                <p className="text-white/50 text-xs">
+                  Contact admin for access code
+                </p>
+              </div>
             </div>
           </div>
-        ) : null}
-        {/* end lockscreen overlay */}
-
-        {(connectedUsers && permit && permit.online) || token ? (
-          <div className=" flex">
-            {connectedUsers.map((item, index) =>
-              item &&
-              token &&
-              item.id !== token.id &&
-              item.online &&
-              permit &&
-              permit.online ? (
-                <div
-                  key={index}
-                  className="flex items-center rounded-full ml-2 border-2  p-2 border-gray-500 shadow-sm cursor-pointer"
-                >
-                  {item.online ? (
-                    <>
-                      <div className="name mr-2 ">
-                        <p className=" text-xs text-gray-200">
-                          {item &&
-                            item.name &&
-                            item.name.charAt(0).toUpperCase() +
-                              item.name.substr(1).toLowerCase()}
-                        </p>
-                      </div>
-                      <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
-                    </>
-                  ) : null}
-                </div>
-              ) : item &&
-                item.online &&
-                item.id !== 301 &&
-                token &&
-                token.admin &&
-                item.id !== token.id ? (
-                <div
-                  key={index}
-                  className="flex items-center rounded-full ml-2 border-2  p-2 border-gray-500 shadow-sm cursor-pointer"
-                >
-                  {item.online ? (
-                    <>
-                      <div className="name mr-2 ">
-                        <p className=" text-xs text-gray-200">
-                          {item &&
-                            item.name &&
-                            item.name.charAt(0).toUpperCase() +
-                              item.name.substr(1).toLowerCase()}
-                        </p>
-                      </div>
-                      <div className="name h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
-                    </>
-                  ) : null}
-                </div>
-              ) : null,
-            )}
-          </div>
-        ) : null}
-
-        <div className="flex justify-between">
-          <div className=" mr-5">
-            <button
-              onClick={() => isLockedScreen()}
-              className="  w-8 h-8 flex justify-center items-center rounded-full"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {true ? (
-            // {(siteStatus && siteStatus.call) || (token && token.admin) ? (
-            <div
-              onClick={callSend}
-              className=" cursor-pointer w-8 h-8 flex justify-center items-center rounded-md"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                />
-              </svg>
-            </div>
-          ) : null}
         </div>
-      </div>
+      ) : null}
 
-      <div>
-        {drawer ? <Drawer socket={socket} drawerToggle={drawerToggle} /> : null}
-      </div>
+      {/* Drawer */}
+      {drawer && <Drawer drawerToggle={drawerToggle} socket={socket} />}
+
+      {/* Stories */}
+      {showStories && <Stories setshowStories={setshowStories} />}
     </>
   );
 }

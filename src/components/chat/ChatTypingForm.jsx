@@ -1,6 +1,6 @@
-import TypingIndicator from '../../components/TypingIndicator';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
+
 export default function ChatTypingForm({
   isTypings,
   sendMsg,
@@ -14,66 +14,68 @@ export default function ChatTypingForm({
   handleUpload,
 }) {
   const permit = useSelector((state) => state.global.adminPermissions);
+
   return (
     <>
       {true ? (
-        <form
-          onSubmit={sendMsg}
-          className=" relative  mb-3 text-center 2xl:max-w-[600px] xl:max-w-[600px] lg:max-w-[600px] md:max-w-[600px] max-w-xs m-auto mt-5"
-        >
-          <div>
-            {isTypings && isTypings.isTyping && isTypings.id != id ? (
-              <TypingIndicator />
-            ) : null}
-            {/* <TypingIndicator /> */}
-          </div>
-
-          <div className=" relative">
+        <form onSubmit={sendMsg} className="relative">
+          {/* Input Container */}
+          <div className="relative">
+            {/* Attachment Menu */}
             {true ? (
-              <div className=" rounded-full absolute left-3 top-1.5">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 z-10">
                 {ismenu ? (
-                  <div className="backdrop-blur-md shadow-lg transition-opacity duration-500 flex  justify-between w-24 p-1 rounded-md absolute bottom-11 -left-2 z-50">
-                    <div className="cursor-pointer w-10 h-10 rounded-full flex justify-center items-center">
-                      <label
-                        htmlFor="audio-file"
-                        className=" cursor-pointer text-white text-xl"
-                      >
-                        <ion-icon name="mic-outline"></ion-icon>
-                      </label>
-                      {(permit && permit.fileInput) ||
-                      (token && token.admin) ? (
-                        <input
-                          className=" hidden"
-                          type="file"
-                          accept="audio/*"
-                          name="audio-file"
-                          id="audio-file"
-                          onChange={(e) => handleUpload(e)}
-                        />
-                      ) : (
-                        <input
-                          className=" hidden"
-                          type="file"
-                          accept="audio/*"
-                          disabled
-                          name="audio-file"
-                          id="audio-file"
-                          onChange={(e) => handleUpload(e)}
-                        />
-                      )}
-                    </div>
-                    <label htmlFor="chatField">
-                      <div className="text-gray-50 p-2 cursor-pointer   w-10 h-10 rounded-full left-7 top-1.5">
+                  <div className="absolute bottom-12 left-0 bg-white/10 backdrop-blur-md shadow-xl rounded-xl p-2 border border-white/20">
+                    <div className="flex space-x-2">
+                      {/* Audio Upload */}
+                      <div className="group">
                         <label
-                          htmlFor="file-input"
-                          className=" cursor-pointer "
+                          htmlFor="audio-file"
+                          className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 rounded-full cursor-pointer transition-all duration-300 transform hover:scale-110 shadow-lg"
                         >
-                          <ion-icon name="image"></ion-icon>
+                          <ion-icon
+                            name="mic-outline"
+                            className="text-white text-lg"
+                          ></ion-icon>
                         </label>
                         {(permit && permit.fileInput) ||
                         (token && token.admin) ? (
                           <input
-                            className=" hidden w-9 cursor-pointer"
+                            className="hidden"
+                            type="file"
+                            accept="audio/*"
+                            name="audio-file"
+                            id="audio-file"
+                            onChange={(e) => handleUpload(e)}
+                          />
+                        ) : (
+                          <input
+                            className="hidden"
+                            type="file"
+                            accept="audio/*"
+                            disabled
+                            name="audio-file"
+                            id="audio-file"
+                            onChange={(e) => handleUpload(e)}
+                          />
+                        )}
+                      </div>
+
+                      {/* Image/Video Upload */}
+                      <div className="group">
+                        <label
+                          htmlFor="file-input"
+                          className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-full cursor-pointer transition-all duration-300 transform hover:scale-110 shadow-lg"
+                        >
+                          <ion-icon
+                            name="image"
+                            className="text-white text-lg"
+                          ></ion-icon>
+                        </label>
+                        {(permit && permit.fileInput) ||
+                        (token && token.admin) ? (
+                          <input
+                            className="hidden"
                             type="file"
                             accept="image/*,video/*"
                             name=""
@@ -83,7 +85,7 @@ export default function ChatTypingForm({
                           />
                         ) : (
                           <input
-                            className=" hidden w-9  cursor-pointer"
+                            className="hidden"
                             type="file"
                             accept="image/*,video/*"
                             name=""
@@ -95,66 +97,71 @@ export default function ChatTypingForm({
                           />
                         )}
                       </div>
-                    </label>
+                    </div>
                   </div>
                 ) : null}
+
+                {/* Attachment Button */}
                 <button
                   type="button"
                   onClick={() => {
                     setismenu(!ismenu);
                   }}
-                  className=" w-9 h-9 text-gray-300 hover:text-gray-400"
+                  className="flex items-center justify-center w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 transform hover:scale-110 backdrop-blur-sm"
                 >
-                  <ion-icon name="document-outline"></ion-icon>
+                  <ion-icon name="add" className="text-lg"></ion-icon>
                 </button>
               </div>
             ) : (
-              <div className=" rounded-full absolute left-7 top-1.5">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                 <button
                   type="button"
                   disabled
-                  className=" absolute w-9 h-9 rounded-full text-white"
+                  className="flex items-center justify-center w-10 h-10 bg-white/5 text-white/50 rounded-full"
                 >
-                  <ion-icon name="document-outline"></ion-icon>
+                  <ion-icon name="add" className="text-lg"></ion-icon>
                 </button>
               </div>
             )}
 
+            {/* Message Input */}
             {(permit && permit.chatInput) || (token && token.admin) ? (
               <input
-                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
+                className="w-full bg-white/10 backdrop-blur-sm text-white placeholder-white/60 outline-none py-4 pl-16 pr-16 rounded-2xl border border-white/20 focus:border-white/40 transition-all duration-300"
                 type="text"
                 name="chatField"
                 onChange={(e) => handleChat(e)}
-                placeholder="Message..."
+                placeholder="Type your message..."
                 autoComplete="off"
               />
             ) : permit && !permit.chatInput && permit.inputMaxLength > 0 ? (
               <input
-                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
+                className="w-full bg-white/10 backdrop-blur-sm text-white placeholder-white/60 outline-none py-4 pl-16 pr-16 rounded-2xl border border-white/20 focus:border-white/40 transition-all duration-300"
                 type="text"
                 name="chatField"
                 maxLength={permit.inputMaxLength}
                 onChange={(e) => handleChat(e)}
-                placeholder="Message..."
+                placeholder="Type your message..."
                 autoComplete="off"
               />
             ) : (
               <input
-                className=" bg-gray-600 text-white outline-none w-full py-3 pl-[60px] pr-12 p-10  rounded-md "
+                className="w-full bg-white/5 backdrop-blur-sm text-white/50 placeholder-white/30 outline-none py-4 pl-16 pr-16 rounded-2xl border border-white/10 cursor-not-allowed"
                 type="text"
                 name="chatField"
                 disabled
                 onChange={(e) => handleChat(e)}
-                placeholder="Message..."
+                placeholder="Chat disabled..."
                 autoComplete="off"
               />
             )}
+
+            {/* Send Button */}
             <button
               type="submit"
-              className="  h-9 w-9 p-2 text-gray-300 absolute right-[10px] top-[6px] hover:text-gray-400"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg"
             >
-              <ion-icon name="send"></ion-icon>
+              <ion-icon name="send" className="text-lg"></ion-icon>
             </button>
           </div>
         </form>

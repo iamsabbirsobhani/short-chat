@@ -9,6 +9,9 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import CustomVideoPlayer from '../components/CustomVideoPlayer';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
 
 import {
   incrLimitGallery,
@@ -37,6 +40,8 @@ export default function ImageGallery() {
   const [loading, setLoading] = useState(false);
   const [id, setid] = useState('');
   const [totalPage, setTotalPage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const [fetchCount, sefetchCount] = useState(0);
 
@@ -98,254 +103,417 @@ export default function ImageGallery() {
   const openLogin = () => {
     setisLogin(!isLogin);
   };
-  const resetGallery = () => {
-    // sefetchCount(0);
-    setimages(null);
-    dispatch(resetLimitGallery());
-    dispatch(setImageGalleryCode(null));
-  };
 
   const handleClosePreview = (e, id) => {
-    if (isPreviewOpen) {
-      seturl(e?.target?.src);
-      setisPreviewOpen(!isPreviewOpen);
-    } else {
-      setTimeout(() => {
-        seturl(e?.target?.src);
-        setisPreviewOpen(!isPreviewOpen);
-      }, 250);
-    }
-    setid(id);
-    // console.log(id);
+    setisPreviewOpen(false);
+    seturl(null);
+    setid('');
   };
 
-  // load more implementation
+  const handleOpenPreview = (e, id) => {
+    setisPreviewOpen(true);
+    seturl(e.target.src);
+    setid(id);
+  };
+
+  const handleOpenLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   const loadMore = () => {
-    // sefetchCount(10);
     dispatch(incrLimitGallery());
+    sefetchCount(fetchCount + 1);
+  };
+
+  const handlePageByDirectInput = (e) => {
+    if (e.target.value > 0 && e.target.value <= totalPage) {
+      setcurrentPage(parseInt(e.target.value));
+    }
+  };
+
+  const handlePageChange = (event, value) => {
+    setcurrentPage(value);
   };
 
   useEffect(() => {
     fetchImages();
-  }, [limit, currentPage]);
-  // load more implementation
+  }, [currentPage]);
 
-  useEffect(() => {
-    return () => {
-      console.log('Image Gallery Dismounted.');
-      // sefetchCount(0);
-      dispatch(resetLimitGallery());
-      dispatch(setImageGalleryCode(null));
-    };
-  }, []);
+  // Show lock screen if no access
+  if (isLogin || !images) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8 w-full max-w-sm">
+          <div className="text-center">
+            {/* Lock Icon */}
+            <div className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+              <ion-icon
+                name="images"
+                className="text-white text-3xl"
+              ></ion-icon>
+            </div>
 
-  const handlePageByDirectInput = (e) => {
-    e.preventDefault();
-    console.log(e.target[0].value);
-    setcurrentPage(e.target[0].value);
-  };
+            {/* Title and Description */}
+            <h2 className="text-white text-2xl font-bold mb-2">
+              Media Gallery
+            </h2>
+            <p className="text-white/70 text-sm mb-8">
+              Enter your gallery code to view images and videos
+            </p>
 
-  return (
-    <>
-      {isPreviewOpen && (
-        <ImagePreviewer
-          fetchImages={fetchImages}
-          imageGalleryCode={imageGalleryCode}
-          id={id}
-          handleClosePreview={handleClosePreview}
-          url={url}
-        />
-      )}
-      {isLogin && (
-        <LoginPlus
-          openLogin={openLogin}
-          isLodaing={isLoading}
-          imageError={imageError}
-          handleSharedPictures={handleSharedPictures}
-        />
-      )}
-      <div className=" text-white flex items-center ml-5">
-        <Link to="/">
-          <div className=" p-1 rounded-md bg-white/10 text-2xl  w-8 flex justify-center items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </div>
-        </Link>
-        <h1 className=" font-bold text-2xl mt-3 mb-3 ml-5 mr-2">
-          Image Gallery
-        </h1>
-
-        <button onClick={() => openLogin()}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-        </button>
-        <button className=" ml-3" onClick={() => resetGallery()}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-        </button>
-      </div>
-      <div
-        className={`grid   lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 grid-cols-2 gap-4 ${noScroll} m-5`}
-      >
-        {images
-          ? images.map((link) =>
-              link.url.includes('video') ? (
-                <div key={link._id} className=" flex flex-col">
-                  <video width="" height="" controls muted>
-                    <source src={link.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  <div>
-                    <p className=" text-gray-300 text-xs mt-1">
-                      {format(
-                        new Timestamp(
-                          link.createdAt.seconds,
-                          link.createdAt.nanoseconds,
-                        ).toDate(),
-
-                        'PPp',
-                      )}
-                    </p>
-                  </div>
-                </div>
-              ) : link.url.includes('audio') ? (
-                <div className=" flex flex-col" key={link._id}>
-                  <audio controls className=" w-44">
-                    <source src={link.url} type="audio/ogg" />
-                  </audio>
-                  <div>
-                    <p className=" text-gray-300 text-xs mt-1">
-                      {format(
-                        new Timestamp(
-                          link.createdAt.seconds,
-                          link.createdAt.nanoseconds,
-                        ).toDate(),
-
-                        'PPp',
-                      )}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className=" flex flex-col">
-                  <img
-                    onClick={(e) => handleClosePreview(e, link._id)}
-                    className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
-                    key={link._id}
-                    src={link.url}
-                    alt=""
-                    loading="lazy"
-                  />
-                  <div>
-                    <p className=" text-gray-300 text-xs mt-1">
-                      {format(
-                        new Timestamp(
-                          link.createdAt.seconds,
-                          link.createdAt.nanoseconds,
-                        ).toDate(),
-
-                        'PPp',
-                      )}
-                    </p>
-                  </div>
-                </div>
-              ),
-            )
-          : img.map((link, index) => (
-              <img
-                onClick={(e) => handleClosePreview(e, link._id)}
-                className=" cursor-pointer transition duration-200 hover:scale-105 w-full h-full object-cover"
-                key={index}
-                src={link.url}
-                alt=""
-              />
-            ))}
-      </div>
-      {images ? (
-        <div className=" text-center mt-3 mb-3 m-auto">
-          {/* <LoadMore loadMore={loadMore} loading={loading} /> */}
-          <Stack spacing={2} className="w-fit text-center mt-3 mb-3  m-auto">
-            <Pagination
-              defaultPage={1}
-              count={totalPage}
-              variant="outlined"
-              shape="rounded"
-              color="primary"
-              onChange={(event, page) => {
-                console.log('page changed', page);
-                setcurrentPage(page);
-              }}
-            />
-          </Stack>
-          <div className="mt-[10vh] mb-[10vh]">
-            <form
-              onSubmit={handlePageByDirectInput}
-              className="flex justify-center items-center"
-            >
-              <div className="">
-                <TextField
-                  id="outlined-number"
-                  className=""
-                  size="small"
-                  label="Number"
-                  type="number"
-                  slotProps={{
-                    inputLabel: {
-                      shrink: true,
-                    },
-                  }}
+            {/* Form */}
+            <form onSubmit={handleSharedPictures} className="space-y-6">
+              {/* Code Input */}
+              <div className="relative">
+                <input
+                  className="w-full bg-white/10 border border-white/20 rounded-xl p-4 pl-4 pr-12 text-white placeholder-white/60 focus:outline-none focus:border-white/40 transition-all duration-300 text-center text-lg font-mono tracking-wider"
+                  type="password"
+                  placeholder="Enter gallery code..."
+                  autoFocus
+                  autoComplete="off"
+                  maxLength="10"
                 />
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <ion-icon
+                    name="key"
+                    className="text-white/40 text-xl"
+                  ></ion-icon>
+                </div>
               </div>
-              <div className="ml-4">
-                <Button
-                  size="small"
-                  variant="contained"
-                  type="submit"
-                  className="h-9"
-                >
-                  Go
-                </Button>
-              </div>
+
+              {/* Error Messages */}
+              {imageError && (
+                <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4">
+                  <p className="text-red-300 text-sm font-medium">
+                    {imageError}
+                  </p>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Unlocking...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center space-x-2">
+                    <ion-icon name="unlock" className="text-lg"></ion-icon>
+                    <span>Unlock Gallery</span>
+                  </div>
+                )}
+              </button>
             </form>
+
+            {/* Back to Chat */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <Link
+                to="/"
+                className="inline-flex items-center space-x-2 text-white/60 hover:text-white transition-colors duration-200"
+              >
+                <ion-icon name="arrow-back" className="text-lg"></ion-icon>
+                <span className="text-sm">Back to Chat</span>
+              </Link>
+            </div>
           </div>
         </div>
-      ) : null}
-    </>
+      </div>
+    );
+  }
+
+  // Main Gallery View
+  return (
+    <div
+      className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 ${noScroll}`}
+    >
+      {/* Header */}
+      <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Link
+                to="/"
+                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition-all duration-300"
+              >
+                <ion-icon name="arrow-back" className="text-xl"></ion-icon>
+              </Link>
+              <div>
+                <h1 className="text-white text-lg font-semibold">
+                  Media Gallery
+                </h1>
+                <p className="text-white/60 text-sm">
+                  {images?.length || 0} items • Page {currentPage} of{' '}
+                  {totalPage}
+                </p>
+              </div>
+            </div>
+
+            {/* Gallery Code Display */}
+            <div className="bg-white/10 rounded-lg px-3 py-2">
+              <p className="text-white/80 text-sm font-mono">
+                {imageGalleryCode}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center text-white/70">
+            <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-lg">Loading images...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Image Grid */}
+      {!loading && images && images.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {images.map((media, index) => {
+              const isVideo =
+                media.url &&
+                (media.url.includes('mp4') || media.url.includes('video'));
+              const isImage =
+                media.url &&
+                (media.url.includes('images') ||
+                  media.url.includes('image') ||
+                  !isVideo);
+
+              return (
+                <div
+                  key={index}
+                  className="group relative aspect-square bg-white/5 rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 hover:shadow-xl"
+                  onClick={() => handleOpenLightbox(index)}
+                >
+                  {/* Video Thumbnail */}
+                  {isVideo ? (
+                    <div className="w-full h-full relative">
+                      <video
+                        src={media.url}
+                        className="w-full h-full object-cover"
+                        muted
+                        preload="metadata"
+                      />
+
+                      {/* Video Play Button Overlay */}
+                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <ion-icon
+                            name="play"
+                            className="text-white text-xl"
+                          ></ion-icon>
+                        </div>
+                      </div>
+
+                      {/* Video Duration Badge */}
+                      <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm rounded-lg px-2 py-1">
+                        <p className="text-white text-xs">VIDEO</p>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Image Display */
+                    <img
+                      src={media.url}
+                      alt={`Gallery ${isImage ? 'image' : 'media'} ${
+                        index + 1
+                      }`}
+                      className="w-full h-full object-cover group-hover:brightness-110 transition-all duration-300"
+                      loading="lazy"
+                    />
+                  )}
+
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+                      <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <ion-icon
+                          name={isVideo ? 'play' : 'expand'}
+                          className="text-white text-xl"
+                        ></ion-icon>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Media Info */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <ion-icon
+                        name={isVideo ? 'videocam' : 'image'}
+                        className="text-white/80 text-xs"
+                      ></ion-icon>
+                      <p className="text-white text-xs truncate">
+                        {media.name ||
+                          `${isVideo ? 'Video' : 'Image'} ${index + 1}`}
+                      </p>
+                    </div>
+                    {media.uploadedAt && (
+                      <p className="text-white/60 text-xs">
+                        {format(
+                          new Timestamp(
+                            media.uploadedAt.seconds,
+                            media.uploadedAt.nanoseconds,
+                          ).toDate(),
+                          'MMM dd, yyyy',
+                        )}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Pagination */}
+          {totalPage > 1 && (
+            <div className="mt-8 flex justify-center">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                <Stack spacing={2}>
+                  <Pagination
+                    count={totalPage}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="primary"
+                    size="large"
+                    sx={{
+                      '& .MuiPaginationItem-root': {
+                        color: 'white',
+                        '&.Mui-selected': {
+                          backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                          color: 'white',
+                        },
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        },
+                      },
+                    }}
+                  />
+                </Stack>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!loading && (!images || images.length === 0) && (
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center text-white/70">
+            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <ion-icon
+                name="images-outline"
+                className="text-white/60 text-2xl"
+              ></ion-icon>
+            </div>
+            <p className="text-lg mb-2">No media found</p>
+            <p className="text-sm">This gallery appears to be empty</p>
+          </div>
+        </div>
+      )}
+
+      {/* Image Preview Modal */}
+      {isPreviewOpen && (
+        <ImagePreviewer
+          url={url}
+          id={id}
+          handleClosePreview={handleClosePreview}
+        />
+      )}
+
+      {/* Lightbox for Images and Videos */}
+      {lightboxOpen && images && (
+        <Lightbox
+          open={lightboxOpen}
+          close={() => setLightboxOpen(false)}
+          index={lightboxIndex}
+          slides={images.map((media) => {
+            const isVideo =
+              media.url &&
+              (media.url.includes('mp4') || media.url.includes('video'));
+            return {
+              src: media.url,
+              type: isVideo ? 'video' : 'image',
+              title: media.name || `${isVideo ? 'Video' : 'Image'}`,
+              description: media.uploadedAt
+                ? format(
+                    new Timestamp(
+                      media.uploadedAt.seconds,
+                      media.uploadedAt.nanoseconds,
+                    ).toDate(),
+                    'MMM dd, yyyy',
+                  )
+                : undefined,
+            };
+          })}
+          carousel={{
+            finite: true,
+            preload: 2,
+          }}
+          animation={{
+            fade: 300,
+            swipe: 300,
+          }}
+          thumbnails={{
+            width: 120,
+            height: 80,
+            padding: 4,
+            border: 2,
+            borderRadius: 4,
+            gap: 16,
+            imageFit: 'contain',
+          }}
+          zoom={{
+            maxZoomPixelRatio: 3,
+            zoomInMultiplier: 2,
+            doubleTapDelay: 300,
+            doubleClickDelay: 300,
+            doubleClickMaxStops: 2,
+            keyboardMoveDistance: 50,
+            wheelZoomDistanceFactor: 100,
+            pinchZoomDistanceFactor: 100,
+            scrollToZoom: true,
+          }}
+          render={{
+            buttonPrev: images.length <= 1 ? () => null : undefined,
+            buttonNext: images.length <= 1 ? () => null : undefined,
+            iconPrev: () => (
+              <ion-icon name="chevron-back" className="text-2xl"></ion-icon>
+            ),
+            iconNext: () => (
+              <ion-icon name="chevron-forward" className="text-2xl"></ion-icon>
+            ),
+            iconClose: () => (
+              <ion-icon name="close" className="text-2xl"></ion-icon>
+            ),
+            iconZoomIn: () => (
+              <ion-icon name="add" className="text-xl"></ion-icon>
+            ),
+            iconZoomOut: () => (
+              <ion-icon name="remove" className="text-xl"></ion-icon>
+            ),
+            iconSlideshow: () => (
+              <ion-icon name="play" className="text-xl"></ion-icon>
+            ),
+            iconSlideshowPause: () => (
+              <ion-icon name="pause" className="text-xl"></ion-icon>
+            ),
+            iconThumbnails: () => (
+              <ion-icon name="grid" className="text-xl"></ion-icon>
+            ),
+            iconThumbnailsClose: () => (
+              <ion-icon name="close" className="text-xl"></ion-icon>
+            ),
+          }}
+        />
+      )}
+    </div>
   );
 }
