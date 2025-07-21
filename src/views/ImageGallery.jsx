@@ -9,7 +9,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-
 import {
   incrLimitGallery,
   resetLimitGallery,
@@ -227,7 +226,7 @@ export default function ImageGallery() {
           ? images.map((link) =>
               link.url.includes('video') ? (
                 <div key={link._id} className=" flex flex-col">
-                  <video width="" height="" controls muted>
+                  <video width="" height="" controls muted preload="none">
                     <source src={link.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
